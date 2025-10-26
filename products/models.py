@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator
 
 
 class ActiveModelManager(models.Manager):
@@ -10,12 +11,108 @@ class ActiveModelManager(models.Manager):
 
 
 class Product(models.Model):
+    # CATEGORIES1 = (
+    #     ('Shoes', (
+    #         ('Women Shoes', (
+    #             ('w-summer', _('Summer')),
+    #             ('w-casual', _('Casual')),
+    #             ('w-sport', _('Sport')),
+    #             ('w-medical', _('Medical')),
+    #             ('w-sport', _('Sport')),
+    #             ('w-formal', _('Formal')),
+    #             ('w-majlesi', _('Majlesi')),
+    #             ('w-winter', _('Winter')),
+    #         )),
+    #         ('Men Shoes', (
+    #             ('m-summer', _('Summer')),
+    #             ('m-casual', _('Casual')),
+    #             ('w-sport', _('Sport')),
+    #             ('w-medical', _('Medical')),
+    #             ('w-sport', _('Sport')),
+    #             ('w-formal', _('Formal')),
+    #             ('w-majlesi', _('Majlesi')),
+    #             ('w-winter', _('Winter')),
+    #         ))
+    #     )),
+    #
+    #     ('Purse', (
+    #         ('women_purse', _('Women Purse')),
+    #         ('men_purse', _('Men Purse')),
+    #         ('bags', _('Bags')),
+    #     )),
+    #
+    #     ('Wearing', (
+    #         ('coat', _('Coat')),
+    #         ('hat', _('Hat')),
+    #     )),
+    #
+    #     ('Accessory', (
+    #         ('Belt', (
+    #             ('women_belt', _('Women Belt')),
+    #             ('men_belt', _('Men Belt')),
+    #             ('kids_belt', _('Kids Belt')),
+    #         )),
+    #         ('Wallet', (
+    #             ('wallet', _('Wallet')),
+    #             ('keyhan', _('Keyhan')),
+    #             ('hand_bag', _('Hand Bag')),
+    #         )),
+    #         ('Card', _('Card')),
+    #         ('buttom', _('Buttom')),
+    #     )),
+    #
+    #     ('Tool', (
+    #         ('polish', _('Polish')),
+    #     )),
+    # )
     CATEGORIES = (
-        ('sh', _('Shoe')),
-        ('pu', _('Purse')),
-        ('co', _('Coat')),
-        ('ec', _('Eccessory')),
-        ('to', _('Tools')),
+        # Shoes Group
+        ('Shoes', (
+            ('w-summer', _('Women Summer Shoes')),
+            ('w-casual', _('Women Casual Shoes')),
+            ('w-sport', _('Women Sport Shoes')),
+            ('w-medical', _('Women Medical Shoes')),
+            ('w-formal', _('Women Formal Shoes')),
+            ('w-majlesi', _('Women Majlesi Shoes')),
+            ('w-winter', _('Women Winter Shoes')),
+            ('m-summer', _('Men Summer Shoes')),
+            ('m-casual', _('Men Casual Shoes')),
+            ('m-sport', _('Men Sport Shoes')),
+            ('m-medical', _('Men Medical Shoes')),
+            ('m-formal', _('Men Formal Shoes')),
+            ('m-majlesi', _('Men Majlesi Shoes')),
+            ('m-winter', _('Men Winter Shoes')),
+        )),
+
+        # Bags Group
+        ('Bags', (
+            ('women_purse', _('Women Purse')),
+            ('men_purse', _('Men Purse')),
+            ('bags', _('Bags')),
+        )),
+
+        # Clothes Group
+        ('Clothes', (
+            ('coat', _('Coat')),
+            ('hat', _('Hat')),
+        )),
+
+        # Accessory Group
+        ('Accessories', (
+            ('women_belt', _('Women Belt')),
+            ('men_belt', _('Men Belt')),
+            ('kids_belt', _('Kids Belt')),
+            ('wallet', _('Wallet')),
+            ('keyhan', _('Keyhan')),
+            ('hand_bag', _('Hand Bag')),
+            ('card', _('Card Holder')),
+            ('buttom', _('Buttom')),
+        )),
+
+        # Tools Group
+        ('Tools', (
+            ('polish', _('Polish')),
+        )),
     )
 
     title = models.CharField(_('Title'), max_length=150)
@@ -24,31 +121,25 @@ class Product(models.Model):
     price = models.PositiveIntegerField(_('Price'), )
     is_active = models.BooleanField(_('Is The Product Active ?'), default=True)
     
-    category = models.CharField(_('Category'), max_length=3, choices=CATEGORIES)
+    category = models.CharField(_('Category'), max_length=50, choices=CATEGORIES)
     
     datetime_created = models.DateTimeField(_('Datetime Created'), auto_now_add=True)
     datetime_modified = models.DateTimeField(_('Datetime Modified'), auto_now=True)
     user = models.ForeignKey(verbose_name=_('User'), to=get_user_model(), on_delete=models.CASCADE, related_name='products')
 
     # Manager
-    objects = models.Manager
-    active_product_manager = ActiveModelManager
+    objects = models.Manager()
+    active_product_manager = ActiveModelManager()
 
     def __str__(self):
         return self.title
     
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"pk": self.pk})
-    
-    def sync_is_active_if_no_stock(self):
-        """
-        Set 'is_active' False if there is no active stock
-        """
-        self.is_active = True if not self.stock.exclude(is_active=False) else False
 
     def get_rating_counts(self):
         """
-        Calculate how many rates given for product
+        Calculate how many rates given to product
         """
         return len(self.comments.filter(rate__isnull=False))
 
@@ -59,21 +150,52 @@ class Product(models.Model):
         comments = self.comments.filter(rate__isnull=False)
         if not comments:
             return 0
-        avg_rating = float(sum(comment.rate for comment in comments) / len(comments))
+        avg_rating = sum(comment.rate for comment in comments) / len(comments)
         return avg_rating
-    
+
+    def get_major_category(self):
+        """
+        Get the major category group for this product
+        """
+        for group_name, choices in self.CATEGORIES:
+            for value, display_name in choices:
+                if value == self.category:
+                    return group_name
+        return None
+
+    @property
+    def variants(self):
+        major_cat = self.get_major_category()
+        if major_cat == 'Shoes':
+            return self.shoes_variants
+        if major_cat == 'Bags':
+            return self.bags_variants
+        if major_cat == 'Clothes':
+            return self.clothes_variants
+        if major_cat == 'Accessories':
+            return self.accessories_variants
+        return self.tools_variants
+
+    def sync_is_active_if_no_variant(self):
+        """
+        Set 'is_active' False if there is no active variant
+        """
+        variants = self.variants
+        self.is_active = True if variants.filter(is_active=True) else False
+
 
 class Cover(models.Model):
-    product = models.ForeignKey(_('Product'), Product, on_delete=models.CASCADE, related_name='covers')
+    product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='covers')
     cover = models.ImageField(_('Product Cover'), upload_to='products/covers/')
 
     def __str__(self):
-        return self.product
+        return str(self.product)
 
 
-class Stock(models.Model):
+class ProductVariant(models.Model):
     """
-    Stock is an abstract model class made for inheritance
+    Abstract base model for product variants
+    Represents specific versions of a product (color, size, etc.)
     """
     COLORS = (
         ('we', _('White')),
@@ -84,28 +206,31 @@ class Stock(models.Model):
         ('he', _('HoneyLike')),
         ('bn', _('Brown')),
         ('wn', _('Wheaten')),
+        ('cm', _('Cream')),
     )
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='stock')
 
     color = models.CharField(_('Color'), max_length=2, choices=COLORS, null=True, blank=True)
-    storage = models.PositiveIntegerField(_('Storage'))
-    is_active = models.BooleanField(_('Is the stock active?'), default=True)
+    quantity = models.PositiveIntegerField(_('Quantity'), validators=[MinValueValidator(0)])
+    is_active = models.BooleanField(_('Is the variant active?'), default=True)
 
     class Meta:
         abstract = True
-    
-    def __str__(self):
-        return self.product
 
     def sync_is_active_if_no_storage(self):
         """
-        Set 'is_over' True if storage equals 0
-        Use when storage amount changes
+        Set 'is_over' True if quantity equals 0
+        Use when quantity amount changes
         """
-        self.is_active = False if self.storage == 0 else True
+        self.is_active = False if self.quantity == 0 else True
+
+    def is_addable_to_cart(self, value):
+        """
+        Check if variant item can be added to cart
+        """
+        return value <= self.quantity
 
 
-class ShoeStock(Stock):
+class ShoesVariant(ProductVariant):
     SHOES_SIZES = (
         (36, 36),
         (37, 37),
@@ -120,23 +245,29 @@ class ShoeStock(Stock):
         (46, 46),
         (47, 47),
     )
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='shoes_stock')
-    size = models.CharField(_('Size'), choices=SHOES_SIZES, null=True, blank=True)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='shoes_variants')
+    size = models.PositiveIntegerField(_('Size'), choices=SHOES_SIZES, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.product)
 
 
-class PurseStock(Stock):
+class BagVariant(ProductVariant):
     PURSE_SIZES = (
         (1, 'Small'),
         (2, 'Medium'),
         (3, 'Large'),
     )
     
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='purse_stock')
-    size = models.CharField(_('Size'), choices=PURSE_SIZES, null=True, blank=True)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='bags_variants')
+    size = models.PositiveIntegerField(_('Size'), choices=PURSE_SIZES, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.product)
 
 
-class CoatStock(Stock):
-    COAT_SIZES = (
+class ClotheVariant(ProductVariant):
+    WEARING_SIZES = (
         (36, 36),
         (38, 38),
         (40, 40),
@@ -153,12 +284,15 @@ class CoatStock(Stock):
         (62, 62),
     )
     
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='coat_stock')
-    size = models.CharField(_('Size'), choices=COAT_SIZES, null=True, blank=True)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='clothes_variants')
+    size = models.PositiveIntegerField(_('Size'), choices=WEARING_SIZES, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.product)
 
 
-class BeltStock(Stock):
-    BELT_SIZES = (
+class AccessoryVariant(ProductVariant):
+    ACCESSORY_SIZES = (
         (85, _('85 cm')),
         (95, _('95 cm')),
         (105, _('105 cm')),
@@ -167,8 +301,18 @@ class BeltStock(Stock):
         (135, _('135 cm')),
     )
     
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='belt_stock')
-    size = models.CharField(_('Size'), choices=BELT_SIZES, null=True, blank=True)
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='accessories_variants')
+    size = models.PositiveIntegerField(_('Size'), choices=ACCESSORY_SIZES, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.product)
+
+
+class ToolVariant(ProductVariant):
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='tools_variants')
+
+    def __str__(self):
+        return str(self.product)
 
 
 class Comment(models.Model):
@@ -190,7 +334,7 @@ class Comment(models.Model):
     text = models.TextField(_('Text'), )
 
     recommend = models.BooleanField(_('Do you recommend this product to others?'), default=True, choices=RECOMMENDATIONS)
-    rate = models.PositiveIntegerField(_('Rate this product from 1-5'), blank=True, choices=RATINGS)
+    rate = models.PositiveIntegerField(_('Rate this product from 1-5'), blank=True, null=True, choices=RATINGS)
     is_active = models.BooleanField(_('Is this comment active'), default=True)
 
     datetime_created = models.DateTimeField(_('Datetime Created'), auto_now_add=True)
@@ -198,7 +342,7 @@ class Comment(models.Model):
     
 
     def __str__(self):
-        return self.product
-    
+        return f'{self.user} - {self.product}'
+
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"pk": self.product.pk})
