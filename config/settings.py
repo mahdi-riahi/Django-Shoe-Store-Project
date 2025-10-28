@@ -44,11 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Humanize
+    'django.contrib.humanize',
 
     # my local apps
-    'pages',
-    'accounts',
-    'products',
+    'pages.apps.PagesConfig',
+    'accounts.apps.AccountsConfig',
+    'products.apps.ProductsConfig',
+    'shared',
 ]
 
 MIDDLEWARE = [

@@ -11,107 +11,60 @@ class ActiveModelManager(models.Manager):
 
 
 class Product(models.Model):
-    # CATEGORIES1 = (
-    #     ('Shoes', (
-    #         ('Women Shoes', (
-    #             ('w-summer', _('Summer')),
-    #             ('w-casual', _('Casual')),
-    #             ('w-sport', _('Sport')),
-    #             ('w-medical', _('Medical')),
-    #             ('w-sport', _('Sport')),
-    #             ('w-formal', _('Formal')),
-    #             ('w-majlesi', _('Majlesi')),
-    #             ('w-winter', _('Winter')),
-    #         )),
-    #         ('Men Shoes', (
-    #             ('m-summer', _('Summer')),
-    #             ('m-casual', _('Casual')),
-    #             ('w-sport', _('Sport')),
-    #             ('w-medical', _('Medical')),
-    #             ('w-sport', _('Sport')),
-    #             ('w-formal', _('Formal')),
-    #             ('w-majlesi', _('Majlesi')),
-    #             ('w-winter', _('Winter')),
-    #         ))
-    #     )),
-    #
-    #     ('Purse', (
-    #         ('women_purse', _('Women Purse')),
-    #         ('men_purse', _('Men Purse')),
-    #         ('bags', _('Bags')),
-    #     )),
-    #
-    #     ('Wearing', (
-    #         ('coat', _('Coat')),
-    #         ('hat', _('Hat')),
-    #     )),
-    #
-    #     ('Accessory', (
-    #         ('Belt', (
-    #             ('women_belt', _('Women Belt')),
-    #             ('men_belt', _('Men Belt')),
-    #             ('kids_belt', _('Kids Belt')),
-    #         )),
-    #         ('Wallet', (
-    #             ('wallet', _('Wallet')),
-    #             ('keyhan', _('Keyhan')),
-    #             ('hand_bag', _('Hand Bag')),
-    #         )),
-    #         ('Card', _('Card')),
-    #         ('buttom', _('Buttom')),
-    #     )),
-    #
-    #     ('Tool', (
-    #         ('polish', _('Polish')),
-    #     )),
-    # )
+    MAJOR_CATEGORIES = (
+        ('Women', 'Women'),
+        ('Men', 'Men'),
+        ('Bags', 'Bags'),
+        ('Clothing', 'Clothing'),
+        ('Accessory', 'Accessory'),
+        ('ShoesCare', 'ShoesCare'),
+    )
     CATEGORIES = (
         # Shoes Group
-        ('Shoes', (
+        ('Women', (
             ('w-summer', _('Women Summer Shoes')),
             ('w-casual', _('Women Casual Shoes')),
             ('w-sport', _('Women Sport Shoes')),
             ('w-medical', _('Women Medical Shoes')),
             ('w-formal', _('Women Formal Shoes')),
-            ('w-majlesi', _('Women Majlesi Shoes')),
+            ('w-heels', _('Women Heels Shoes')),
             ('w-winter', _('Women Winter Shoes')),
+        )),
+
+        ('Men', (
             ('m-summer', _('Men Summer Shoes')),
-            ('m-casual', _('Men Casual Shoes')),
             ('m-sport', _('Men Sport Shoes')),
             ('m-medical', _('Men Medical Shoes')),
             ('m-formal', _('Men Formal Shoes')),
-            ('m-majlesi', _('Men Majlesi Shoes')),
+            ('m-occasional', _('Men Occasional Shoes')),
             ('m-winter', _('Men Winter Shoes')),
         )),
 
-        # Bags Group
         ('Bags', (
-            ('women_purse', _('Women Purse')),
-            ('men_purse', _('Men Purse')),
-            ('bags', _('Bags')),
+            ('Handbag', _('Handbag')),
+            ('Shoulder bags', _('Shoulder bags')),
+            ('office bag', _('office bag')),
+            ('travel bag', _('travel bag')),
+            ('backpack', _('backpack')),
+            ('card holder', _('card holder')),
+            ('coat bag', _('coat bag')),
+            ('Checkbook bag', _('Checkbook bag')),
         )),
 
-        # Clothes Group
-        ('Clothes', (
-            ('coat', _('Coat')),
-            ('hat', _('Hat')),
+        ('Clothing', (
+            ('m-jackets', _('Men Jackets')),
+            ('w-jackets', _('Women Jackets')),
+            ('hats', _('Hats')),
         )),
 
-        # Accessory Group
-        ('Accessories', (
-            ('women_belt', _('Women Belt')),
-            ('men_belt', _('Men Belt')),
-            ('kids_belt', _('Kids Belt')),
-            ('wallet', _('Wallet')),
-            ('keyhan', _('Keyhan')),
-            ('hand_bag', _('Hand Bag')),
-            ('card', _('Card Holder')),
-            ('buttom', _('Buttom')),
+        ('Accessory', (
+            ('m-accessories', 'Men'),
+            ('w-accessories', 'Women'),
         )),
 
-        # Tools Group
-        ('Tools', (
-            ('polish', _('Polish')),
+        ('ShoesCare', (
+            ('medical-insole', _('Medical Insole')),
+             ('wax', _('Wax')),
         )),
     )
 
@@ -120,8 +73,10 @@ class Product(models.Model):
     description = models.TextField(_('Description'), )
     price = models.PositiveIntegerField(_('Price'), )
     is_active = models.BooleanField(_('Is The Product Active ?'), default=True)
+    sell_count = models.PositiveIntegerField(_('How many items of this product were sold?'))
     
     category = models.CharField(_('Category'), max_length=50, choices=CATEGORIES)
+    major_category = models.CharField(_('Major Category'), max_length=20, choices=MAJOR_CATEGORIES, blank=True)
     
     datetime_created = models.DateTimeField(_('Datetime Created'), auto_now_add=True)
     datetime_modified = models.DateTimeField(_('Datetime Modified'), auto_now=True)
@@ -136,6 +91,12 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return reverse("product_detail", kwargs={"pk": self.pk})
+
+    def save(self, *args, **kwargs):
+        # Auto-populate major_category before saving
+        self.major_category = self.get_major_category()
+        super().save(*args, **kwargs)
+
 
     def get_rating_counts(self):
         """
@@ -164,24 +125,36 @@ class Product(models.Model):
         return None
 
     @property
-    def variants(self):
-        major_cat = self.get_major_category()
-        if major_cat == 'Shoes':
-            return self.shoes_variants
-        if major_cat == 'Bags':
-            return self.bags_variants
-        if major_cat == 'Clothes':
-            return self.clothes_variants
-        if major_cat == 'Accessories':
-            return self.accessories_variants
-        return self.tools_variants
+    def active_variants(self):
+        if self.major_category == 'Women':
+            return self.women_variants.filter(is_active=True)
+        if self.major_category == 'Men':
+            return self.men_variants.filter(is_active=True)
+        if self.major_category == 'Bags':
+            return self.bags_variants.filter(is_active=True)
+        if self.major_category == 'Clothing':
+            return self.clothing_variants.filter(is_active=True)
+        if self.major_category == 'Accessory':
+            return self.accessory_variants.filter(is_active=True)
+        return self.shoescare_variants.filter(is_active=True)
+
+    def get_active_variants_colors(self):
+        colors_list = []
+        for variant in self.active_variants:
+            if variant.get_color_display not in colors_list:
+                colors_list.append(variant.get_color_display)
+
+        return colors_list
 
     def sync_is_active_if_no_variant(self):
         """
         Set 'is_active' False if there is no active variant
         """
-        variants = self.variants
+        variants = self.active_variants
         self.is_active = True if variants.filter(is_active=True) else False
+
+    # def get_sell_count(self):
+    #     return sum(item.quantity for item in self.order_items.all())
 
 
 class Cover(models.Model):
@@ -203,10 +176,10 @@ class ProductVariant(models.Model):
         ('yw', _('Yellow')),
         ('re', _('Red')),
         ('be', _('Blue')),
-        ('he', _('HoneyLike')),
+        ('ce', _('Chocolate')),
         ('bn', _('Brown')),
-        ('wn', _('Wheaten')),
-        ('cm', _('Cream')),
+        ('wn', _('Wheat')),
+        ('lw', _('Lightyellow')),
     )
 
     color = models.CharField(_('Color'), max_length=2, choices=COLORS, null=True, blank=True)
@@ -230,12 +203,25 @@ class ProductVariant(models.Model):
         return value <= self.quantity
 
 
-class ShoesVariant(ProductVariant):
+class WomenVariant(ProductVariant):
     SHOES_SIZES = (
         (36, 36),
         (37, 37),
         (38, 38),
         (39, 39),
+        (40, 40),
+        (41, 41),
+        (42, 42),
+    )
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='women_variants')
+    size = models.PositiveIntegerField(_('Size'), choices=SHOES_SIZES, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.product)
+
+
+class MenVariant(ProductVariant):
+    SHOES_SIZES = (
         (40, 40),
         (41, 41),
         (42, 42),
@@ -245,7 +231,7 @@ class ShoesVariant(ProductVariant):
         (46, 46),
         (47, 47),
     )
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='shoes_variants')
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='men_variants')
     size = models.PositiveIntegerField(_('Size'), choices=SHOES_SIZES, null=True, blank=True)
 
     def __str__(self):
@@ -266,7 +252,7 @@ class BagVariant(ProductVariant):
         return str(self.product)
 
 
-class ClotheVariant(ProductVariant):
+class ClothingVariant(ProductVariant):
     WEARING_SIZES = (
         (36, 36),
         (38, 38),
@@ -284,7 +270,7 @@ class ClotheVariant(ProductVariant):
         (62, 62),
     )
     
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='clothes_variants')
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='clothing_variants')
     size = models.PositiveIntegerField(_('Size'), choices=WEARING_SIZES, null=True, blank=True)
 
     def __str__(self):
@@ -301,15 +287,15 @@ class AccessoryVariant(ProductVariant):
         (135, _('135 cm')),
     )
     
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='accessories_variants')
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='accessory_variants')
     size = models.PositiveIntegerField(_('Size'), choices=ACCESSORY_SIZES, null=True, blank=True)
 
     def __str__(self):
         return str(self.product)
 
 
-class ToolVariant(ProductVariant):
-    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='tools_variants')
+class ShoesCareVariant(ProductVariant):
+    product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='shoescare_variants')
 
     def __str__(self):
         return str(self.product)
@@ -339,7 +325,7 @@ class Comment(models.Model):
 
     datetime_created = models.DateTimeField(_('Datetime Created'), auto_now_add=True)
     datetime_modified = models.DateTimeField(_('Datetime Modified'), auto_now=True)
-    
+
 
     def __str__(self):
         return f'{self.user} - {self.product}'

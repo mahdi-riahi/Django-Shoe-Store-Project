@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, Comment, ShoesVariant, BagVariant, ToolVariant, AccessoryVariant, ClotheVariant, Cover
+from .models import Product, Comment, WomenVariant, MenVariant, BagVariant, AccessoryVariant, ClothingVariant, ShoesCareVariant, Cover
 
 
 # Create Inlines
@@ -9,8 +9,13 @@ class CoverInline(admin.StackedInline):
     extra = 1
 
 
-class ShoesVariantInline(admin.StackedInline):
-    model = ShoesVariant
+class MenVariantInline(admin.StackedInline):
+    model = MenVariant
+    extra = 1
+
+
+class WomenVariantInline(admin.StackedInline):
+    model = WomenVariant
     extra = 1
 
 
@@ -19,8 +24,8 @@ class BagVariantInline(admin.StackedInline):
     extra = 1
 
 
-class ToolVariantInline(admin.StackedInline):
-    model = ToolVariant
+class ShoesCareVariantInline(admin.StackedInline):
+    model = ShoesCareVariant
     extra = 1
 
 
@@ -29,8 +34,8 @@ class AccessoryVariantInline(admin.StackedInline):
     extra = 1
 
 
-class ClotheVariantInline(admin.StackedInline):
-    model = ClotheVariant
+class ClothingVariantInline(admin.StackedInline):
+    model = ClothingVariant
     extra = 1
 
 
@@ -42,10 +47,10 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = [
         CoverInline,
-        ToolVariantInline,
+        WomenVariantInline,
+        MenVariantInline,
         BagVariantInline,
-        ShoesVariantInline,
-        ClotheVariantInline,
+        ClothingVariantInline,
         AccessoryVariantInline,
     ]
 
