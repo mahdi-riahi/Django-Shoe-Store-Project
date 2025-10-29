@@ -1,0 +1,19 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+
+{% block title %}{{ major_category }}{% endblock %}
+
+{% block content %}
+
+    {% for cat,products in query_dict.items %}
+        <h1>
+    	{{ cat }}
+        </h1>
+        {% for product in products %}
+        	{{ product.title }}
+        {% endfor %}
+
+    {% endfor %}
+
+{% endblock %}

@@ -146,6 +146,25 @@ class Product(models.Model):
 
         return colors_list
 
+    @classmethod
+    def get_categories_from_major_cat(cls, major_category):
+        for key, values in cls.CATEGORIES:
+            if key == major_category:
+                return (value[0] for value in values)
+        return None
+
+    @classmethod
+    def get_major_categories_list(cls):
+        return [group_name for group_name, subgroups in cls.CATEGORIES]
+
+    @classmethod
+    def get_categories_list(cls):
+        categories_list = []
+        for group_name, subgroups in cls.CATEGORIES:
+            for value, label in subgroups:
+                categories_list.append(value)
+        return categories_list
+
     def sync_is_active_if_no_variant(self):
         """
         Set 'is_active' False if there is no active variant
@@ -314,7 +333,9 @@ class Comment(models.Model):
         (5, _('5/5  Perfect')),
     )
 
-    user = models.ForeignKey(verbose_name=_('User'), to=get_user_model(), on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(_('Name'), max_length=100, blank=True)
+    email = models.EmailField(_('Email'), max_length=100, blank=True)
+    user = models.ForeignKey(verbose_name=_('User'), to=get_user_model(), on_delete=models.CASCADE, related_name='comments', blank=True, null=True)
     product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='comments')
 
     text = models.TextField(_('Text'), )
