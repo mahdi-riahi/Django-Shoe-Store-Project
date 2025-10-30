@@ -19,7 +19,9 @@
             {% include 'products/category_header.html' with name=cat_name %}
 
             {% for shoe in men_shoes %}
-            	{{ shoe.title }}
+                <a href="{{ shoe.get_absolute_url }}">
+                {{ shoe.title }}
+                </a>
             {% endfor %}
 
 

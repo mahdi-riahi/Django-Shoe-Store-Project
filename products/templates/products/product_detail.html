@@ -6,6 +6,16 @@
 
 {% block content %}
 
+{#    <h4>{{ product.active_variants }}</h4>#}
+    {% for color,variants in product.get_active_variants_info_based_on_colors_dict.items %}
+    	<h2>{{ color }}</h2>
+        {% for variant in variants %}
+        	<p>{{ variant.quantity }} * {{ variant.size }}</p>
+        {% endfor %}
+        <span>--------------</span>
+
+    {% endfor %}
+
     {% include 'header.html' %}
 
     <!-- Main Content Wrapper Start -->

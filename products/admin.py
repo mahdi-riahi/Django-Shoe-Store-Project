@@ -1,58 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, Comment, WomenVariant, MenVariant, BagVariant, AccessoryVariant, ClothingVariant, ShoesCareVariant, Cover
-
-
-# Create Inlines
-class CoverInline(admin.StackedInline):
-    model = Cover
-    extra = 1
-
-
-class MenVariantInline(admin.StackedInline):
-    model = MenVariant
-    extra = 1
-
-
-class WomenVariantInline(admin.StackedInline):
-    model = WomenVariant
-    extra = 1
-
-
-class BagVariantInline(admin.StackedInline):
-    model = BagVariant
-    extra = 1
-
-
-class ShoesCareVariantInline(admin.StackedInline):
-    model = ShoesCareVariant
-    extra = 1
-
-
-class AccessoryVariantInline(admin.StackedInline):
-    model = AccessoryVariant
-    extra = 1
-
-
-class ClothingVariantInline(admin.StackedInline):
-    model = ClothingVariant
-    extra = 1
-
-
-# Create model-admin
-class ProductAdmin(admin.ModelAdmin):
-    model = Product
-    list_display = ('title', 'category', 'price', 'is_active')
-    ordering = ('is_active', )
-
-    inlines = [
-        CoverInline,
-        WomenVariantInline,
-        MenVariantInline,
-        BagVariantInline,
-        ClothingVariantInline,
-        AccessoryVariantInline,
-    ]
+from .models import Product, ProductColor, ProductColorVariant, Comment, Cover
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -67,6 +15,35 @@ class CoverAdmin(admin.ModelAdmin):
     ordering = ('product', )
 
 
-admin.site.register(Product, ProductAdmin)
+class CoverInline(admin.StackedInline):
+    model = Cover
+    extra = 1
+
+
+class ProductAdmin(admin.ModelAdmin):
+    model = Product
+    list_display = ('title', 'category', 'price', 'is_active')
+    ordering = ('is_active', )
+
+    inlines = [
+        CoverInline,
+    ]
+
+
+class ProductColorVariantInline(admin.TabularInline):
+    model = ProductColorVariant
+    extra = 2
+
+
+class ProductColorAdmin(admin.ModelAdmin):
+    model = ProductColor
+
+    inlines = [
+        ProductColorVariantInline,
+    ]
+
+
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Cover, CoverAdmin)
+admin.site.register(Product, ProductAdmin)
+admin.site.register(ProductColor, ProductColorAdmin)

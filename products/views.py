@@ -38,6 +38,7 @@ class ProductDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data()
         context['comment_form'] = CommentForm()
+        return context
 
 
 def product_major_category_list_view(request, major_category):
@@ -53,9 +54,9 @@ def product_major_category_list_view(request, major_category):
 
 
 def product_category_list_view(request, major_category, category):
-    if any([major_category not in Product.get_major_categories_list(),
-        category not in Product.get_categories_from_major_cat(major_category),
-        category not in Product.get_categories_list() ]):
+    if any([
+        major_category not in Product.get_major_categories_list(),
+        category not in Product.get_categories_from_major_cat(major_category),]):
         return HttpResponseNotFound('Page not found')
     products = Product.active_product_manager.filter(category=category)
     return render(request,'products/category_product_list.html', {
@@ -63,6 +64,7 @@ def product_category_list_view(request, major_category, category):
         'category':category,
         'major_category': major_category,
     })
+    # Remember to add pagination to this view. other list views don't need pagination.
 
 
 class CommentCreateView(generic.CreateView):
