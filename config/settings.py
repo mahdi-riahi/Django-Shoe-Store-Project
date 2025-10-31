@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 from environs import Env
 import os
+from django.contrib.messages import constants as messages
 
 
 env = Env()
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'shared',
     'cart.apps.CartConfig',
+    'orders.apps.OrdersConfig',
 ]
 
 MIDDLEWARE = [
@@ -77,6 +79,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # Custom Context Processors
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -150,3 +154,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Auth
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+# Messages settings
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
