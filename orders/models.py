@@ -61,7 +61,7 @@ class Order(models.Model):
         return f'User:{self.user}-Order:{self.id}'
 
     def get_absolute_url(self):
-        return reverse('order:order_detail', kwargs={'pk': self.id})
+        return reverse('orders:order_detail', kwargs={'pk': self.id})
 
     def activate_order(self):
         """
