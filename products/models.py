@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
@@ -80,7 +80,7 @@ class Product(models.Model):
     
     datetime_created = models.DateTimeField(_('Datetime Created'), auto_now_add=True)
     datetime_modified = models.DateTimeField(_('Datetime Modified'), auto_now=True)
-    user = models.ForeignKey(verbose_name=_('User'), to=get_user_model(), on_delete=models.CASCADE, related_name='products')
+    user = models.ForeignKey(verbose_name=_('User'), to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='products')
 
     # Manager
     objects = models.Manager()
@@ -240,7 +240,7 @@ class Comment(models.Model):
 
     name = models.CharField(_('Name'), max_length=100, blank=True)
     email = models.EmailField(_('Email'), max_length=100, blank=True)
-    user = models.ForeignKey(verbose_name=_('User'), to=get_user_model(), on_delete=models.CASCADE, related_name='comments', blank=True, null=True)
+    user = models.ForeignKey(verbose_name=_('User'), to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments', blank=True, null=True)
     product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='comments')
 
     text = models.TextField(_('Text'), )
