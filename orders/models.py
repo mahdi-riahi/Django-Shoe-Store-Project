@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 
 from datetime import datetime, timedelta
 
-from products.models import ProductColorVariant
+from products.models import ProductVariant
 from cart.cart import Cart
 
 
@@ -120,7 +120,7 @@ class Order(models.Model):
 class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(_('Quantity'))
     price = models.PositiveIntegerField(_('Price'), blank=True)
-    product_variant = models.ForeignKey(verbose_name=_('Product Variant'), to=ProductColorVariant, on_delete=models.CASCADE, related_name='order_items')
+    product_variant = models.ForeignKey(verbose_name=_('Product Variant'), to=ProductVariant, on_delete=models.CASCADE, related_name='order_items')
     order = models.ForeignKey(verbose_name=_('Order'), to=Order, on_delete=models.CASCADE, related_name='items')
 
     def __str__(self):
@@ -139,7 +139,7 @@ class OrderItem(models.Model):
         Fill the price when object is getting created
         """
         super().__init__(*args, **kwargs)
-        self.price = self.product_variant.color.product.price
+        self.price = self.product_variant.product.price
 
     def get_total_price(self):
         """
@@ -152,5 +152,5 @@ class OrderItem(models.Model):
         """
         Refresh price amount from product
         """
-        self.price = self.product_variant.color.product.price
+        self.price = self.product_variant.product.price
         self.save()

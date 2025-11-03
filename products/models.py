@@ -73,7 +73,7 @@ class Product(models.Model):
     description = models.TextField(_('Description'), )
     price = models.PositiveIntegerField(_('Price'), )
     is_active = models.BooleanField(_('Is The Product Active ?'), default=True)
-    sell_count = models.PositiveIntegerField(_('How many items of this product were sold?'))
+    sell_count = models.PositiveIntegerField(_('How many items of this product were sold?'), default=0)
     
     category = models.CharField(_('Category'), max_length=50, choices=CATEGORIES)
     major_category = models.CharField(_('Major Category'), max_length=20, choices=MAJOR_CATEGORIES, blank=True)
@@ -124,44 +124,6 @@ class Product(models.Model):
                     return group_name
         return None
 
-    # def get_variants(self):
-    #     if self.major_category == 'Women':
-    #         return self.women_variants
-    #     if self.major_category == 'Men':
-    #         return self.men_variants
-    #     if self.major_category == 'Bags':
-    #         return self.bags_variants
-    #     if self.major_category == 'Clothing':
-    #         return self.clothing_variants
-    #     if self.major_category == 'Accessory':
-    #         return self.accessory_variants
-    #     return self.shoescare_variants
-
-    # @property
-    # def active_variants(self):
-    #     return self.get_variants().filter(is_active=True)
-    #
-    # def get_active_variants_get_color_display(self):
-    #     colors_list = []
-    #     for variant in self.active_variants:
-    #         if variant.get_color_display not in colors_list:
-    #             colors_list.append(variant.get_color_display)
-    #     return colors_list
-    #
-    # def get_active_variants_colors(self):
-    #     colors_list = {}
-    #     for variant in self.active_variants:
-    #         if variant.color not in colors_list:
-    #             colors_list[variant.color] = variant.get_color_display
-    #     return colors_list
-    #
-    # def get_active_variants_info_based_on_colors_dict(self):
-    #     colors = self.get_active_variants_colors()
-    #     result = {}
-    #     for color,color_display in colors.items():
-    #         result[color_display] = self.get_variants().filter(color=color, is_active=True)
-    #     return result
-
     @classmethod
     def get_categories_from_major_cat(cls, major_category):
         for key, values in cls.CATEGORIES:
@@ -185,14 +147,19 @@ class Product(models.Model):
         """
         Set 'is_active' False if there is no active color
         """
-        self.is_active = True if self.colors.filter(is_active=True) else False
+        self.is_active = True if self.variants.filter(is_active=True) else False
+        self.save()
 
-    # Add after implementing order & order-item
-    # def get_sell_count(self):
-    #     return sum(item.quantity for item in self.order_items.all())
+    def get_sell_count(self):
+        sell_count = 0
+        for variant in self.variants.all():
+            for item in variant.order_items.all():
+                sell_count += item.quantity
+        self.sell_count = sell_count
+        return sell_count
 
 
-class ProductColor(models.Model):
+class ProductVariant(models.Model):
     COLORS = (
         ('we', _('White')),
         ('bk', _('Black')),
@@ -204,43 +171,11 @@ class ProductColor(models.Model):
         ('wn', _('Wheat')),
         ('lw', _('Lightyellow')),
     )
-    color = models.CharField(_('Color'), max_length=20, choices=COLORS)
-    product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='colors')
-    is_active = models.BooleanField(_('Is Active'), default=True)
 
-    def __str__(self):
-        return f'Product: {self.product}- Color:{self.get_color_display()}'
-
-    def sync_is_active_and_variant(self):
-        """
-        Set 'is_active' False if there is no active variants
-        """
-        self.is_active = True if self.variants.filter(is_active=True) else False
-
-
-class ProductColorVariant(models.Model):
     SIZES = (
-        # Shoes Group
-        ('Women', (
-            (36, 36),
-            (37, 37),
-            (38, 38),
-            (39, 39),
-            (40, 40),
-            (41, 41),
-            (42, 42),
-        )),
+        ('Women', tuple((i, str(i)) for i in range(36,43))),
 
-        ('Men', (
-            (40, 40),
-            (41, 41),
-            (42, 42),
-            (43, 43),
-            (44, 44),
-            (45, 45),
-            (46, 46),
-            (47, 47),
-        )),
+        ('Men', tuple((i, str(i)) for i in range(40,48))),
 
         ('Bags', (
             (1, 'Small'),
@@ -248,69 +183,38 @@ class ProductColorVariant(models.Model):
             (3, 'Large'),
         )),
 
-        ('Clothing', (
-            (36, 36),
-            (38, 38),
-            (40, 40),
-            (42, 42),
-            (44, 44),
-            (46, 46),
-            (48, 48),
-            (50, 50),
-            (52, 52),
-            (54, 54),
-            (56, 56),
-            (58, 58),
-            (60, 60),
-            (62, 62),
-        )),
+        ('Clothing', tuple((i, str(i)) for i in range(36,63,2))),
 
-        ('Accessory', (
-            (85, _('85 cm')),
-            (95, _('95 cm')),
-            (105, _('105 cm')),
-            (115, _('115 cm')),
-            (125, _('125 cm')),
-            (135, _('135 cm')),
-        )),
+        ('Accessory', tuple((i, f'{i}cm') for i in range(85,140,10))),
 
-        ('ShoesCare', (
-            (36, 36),
-            (37, 37),
-            (38, 38),
-            (39, 39),
-            (40, 40),
-            (41, 41),
-            (42, 42),
-            (40, 40),
-            (41, 41),
-            (42, 42),
-            (43, 43),
-            (44, 44),
-            (45, 45),
-        )),
+        ('ShoesCare', tuple((i, str(i)) for i in range(36,46))),
     )
 
-    size = models.PositiveIntegerField(_('Size'), choices=SIZES)
+    color = models.CharField(_('Color'), max_length=2, choices=COLORS, blank=True)
+    size = models.PositiveIntegerField(_('Size'), choices=SIZES, blank=True, null=True)
+
+    product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='variants')
     quantity = models.PositiveIntegerField(_('Quantity'), default=1, validators=[MinValueValidator(0), ])
-    is_active = models.BooleanField(_('Is Active'), default=True)
-    color = models.ForeignKey(verbose_name=_('Color'), to=ProductColor, on_delete=models.CASCADE, related_name='variants')
+    is_active = models.BooleanField(_('Is the variant active?'), default=True)
+
+    class Meta:
+        unique_together = ['product', 'color', 'size']  # Prevent duplicates
 
     def __str__(self):
-        return f'{self.color} - Size: {self.size} - Quantity: {self.quantity}'
+        return f'{self.product.title} - Color: {self.get_color_display()} - Size: {self.size}'
 
-    def sync_is_active_and_quantity(self):
+    def sync_is_active_quantity(self):
         """
-        Set 'is_active' False if quantity equals 0
-        Use when quantity amount changes
+        Set variant active based on quantity
         """
-        self.is_active = False if self.quantity == 0 else True
+        self.as_active = self.quantity > 0
+        self.save()
 
-    def is_addable_to_cart(self, value):
+    def is_available(self, requested_quantity):
         """
         Check if variant item can be added to cart
         """
-        return value <= self.quantity
+        return requested_quantity <= self.quantity and self.is_active
 
 
 class Cover(models.Model):

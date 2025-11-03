@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, ProductColor, ProductColorVariant, Comment, Cover
+from .models import Product, ProductVariant, Comment, Cover
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -20,6 +20,11 @@ class CoverInline(admin.StackedInline):
     extra = 1
 
 
+class ProductVariantInline(admin.StackedInline):
+    model = ProductVariant
+    extra = 1
+
+
 class ProductAdmin(admin.ModelAdmin):
     model = Product
     list_display = ('title', 'category', 'price', 'is_active')
@@ -27,23 +32,10 @@ class ProductAdmin(admin.ModelAdmin):
 
     inlines = [
         CoverInline,
-    ]
-
-
-class ProductColorVariantInline(admin.TabularInline):
-    model = ProductColorVariant
-    extra = 2
-
-
-class ProductColorAdmin(admin.ModelAdmin):
-    model = ProductColor
-
-    inlines = [
-        ProductColorVariantInline,
+        ProductVariantInline,
     ]
 
 
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Cover, CoverAdmin)
 admin.site.register(Product, ProductAdmin)
-admin.site.register(ProductColor, ProductColorAdmin)

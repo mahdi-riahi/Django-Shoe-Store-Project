@@ -3,7 +3,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from products.models import Product, ProductColor, ProductColorVariant
+from products.models import Product, ProductVariant
 from .cart import Cart
 from .forms import AddUpdateCartForm
 
@@ -13,8 +13,8 @@ def cart_detail_view(request):
 
 @require_POST
 def cart_add_update_view(request, variant_id):
-    variant = get_object_or_404(ProductColorVariant, pk=variant_id)
-    product = variant.color.product
+    variant = get_object_or_404(ProductVariant, pk=variant_id)
+    product = variant.product
     form = AddUpdateCartForm(request.POST)
     if form.is_valid():
         cleaned_data = form.cleaned_data
@@ -22,6 +22,9 @@ def cart_add_update_view(request, variant_id):
         update = bool(cleaned_data.get('update'))
         cart = Cart(request)
         cart.add(variant, quantity, update)
+        if update:
+            return redirect('cart:cart_detail')
+        return redirect('product:product_detail', pk=product.id)
 
     messages.error(request, _('Form is not valid'))
     return redirect('product:product_detail', pk=product.id)

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'shared',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'payment.apps.PaymentConfig',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,6 @@ AUTH_USER_MODEL = 'accounts.CustomUser'
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+# Payment (Zarinpal)
+ZARINPAL_MERCHANT_ID = env.str("DJANGO_ZARINPAL_MERCHANT_ID")

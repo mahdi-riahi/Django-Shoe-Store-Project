@@ -14,7 +14,7 @@ class ProductListView(generic.ListView):
     paginate_by = 10
     queryset = Product.active_product_manager.all()
 
-    # Product.objects.filter(shoes_variants__size=42) I'm gonna use it later
+    # Product.objects.filter(variants__size=42) I'm gonna use it later
 
     def get_queryset(self):
         return Product.active_product_manager.all()

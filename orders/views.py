@@ -45,7 +45,7 @@ def order_create_view(request):   # Form invalid messaging!!!!!!!!!!
             # Messaging
             messages.success(request, _('Your order was successfully created'))
             # Redirect to order_confirm url
-            return redirect('orders:order_confirm')
+            return redirect('orders:order_confirm', pk=order.id)
 
         # If form not valid --> Messages
         messages.add_message(request, messages.INFO, _('Some fields in the form are not valid'))
@@ -118,14 +118,14 @@ def order_confirm_view(request, pk):
         if order.is_paid:
             messages.info(request, _('Payment is already done for your order'))
             return redirect('orders:order_detail', pk=pk)
-        # Messaging to the client about how to do the payment
-        messages.success(request, _('Confirm your information and go to payment'))
 
         # Redirect to payment process
         if request.method == 'POST':
             request.session['order_id'] = order.id
-            return redirect('payment:payment_process')
+            return redirect('payment:payment_process_sandbox')
         # If method == 'GET'
+        # Messaging to the client about how to do the payment
+        messages.success(request, _('Confirm your information and go to payment'))
         return render(request, 'orders/order_confirm.html', {'order': order})
 
     return HttpResponseForbidden('<h1>ERROR 403 Forbidden</h1>')
