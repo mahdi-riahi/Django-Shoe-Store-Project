@@ -1,0 +1,89 @@
+{% load i18n %}
+    <!-- Category Header Start -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">{% trans 'Categories' %}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans 'Women' %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-summer' %}">{% trans 'Summer' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-casual' %}">{% trans 'Casual' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-sport' %}">{% trans 'Sport' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-medical' %}">{% trans 'Medical' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-formal' %}">{% trans 'Formal' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-heels' %}">{% trans 'Heels' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Women' 'w-winter' %}">{% trans 'Winter' %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans 'Men' %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Men' 'm-summer' %}">{% trans 'Summer' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Men' 'm-sport' %}">{% trans 'Sport' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Men' 'm-medical' %}">{% trans 'Medical' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Men' 'm-formal' %}">{% trans 'Formal' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Men' 'm-occasional' %}">{% trans 'Occasional' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Men' 'm-winter' %}">{% trans 'Winter' %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans 'Bags' %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'hand-bag' %}">{% trans 'Handbag' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'shoulder-bags' %}">{% trans 'Shoulder bags' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'office-bag' %}">{% trans 'office bag' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'travel-bag' %}">{% trans 'travel bag' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'back-pack' %}">{% trans 'backpack' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'card-holder' %}">{% trans 'card holder' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'coat-bag' %}">{% trans 'coat bag' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Bags' 'checkbook-bag' %}">{% trans 'Checkbook bag' %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans 'Clothing' %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Clothing' 'm-jackets' %}">{% trans 'Men Jackets' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Clothing' 'w-jackets' %}">{% trans 'Women Jackets' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Clothing' 'hats' %}">{% trans 'Hats' %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans 'Accessory' %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Accessory' 'm-accessories' %}">{% trans 'Men' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'Accessory' 'w-accessories' %}">{% trans 'Women' %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans 'Shoes Care' %}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'ShoesCare' 'medical-insole' %}">{% trans 'Medical insole' %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'products:product_category_list' 'ShoesCare' 'wax' %}">{% trans 'Wax' %}</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Category Header End -->

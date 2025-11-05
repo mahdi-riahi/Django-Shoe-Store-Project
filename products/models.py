@@ -20,7 +20,6 @@ class Product(models.Model):
         ('ShoesCare', 'ShoesCare'),
     )
     CATEGORIES = (
-        # Shoes Group
         ('Women', (
             ('w-summer', _('Women Summer Shoes')),
             ('w-casual', _('Women Casual Shoes')),
@@ -41,14 +40,14 @@ class Product(models.Model):
         )),
 
         ('Bags', (
-            ('Handbag', _('Handbag')),
-            ('Shoulder bags', _('Shoulder bags')),
-            ('office bag', _('office bag')),
-            ('travel bag', _('travel bag')),
-            ('backpack', _('backpack')),
-            ('card holder', _('card holder')),
-            ('coat bag', _('coat bag')),
-            ('Checkbook bag', _('Checkbook bag')),
+            ('hand-bag', _('Handbag')),
+            ('shoulder-bags', _('Shoulder bags')),
+            ('office-bag', _('Office bag')),
+            ('travel-bag', _('Travel bag')),
+            ('back-pack', _('Backpack')),
+            ('card-holder', _('Card holder')),
+            ('coat-bag', _('Coat bag')),
+            ('checkbook-bag', _('Checkbook bag')),
         )),
 
         ('Clothing', (
@@ -63,7 +62,7 @@ class Product(models.Model):
         )),
 
         ('ShoesCare', (
-            ('medical-insole', _('Medical Insole')),
+            ('medical-insole', _('Medical insole')),
              ('wax', _('Wax')),
         )),
     )
@@ -74,6 +73,10 @@ class Product(models.Model):
     price = models.PositiveIntegerField(_('Price'), )
     is_active = models.BooleanField(_('Is The Product Active ?'), default=True)
     sell_count = models.PositiveIntegerField(_('How many items of this product were sold?'), default=0)
+
+    # If product is in offer
+    offer = models.BooleanField(_('Does this product have an offer?'), default=False)
+    offer_price = models.PositiveIntegerField(_('Offer Price'), null=True, blank=True)
     
     category = models.CharField(_('Category'), max_length=50, choices=CATEGORIES)
     major_category = models.CharField(_('Major Category'), max_length=20, choices=MAJOR_CATEGORIES, blank=True)

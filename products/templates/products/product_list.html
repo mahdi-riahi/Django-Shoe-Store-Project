@@ -2,31 +2,114 @@
 
 {% load i18n %}
 {% load humanize %}
+{% load static %}
 
 {% load farsi_tags %}
 
 {% block title %}{% trans 'Products List' %}{% endblock %}
 
+{% block mini_cart_icon %}
+    {% include 'cart/mini_cart_icon_with_aside.html' %}
+{% endblock mini_cart_icon %}
+
 {% block content %}
 
+    <!-- Category Navbar -->
+    {% include 'products/category_navbar.html' %}
+
     <!-- Main Content Wrapper Start -->
-    <div class="main-content-wrapper container-fluid">
+    <div class="main-content-wrapper container-fluid mt-5">
 
         <!-- Shoes -->
         <div class="shop-page-wrapper shop-fullwidth">
 
-            {% trans 'Shoes' as cat_name %}
-            {% include 'products/category_header.html' with name=cat_name %}
+            <!-- Main Content Wrapper Start -->
+            <div class="main-content-wrapper container-fluid">
+                <div class="shop-page-wrapper shop-fullwidth">
+                    <div class="container-fluid shop-products">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="tab-content" id="product-tab-content">
+                                    <div class="tab-pane fade show active" id="nav-all">
+                                        <div class="row xxl-block-grid-6 grid-space-20">
+                                            {% for product in women_shoes %}
 
-            {% for shoe in men_shoes %}
-                <a href="{{ shoe.get_absolute_url }}">
-                {{ shoe.title }}
-                </a>
-            {% endfor %}
+                                            {% endfor %}
+
+                                            <div class="col-xl-2 col-md-4 col-sm-9 mb--20">
+                                                <div class="ShoppingYar-product">
+                                                    <div class="product-inner">
+                                                        <figure class="product-image">
+                                                            <a href="{{ product.get_absolute_url }}">
+                                                                <img src="
+                                                                        {% if product.covers.all %}{{ product.covers.first.url }}{% else %}{% static 'img/products/prod-1.jpg' %}{% endif %}"
+                                                                     alt="Products" height="200px">
+                                                            </a>
+                                                            <div class="ShoppingYar-product-action">
+                                                                <div class="product-action d-flex">
+                                                                    <a href="{% url 'users:favorite_create' %}" class="action-btn">
+                                                                        <i class="flaticon flaticon-like"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        {% if product.offer %}
+                                                            <span class="product-badge">{% trans 'Special Offer' %}</span>
+                                                        {% endif %}
+                                                        </figure>
+                                                        <div class="product-info">
+                                                            <h3 class="product-title h6 mb--15">
+                                                                <a href="product-details.html">{{ product.title }}</a>
+                                                            </h3>
+                                                            <div class="product-price-wrapper mb--30">
+                                                                {% if product.offer %}
+                                                                <span class="money-separator">-</span>
+                                                                <span class="old-price text-danger">
+                                                                    <span class="money text-danger">{{ product.price }} {% trans 'Toman' %}</span>
+                                                                </span>
+                                                                <span class="money text-success">{{ product.offer_price }} {% trans 'Toman' %}</span>
+                                                                {% else %}
+                                                                <span class="money">{{ product.price }} {% trans 'Toman' %}</span>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div>
+                                                                {% for variant in product.variants.all %}
+                                                                {{ variant.color }}
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {#                                Pagination#}
+                                <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
+                                    <ul class="pagination">
+                                        <li><a href="#" class="next page-number"><i
+                                                class="fa fa-angle-double-right"></i></a></li>
+                                        <li><span class="current page-number">1</span></li>
+                                        <li><a href="#" class="page-number">2</a></li>
+                                        <li><a href="#" class="page-number">3</a></li>
+                                        <li><a href="#" class="prev page-number"><i class="fa fa-angle-double-left"></i></a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content Wrapper Start -->
 
 
         </div>
     </div>
     <!-- Main Content Wrapper Start -->
+
+    <!-- Mini Cart Aside -->
+    {% include 'cart/mini_cart_aside.html' %}
 
 {% endblock %}

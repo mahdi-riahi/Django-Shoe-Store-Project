@@ -139,7 +139,8 @@ class OrderItem(models.Model):
         Fill the price when object is getting created
         """
         super().__init__(*args, **kwargs)
-        self.price = self.product_variant.product.price
+        product = self.product_variant.product
+        self.price = product.offer_price if product.offer else product.price
 
     def get_total_price(self):
         """
@@ -152,5 +153,6 @@ class OrderItem(models.Model):
         """
         Refresh price amount from product
         """
-        self.price = self.product_variant.product.price
+        product = self.product_variant.product
+        self.price = product.offer_price if product.offer else product.price
         self.save()

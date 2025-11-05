@@ -5,9 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 
-
-class DashboardView(LoginRequiredMixin, generic.TemplateView):
-    template_name = 'accounts/dashboard.html'
+from .models import CustomUserFavorite
 
 
 class ProfileView(LoginRequiredMixin, generic.DetailView):
@@ -18,7 +16,7 @@ class ProfileView(LoginRequiredMixin, generic.DetailView):
         return self.request.user
 
     def get_context_data(self, **kwargs):
-        context = super(**kwargs).get_context_data()
+        context = super().get_context_data(**kwargs)
         context['recent_orders'] = self.request.user.orders.all()[:5]
         context['favorites_count'] = self.request.user.favorites.count()
         return context
@@ -28,7 +26,7 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = 'accounts/profile_update.html'
     model = get_user_model()
     fields = ['profile_photo', 'first_name', 'last_name', 'username', 'email', 'phone_number', ]
-    success_url = reverse_lazy('accounts:profile')
+    success_url = reverse_lazy('users:profile')
 
     def get_object(self, queryset=None):
         """Ensure users can only edit their own profile"""
@@ -43,9 +41,25 @@ class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
         super().form_valid(form)
 
 
+class PaymentListView(LoginRequiredMixin, generic.ListView):
+    template_name = 'payment/payment_history.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return self.request.user.orders.exclude(zarinpal_authority="")
+
+
 class FavoriteListView(LoginRequiredMixin, generic.ListView):
     template_name = 'accounts/favorites.html'
     context_object_name = 'favorite_products'
 
     def get_queryset(self):
         return self.request.user.favorites.all()
+
+# Need Working
+class FavoriteCreateView(generic.CreateView):
+    model = CustomUserFavorite
+
+# Need Working
+class FavoriteDeleteView(generic.DeleteView):
+    model = CustomUserFavorite

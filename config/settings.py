@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     # Humanize
     'django.contrib.humanize',
 
+    # Third party apps
+    'crispy_forms',
+    'crispy_bootstrap5',
+
     # my local apps
     'pages.apps.PagesConfig',
     'accounts.apps.AccountsConfig',
@@ -163,3 +167,7 @@ MESSAGE_TAGS = {
 
 # Payment (Zarinpal)
 ZARINPAL_MERCHANT_ID = env.str("DJANGO_ZARINPAL_MERCHANT_ID")
+
+# Crispy forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"  # Optional
+CRISPY_TEMPLATE_PACK = "bootstrap5"  # Default template pack

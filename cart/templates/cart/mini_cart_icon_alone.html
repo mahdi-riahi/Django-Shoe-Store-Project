@@ -1,0 +1,7 @@
+
+{#Use it in authentication pages and those that aren't very much related to cart and products#}
+
+<a href="{% url 'cart:cart_detail' %}" class="header-toolbar__btn  mini-cart-btn">
+    <i class="flaticon flaticon-shopping-cart"></i>
+    <sup class="mini-cart-count">{{ cart|length }}</sup>
+</a>
