@@ -93,7 +93,7 @@ class Product(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs={"pk": self.pk})
+        return reverse("products:product_detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
         # Auto-populate major_category before saving
@@ -212,12 +212,19 @@ class ProductVariant(models.Model):
         """
         self.as_active = self.quantity > 0
         self.save()
+        self.product.sync_is_active_and_colors()
 
     def is_available(self, requested_quantity):
         """
         Check if variant item can be added to cart
         """
         return requested_quantity <= self.quantity and self.is_active
+
+    def decrease_quantity(self, quantity):
+        if self.is_available(quantity):
+            self.quantity -= quantity
+            self.save()
+            self.sync_is_active_quantity()
 
 
 class Cover(models.Model):

@@ -40,6 +40,9 @@ def order_create_view(request):   # Form invalid messaging!!!!!!!!!!
                     product_variant=item['variant_obj'],
                     order=order,
                 )
+                # Decrease product variant's quantity
+                item['variant_obj'].decrease_quantity(item['quantity'])
+                # product_variant.sync_is_active_quantity()
             # Empty Cart
             cart.clear()
             # Messaging

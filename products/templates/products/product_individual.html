@@ -1,0 +1,52 @@
+{% load static %}
+{% load i18n %}
+{% load product_tags %}
+
+<div class="col-xl-2 col-md-4 col-sm-9 mb--20">
+    <div class="ShoppingYar-product">
+        <div class="product-inner">
+            <figure class="product-image">
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="
+                            {% if product.covers.all %}{{ product.covers.first.cover.url }}{% else %}{% static 'img/products/prod-1.jpg' %}{% endif %}"
+                         alt="Products" height="200px">
+                </a>
+                <div class="ShoppingYar-product-action">
+                    <div class="product-action d-flex">
+                        <a href="{% url 'users:favorite_create' %}" class="action-btn">
+                            <i class="flaticon flaticon-like"></i>
+                        </a>
+                    </div>
+                </div>
+                {% if product.offer %}
+                    <span class="product-badge">{% trans 'Special Offer' %}</span>
+                {% endif %}
+            </figure>
+            <div class="product-info">
+                <div class="row justify-content-center">
+                    {% for variant in product.variants|active_objects %}
+                        <div style="background-color: {{ variant.get_color_display }}; width: 20px; height: 20px"></div>
+
+                    {% endfor %}
+                </div>
+                <div>
+                <h3 class="product-title h6 mb--15">
+                    <a href="product-details.html">{{ product.title }}</a>
+                </h3>
+                </div>
+                <div class="product-price-wrapper mb--30">
+                    {% if product.offer %}
+                        <span class="money-separator">-</span>
+                        <span class="old-price text-danger">
+                            <span class="money text-danger">{{ product.price }} {% trans 'Toman' %}</span>
+                        </span>
+                        <span class="money text-success">{{ product.offer_price }} {% trans 'Toman' %}</span>
+                    {% else %}
+                        <span class="money">{{ product.price }} {% trans 'Toman' %}</span>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
