@@ -4,6 +4,9 @@ from django.views import generic
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
 
 from .models import Product, Comment
 from .forms import CommentForm
@@ -39,6 +42,14 @@ class ProductDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data()
         context['comment_form'] = CommentForm()
+
+        comments = self.object.comments.filter(is_active=True).order_by('-datetime_modified')
+
+        paginator = Paginator(comments, 10)
+        page_number = self.request.GET.get('page')
+        comment_page_obj = paginator.get_page(page_number)
+        context['comments_page_obj'] = comment_page_obj
+        context['comments_num_pages'] = paginator.num_pages
         return context
 
 
@@ -67,8 +78,6 @@ def product_category_list_view(request, major_category, category):
     })
     # Remember to add pagination to this view. other list views don't need pagination.
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.http import require_http_methods
 
 @method_decorator(require_http_methods(["POST", ]), name='dispatch')
 class CommentCreateView(generic.CreateView):
@@ -89,9 +98,12 @@ class CommentCreateView(generic.CreateView):
             comment.email = user.email
         else:
             cleaned_data = form.cleaned_data
+            print(cleaned_data)
             comment.name = cleaned_data.get('name', )
             comment.email = cleaned_data.get('email', )
+            print(comment.name, comment.email)
         comment.save()
+        print('saved!')
 
         messages.success(self.request, _('Your comment added successfully'))
         return redirect(self.get_success_url())

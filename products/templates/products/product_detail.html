@@ -28,7 +28,9 @@
                 {% if product.covers.exists %}
                     {% for cover in product.covers.all %}
                         <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
+                        <a href="{{ cover.cover.url }}">
                             <img src="{{ cover.cover.url }}" class="m-auto" style="max-height: 400px;">
+                        </a>
                         </div>
                     {% endfor %}
                     {% else %}
@@ -127,7 +129,8 @@
                                         {% endwith %}
                                         <ul class="review__list">
 
-                                        {% for comment in product.comments.all|active_objects %}
+{#                                        {% for comment in product.comments.all|active_objects %}#}
+                                        {% for comment in comments_page_obj %}
                                             <li class="review__item">
                                                 <div class="review__container">
                                                     <div class="review__text">
@@ -159,13 +162,30 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <p class="review__description text-right px-4">
-                                                            {{ comment.text }}
-                                                        </p>
+                                                            <p class="review__description text-right px-4">
+                                                                {{ comment.text|linebreaksbr }}
+                                                            </p>
                                                     </div>
                                                 </div>
                                             </li>
                                         {% endfor %}
+                                        <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
+                                            <ul class="pagination">
+                                                {% with comments_page_obj as page %}
+                                                        <li><a href="?page=1" class="page-link">1</a></li>
+                                                    <li><a href="#" class="next page-number"><i class="fa fa-angle-double-right"></i></a></li>
+                                                        {% if page.has_previous %}
+                                                            <li><a href="?page={{ page.previous_page_number }}" class="page-number">{{ page.previous_page_number }}</a></li>
+                                                        {% endif %}
+                                                    <li><span class="current page-number">{{ page.number }}</span></li>
+                                                        {% if page.has_next %}
+                                                            <li><a href="?page={{ page.next_page_number }}" class="page-number">{{ page.next_page_number }}</a></li>
+                                                        {% endif %}
+                                                    <li><a href="#" class="prev page-number"><i class="fa fa-angle-double-left"></i></a></li>
+                                                        <li><a href="?page={{ comments_num_pages }}" class="page-link">{{ comments_num_pages }}</a></li>
+                                                {% endwith %}
+                                            </ul>
+                                        </nav>
 
                                         </ul>
                                         <div class="review-form-wrapper">
@@ -192,7 +212,9 @@
                                                         {% endif %}
 
                                                         <div class="form__group mb--10">
-                                                            {{ comment_form|crispy }}
+                                                            {{ comment_form.text|as_crispy_field }}
+                                                            {{ comment_form.recommend|as_crispy_field }}
+                                                            {{ comment_form.rate|as_crispy_field }}
                                                         </div>
                                                         <div class="form__group">
                                                             <div class="form-row">
