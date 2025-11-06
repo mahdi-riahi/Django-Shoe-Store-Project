@@ -70,6 +70,7 @@ class Product(models.Model):
     title = models.CharField(_('Title'), max_length=150)
     short_description = models.CharField(_('Short Description'), max_length=700)
     description = models.TextField(_('Description'), )
+    material = models.CharField(_('Materials'), max_length=400, blank=True)
     price = models.PositiveIntegerField(_('Price'), )
     is_active = models.BooleanField(_('Is The Product Active ?'), default=True)
     sell_count = models.PositiveIntegerField(_('How many items of this product were sold?'), default=0)
@@ -96,8 +97,13 @@ class Product(models.Model):
         return reverse("products:product_detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
-        # Auto-populate major_category before saving
+        """
+        Auto-populate major_category, sync is_active with variants, fill offer_price before saving
+        """
         self.major_category = self.get_major_category()
+        self.is_active = True if self.variants.filter(is_active=True) else False
+        if not self.offer:
+            self.offer_price = self.price
         super().save(*args, **kwargs)
 
 
@@ -129,6 +135,9 @@ class Product(models.Model):
 
     @classmethod
     def get_categories_from_major_cat(cls, major_category):
+        """
+        Get categories in each major category by having major_category
+        """
         for key, values in cls.CATEGORIES:
             if key == major_category:
                 return (value[0] for value in values)
@@ -136,30 +145,57 @@ class Product(models.Model):
 
     @classmethod
     def get_major_categories_list(cls):
+        """
+        A class method to get all major categories in a list
+        """
         return [group_name for group_name, subgroups in cls.CATEGORIES]
 
     @classmethod
     def get_categories_list(cls):
+        """
+        A class method to get all categories of the model in a list
+        """
         categories_list = []
         for group_name, subgroups in cls.CATEGORIES:
             for value, label in subgroups:
                 categories_list.append(value)
         return categories_list
 
-    def sync_is_active_and_colors(self):
+    def sync_is_active_and_variants(self):
         """
-        Set 'is_active' False if there is no active color
+        Set 'is_active' False if there is no active variants
         """
         self.is_active = True if self.variants.filter(is_active=True) else False
         self.save()
 
     def get_sell_count(self):
+        """
+        Calculate how many variants from product were sold (from order_items)
+        """
         sell_count = 0
         for variant in self.variants.all():
             for item in variant.order_items.all():
                 sell_count += item.quantity
         self.sell_count = sell_count
         return sell_count
+
+    @property
+    def active_variants(self):
+        return self.variants.filter(is_active=True)
+
+    def get_active_variants_colors(self):
+        colors = {}
+        for variant in self.active_variants:
+            if variant.color not in colors:
+                colors[variant.color] = variant.get_color_display()
+        return colors
+
+    def get_active_variants_sizes(self):
+        sizes = {}
+        for variant in self.active_variants:
+            if variant.size and variant.size not in sizes:
+                sizes[variant.size] = variant.get_size_display()
+        return sizes
 
 
 class ProductVariant(models.Model):
@@ -206,13 +242,20 @@ class ProductVariant(models.Model):
     def __str__(self):
         return f'{self.product.title} - Color: {self.get_color_display()} - Size: {self.size}'
 
+    def save(self, *args, **kwargs):
+        """
+        Auto-sync is_active before saving
+        """
+        self.product.sync_is_active_and_variants()
+        super().save(*args, **kwargs)
+
     def sync_is_active_quantity(self):
         """
         Set variant active based on quantity
         """
         self.as_active = self.quantity > 0
         self.save()
-        self.product.sync_is_active_and_colors()
+        self.product.sync_is_active_and_variants()
 
     def is_available(self, requested_quantity):
         """
@@ -221,6 +264,9 @@ class ProductVariant(models.Model):
         return requested_quantity <= self.quantity and self.is_active
 
     def decrease_quantity(self, quantity):
+        """
+        Decrease the quantity while creating order
+        """
         if self.is_available(quantity):
             self.quantity -= quantity
             self.save()

@@ -11,7 +11,6 @@ from orders.models import Order, OrderItem
 from cart.cart import Cart
 from .forms import OrderCreateForm
 
-@require_POST
 @login_required
 def order_create_view(request):   # Form invalid messaging!!!!!!!!!!
     # Form invalid messaging : Remember!!!!!!!!!!! ***********
@@ -42,7 +41,6 @@ def order_create_view(request):   # Form invalid messaging!!!!!!!!!!
                 )
                 # Decrease product variant's quantity
                 item['variant_obj'].decrease_quantity(item['quantity'])
-                # product_variant.sync_is_active_quantity()
             # Empty Cart
             cart.clear()
             # Messaging

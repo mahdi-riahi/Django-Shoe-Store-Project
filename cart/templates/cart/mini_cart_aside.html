@@ -1,76 +1,58 @@
-        <!-- Mini Cart Start -->
-        <aside class="mini-cart" id="miniCart">
-            <div class="mini-cart-wrapper">
-                <a href="" class="btn-close"><i class="flaticon flaticon-cross"></i></a>
-                <div class="mini-cart-inner">
-                    <h3 class="mini-cart__heading mb--40 mb-lg--30 text-right">سبد خرید</h3>
-                    <div class="mini-cart__content">
-                        <ul class="mini-cart__list text-right">
-                            <li class="mini-cart__product d-flex justify-content-between">
-                                <div class="mini-cart__product__image">
-                                    <a href="#">
-                                        <img src="assets/img/products/prod-1-100x100.jpg" alt="products">
+{% load i18n %}
+{% load humanize %}
+{% load farsi_tags %}
+{% load static %}
+
+<!-- Mini Cart Start -->
+<aside class="mini-cart" id="miniCart">
+    <div class="mini-cart-wrapper">
+        <a href="" class="btn-close"><i class="flaticon flaticon-cross"></i></a>
+        <div class="mini-cart-inner">
+            <h3 class="mini-cart__heading mb--40 mb-lg--30 text-right">{% trans 'Shopping cart' %}</h3>
+            <div class="mini-cart__content">
+                <ul class="mini-cart__list text-right">
+                    {% for item in cart %}
+
+                        <li class="mini-cart__product d-flex justify-content-between">
+                            <div class="mini-cart__product__image">
+                                {% with item.product_obj as product %}
+                                    <a href="{{ item.product_obj.get_absolute_url }}">
+                                        <img
+                                             src="{% if item.product_obj.covers.exists %}{{ product.covers.first.cover.url }}
+                                             {% else %}{% static 'img/products/prod-1-100x100.jpg' %}{% endif %}"
+                                             alt="products">
                                     </a>
-                                </div>
-                                <div class="mini-cart__product__content pt-2">
+                                    </div>
+                                    <div class="mini-cart__product__content pt-2">
                                     <span class="mini-cart__product__title d-flex flex-row justify-content-between">
-                                        <a href="#"> محصول سماره یک </a>
+                                        <a href="{{ product.get_absolut_url }}">{{ product.title }}</a>
+                                        <h6>{% trans 'Color' %}:{{ item.variant_obj.color }}</h6>
+                                        <h6>{% trans 'Size' %}:{{ item.variant_obj.size }}</h6>
                                         <a href="#" class="">
                                             &#10060;
                                         </a>
                                     </span>
-                                    <span class="mini-cart__product__quantity">
-                                        <span>۴۹,۰۰۰ تومان</span> &#215; <span>۱</span>
+                                        <span class="mini-cart__product__quantity">
+                                        <span>{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span> &#215; <span>۱</span>
                                     </span>
-                                </div>
-                            </li>
-                            <li class="mini-cart__product d-flex justify-content-between">
-                                <div class="mini-cart__product__image">
-                                    <a href="#">
-                                        <img src="assets/img/products/prod-1-100x100.jpg" alt="products">
-                                    </a>
-                                </div>
-                                <div class="mini-cart__product__content pt-2">
-                                    <span class="mini-cart__product__title d-flex flex-row justify-content-between">
-                                        <a href="#"> محصول سماره یک </a>
-                                        <a href="#" class="">
-                                            &#10060;
-                                        </a>
-                                    </span>
-                                    <span class="mini-cart__product__quantity">
-                                        <span>۴۹,۰۰۰ تومان</span> &#215; <span>۱</span>
-                                    </span>
-                                </div>
-                            </li>
-                            <li class="mini-cart__product d-flex justify-content-between">
-                                <div class="mini-cart__product__image">
-                                    <a href="#">
-                                        <img src="assets/img/products/prod-1-100x100.jpg" alt="products">
-                                    </a>
-                                </div>
-                                <div class="mini-cart__product__content pt-2">
-                                    <span class="mini-cart__product__title d-flex flex-row justify-content-between">
-                                        <a href="#"> محصول سماره یک </a>
-                                        <a href="#" class="">
-                                            &#10060;
-                                        </a>
-                                    </span>
-                                    <span class="mini-cart__product__quantity">
-                                        <span>۴۹,۰۰۰ تومان</span> &#215; <span>۱</span>
-                                    </span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="mini-cart__total">
-                            <span>جمع کل</span>
-                            <span class="ammount">۱۴۸,۰۰۰ تومان</span>
-                        </div>
-                        <div class="mini-cart__buttons">
-                            <a href="cart.html" class="btn btn-fullwidth btn-bg-sand mb--20">مشاهده سبد خرید</a>
-                            <a href="checkout.html" class="btn btn-fullwidth btn-bg-sand">پرداخت</a>
-                        </div>
-                    </div>
+                                    </div>
+                                    </li>
+                                {% endwith %}
+                    {% endfor %}
+
+                </ul>
+                <div class="mini-cart__total">
+                    <span>{% translate 'Total' %}</span>
+                    <span class="ammount">{{ item.variant_obj.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
+                </div>
+                <div class="mini-cart__buttons">
+                    <a href="{% url 'cart:cart_detail' %}"
+                       class="btn btn-fullwidth btn-bg-sand mb--20 btn-danger">{% trans 'Go to cart detail' %}</a>
+                    <a href="{% url 'orders:order_create' %}"
+                       class="btn btn-fullwidth btn-bg-sand btn-danger">{% trans 'Register Order' %}</a>
                 </div>
             </div>
-        </aside>
-        <!-- Mini Cart End -->
+        </div>
+    </div>
+</aside>
+<!-- Mini Cart End -->

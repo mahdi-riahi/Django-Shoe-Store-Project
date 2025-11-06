@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponseNotFound
 from django.views import generic
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+from django.urls import reverse_lazy
 
 from .models import Product, Comment
 from .forms import CommentForm
@@ -66,11 +67,16 @@ def product_category_list_view(request, major_category, category):
     })
     # Remember to add pagination to this view. other list views don't need pagination.
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.http import require_http_methods
 
+@method_decorator(require_http_methods(["POST", ]), name='dispatch')
 class CommentCreateView(generic.CreateView):
-    request_method = 'POST'
     model = Comment
     form_class = CommentForm
+
+    def get_success_url(self):
+        return reverse_lazy('products:product_detail', kwargs={'pk': self.kwargs['pk']})
 
     def form_valid(self, form):
         product = get_object_or_404(Product, pk=int(self.kwargs['pk']))
@@ -83,9 +89,13 @@ class CommentCreateView(generic.CreateView):
             comment.email = user.email
         else:
             cleaned_data = form.cleaned_data
-            comment.name = cleaned_data['name']
-            comment.email = cleaned_data['email']
+            comment.name = cleaned_data.get('name', )
+            comment.email = cleaned_data.get('email', )
         comment.save()
 
         messages.success(self.request, _('Your comment added successfully'))
-        return super().form_valid(form)
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Please correct the errors for comment.'))
+        return redirect(self.get_success_url())

@@ -9,7 +9,13 @@ from .forms import AddUpdateCartForm
 
 
 def cart_detail_view(request):
-    return render(request, 'cart/cart_detail.html', )
+    cart = Cart(request)
+    for item in cart:
+        item['form'] = AddUpdateCartForm(initial={
+            'quantity': item['quantity'],
+            'update': True,
+        })
+    return render(request, 'cart/cart_detail.html', {'my_cart':cart})
 
 @require_POST
 def cart_add_update_view(request, variant_id):

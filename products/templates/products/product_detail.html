@@ -1,58 +1,72 @@
 {% extends '_base.html' %}
 
 {% load i18n %}
+{% load static %}
+{% load humanize %}
+{% load farsi_tags %}
+{% load global_tags %}
+{% load product_tags %}
+{% load crispy_forms_tags %}
 
 {% block title %}{% trans 'Details for' %}{{ product.title }}{% endblock %}
 
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock %}
+
 {% block content %}
 
-{#    <h4>{{ product.active_variants }}</h4>#}
-    {% for color,variants in product.get_active_variants_info_based_on_colors_dict.items %}
-    	<h2>{{ color }}</h2>
-        {% for variant in variants %}
-        	<p>{{ variant.quantity }} * {{ variant.size }}</p>
-        {% endfor %}
-        <span>--------------</span>
-
-    {% endfor %}
-
-    {% include 'header.html' %}
+    {% include 'products/category_navbar.html' %}
+    
+    {% trans 'Details for' as header1 %}
+    {% with product.title|number_farsi as product_title %}
+    {% include 'header.html' with header1=header1 header2=product_title %}
 
     <!-- Main Content Wrapper Start -->
     <div class="main-content-wrapper">
         <div class="page-content-inner ptb--80">
             <div class="container">
                 <div class="row no-gutters mb--80">
+                {% if product.covers.exists %}
+                    {% for cover in product.covers.all %}
+                        <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
+                            <img src="{{ cover.cover.url }}" class="m-auto" style="max-height: 400px;">
+                        </div>
+                    {% endfor %}
+                    {% else %}
                     <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
-                        <img class="m-auto" style="max-height: 400px;" src="https://dkstatics-public.digikala.com/digikala-products/8f34ee9823202d09ee97deb9b1c8e3300a9a24d8_1643265727.jpg?x-oss-process=image/resize,w_1600/quality,q_80" alt="">
-                    </div>
+                            <img src="{% static 'img/products/prod-7.jpg' %}" class="m-auto" style="max-height: 400px;">
+                        </div>
+                {% endif %}
                     <div class="col-12 col-sm-8 product-main-details mt-md--50">
                         <div class="product-summary pl-lg--30 pl-md--0 text-right p-4">
-                            <h3 class="product-title mb--20">لباس تابستانی</h3>
+                            <h3 class="product-title mb--20">{{ product_title }}</h3>
                             <p class="product-short-description mb--20">
-                                لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی
-                            </p>
+                            {{ product.short_description }}</p>
                             <div class="my-5 py-5 product-price-wrapper mb--25">
-                                <span class="money text-success">۱۴۸,۰۰۰ تومان</span>
+                                <span class="money text-success">{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
+                                {% if product.offer %}
                                 <span class="price-separator">-</span>
-                                <span class="money old-price text-danger">۲۱۰,۰۰۰ تومان</span>
+                                <span class="money old-price text-danger">{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
+                                {% endif %}
                             </div>
                             <div class="product-action d-flex align-items-sm-center align-content-center mb--30">
-                                <div class="quantity-wrapper d-flex justify-content-start">
-                                    <div class="quantity">
-                                        <input type="number" class="quantity-input" name="qty" id="qty" value="1" min="1">
+{#                                Needs fixing! important!!!!!!!!!!!!!!!#}
+                                <form action="{% url 'cart:cart_add' product.id %}">
+                                    {% csrf_token %}
+                                    <div class="quantity-wrapper d-flex justify-content-start">
+                                        <div class="quantity">
+                                            <input type="number" class="quantity-input" name="quantity" id="qty" value="1" min="1" max="30">
+                                            <button type="submit" class="btn btn-danger btn-bg-red btn-hover-2">
+                                                {% trans 'Add to cart' %}
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <button type="button" class="btn btn-small btn-bg-red btn-color-white btn-hover-2" onclick="window.location.href='cart.html'">
-                                    اضافه به سبد خرید
-                                </button>
+                                </form>
                             </div>
+                            <br>
                             <div class="product-footer-meta mt-5 pt-5">
-                                <p><span class="m-0">دسته بندی ها:</span>
-                                    <a href="shop.html">لباس</a>,
-                                    <a href="shop.html">تابستانی</a>,
-                                    <a href="shop.html">گرم</a>,
-                                    <a href="shop.html">زنانه</a>
+                                <p><span class="m-0">{% trans 'Categories' %}:</span>
+                                    <a href="{% url 'products:product_major_cat_list' product.major_category %}">{{ product.major_category }}</a>,
+                                    <a href="{% url 'products:product_category_list' product.major_category product.category %}">{{ product.get_category_display }}</a>
                                 </p>
                             </div>
                         </div>
@@ -63,25 +77,19 @@
                         <div class="product-data-tab tab-style-3">
                             <div class="nav nav-tabs product-data-tab__head" id="product-tab" role="tablist">
                                 <a class="m-0 product-data-tab__link nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-selected="true">
-                                    <span>توضیحات محصول</span>
+                                    <span>{% trans 'Product Description' %}</span>
                                 </a>
                                 <a class="m-0 product-data-tab__link nav-link" id="nav-info-tab" data-toggle="tab" href="#nav-info" role="tab" aria-selected="true">
-                                    <span>ویژگی ها</span>
+                                    <span>{% trans 'Properties' %}</span>
                                 </a>
                                 <a class="m-0 product-data-tab__link nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-selected="true">
-                                    <span>نظرات (۱)</span>
+                                    <span>{% trans 'Comments' %} ({{ product.comments.count|number_farsi }})</span>
                                 </a>
                             </div>
                             <div class="tab-content product-data-tab__content" id="product-tabContent">
                                 <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">
                                     <div class="product-description text-justify">
-                                        <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از
-                                            طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد،
-                                            تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارسی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی،
-                                            و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز،</p><p>
-                                            و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده، شناخت فراوان جامعه و متخصصان را می طلبد، تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی، و فرهنگ پیشرو در زبان فارس
-                                            ی ایجاد کرد، در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها، و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی، و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-
+                                        <p>{{ product.description|linebreaksbr }}</p>
                                     </div>
                                 </div>
                                 <div class="tab-pane text-right" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
@@ -89,20 +97,23 @@
                                         <table class="table shop_attributes">
                                             <tbody>
                                                 <tr>
-                                                    <th>وزن</th>
-                                                    <td>۴۳۰ گرم</td>
+                                                    <th>{% trans 'Material' %}</th>
+                                                    <td>{{ product.material }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>سایز</th>
-                                                    <td>XL</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>رنگ</th>
+                                                    <th>{% trans 'Sizes' %}</th>
                                                     <td>
-                                                        <a href="shop-sidebar.html">مشکی</a>,
-                                                        <a href="shop-sidebar.html">سبز</a>,
-                                                        <a href="shop-sidebar.html">قرمز</a>,
-                                                        <a href="shop-sidebar.html">نارنجی</a>,
+                                                    {% for size_display in product.get_active_variants_sizes.values %}
+                                                        <a href="#">{{ size_display|number_farsi }}</a>,
+                                                    {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>{% trans 'Colors' %}</th>
+                                                    <td>
+                                                    {% for color_display in product.get_active_variants_colors.values %}
+                                                        <a href="#">{{ color_display }}</a>,
+                                                    {% endfor %}
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -111,59 +122,82 @@
                                 </div>
                                 <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
                                     <div class="product-reviews">
-                                        <h3 class="review__title">۱ نظر برای لباس تابستانی</h3>
+                                        <h3 class="review__title">{{ product.comments.count|number_farsi }} {% trans 'Comments for' %}
+                                            {{ product_title|truncatewords:10 }}</h3>
+                                        {% endwith %}
                                         <ul class="review__list">
+
+                                        {% for comment in product.comments.all|active_objects %}
                                             <li class="review__item">
                                                 <div class="review__container">
                                                     <div class="review__text">
                                                         <div class="d-flex flex-sm-row flex-row">
-                                                            <img src="assets/img/others/comment-1.jpg" alt="Review Avatar" class="review__avatar">
-                                                            <div>
+                                                            <img
+                                                                src="{% if comment.user.profile_photo %}
+                                                                {{ user.profile_photo.url }}
+                                                                {% else %}{% static 'img/others/comment-1.jpg' %}
+                                                                {% endif %}" alt="Review Avatar" class="review__avatar">
+                                                            <div class="pr-2">
                                                                 <div class="review__meta">
-                                                                    <strong class="review__author px-4">علی علوی</strong>
+                                                                    <strong class="review__author px-4" style="float: right">{{ comment.name }}</strong>
                                                                     <span class="review__dash">-</span>
-                                                                    <span class="review__published-date">۱۲ مرداد ۱۴۰۱</span>
+                                                                    <span class="review__published-date">{{ comment.datetime_modified|number_farsi }}</span>
                                                                 </div>
-                                                                <div class="product-rating">
-                                                                    <div class="m-0 star-rating star-five">
-                                                                        <span>Rated <strong class="rating">5.00</strong> out of 5</span>
+                                                                <div class="product-rating pr-3">
+                                                                    {% if comment.rate %}
+                                                                    <div class="m-0 star-rating star-{{ comment.rate|turn_number_to_letter }}">
+                                                                        <span>Rated <strong class="rating"></strong> out of 5</span>
                                                                     </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                                <div class="pr-3 pt-2 product-price-wrapper mb--25">
+                                                                    {% if comment.recommend %}
+                                                                        <span class="money text-success">👍 {% trans 'I recommend this product' %}</span>
+                                                                    {% else %}
+                                                                    <span class="money text-danger">👎 {% trans "I don't recommend this product" %}</span>
+                                                                    {% endif %}
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <p class="review__description text-right px-4">
-                                                            از خرید خودم راضی هستم. واقعا خیلی خوب بسته بندی شده بود و همینطور سر زمان رسید. واقعا نسبت به قیمت خیلی می ارزه.
+                                                            {{ comment.text }}
                                                         </p>
                                                     </div>
                                                 </div>
                                             </li>
+                                        {% endfor %}
+
                                         </ul>
                                         <div class="review-form-wrapper">
                                             <div class="row">
                                                 <div class="border-top py-5 w-100"></div>
                                                 <div class="col-lg-8 m-auto">
-                                                    <span class="reply-title pull-right">نظر خود را بنویسید</span>
+                                                    <span class="reply-title pull-right">{% trans 'Add your own comment' %}</span>
                                                     <br>
-                                                    <form action="#" class="form text-right">
+                                                    <form action="{% url 'products:comment_create' product.id %}" method="POST" class="form text-right">
+                                                        {% csrf_token %}
+
+                                                        {% if not user.is_authenticated %}
                                                         <div class="form-notes mb--20">
-                                                            <p class="my-3"><span class="required">*</span>ایمیل شما برای دیگران نشان داده نمیشود.</p>
-                                                        </div>
-                                                        <div class="form__group mb--10">
-                                                            <label class="form__label d-block" for="email">متن نظر شما<span class="required">*</span></label>
-                                                            <textarea name="review" id="review" class="form__input form__input--textarea"></textarea>
+                                                            <p class="my-3"><span class="required">*</span>{% trans 'Your email will not be shown to others' %}</p>
                                                         </div>
                                                         <div class="form__group mb--20">
-                                                            <label class="form__label d-block" for="name">نام شما<span class="required">*</span></label>
+                                                            <label class="form__label d-block" for="name">{% trans 'Your Name' %}<span class="required">*</span></label>
                                                             <input type="text" name="name" id="name" class="form__input">
                                                         </div>
                                                         <div class="form__group mb--20">
-                                                            <label class="form__label d-block" for="email">ایمیل شما<span class="required">*</span></label>
+                                                            <label class="form__label d-block" for="email">{% trans 'Your Email' %}<span class="required">*</span></label>
                                                             <input type="email" name="email" id="email" class="form__input">
+                                                        </div>
+                                                        {% endif %}
+
+                                                        <div class="form__group mb--10">
+                                                            {{ comment_form|crispy }}
                                                         </div>
                                                         <div class="form__group">
                                                             <div class="form-row">
                                                                 <div class="col-12">
-                                                                    <input type="submit" value="ارسال" class="btn-submit">
+                                                                    <input type="submit" value="{% trans 'Send' %}" class="btn-submit">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -181,6 +215,7 @@
         </div>
     </div>
     <!-- Main Content Wrapper End -->
-
+    
+    {% include 'cart/mini_cart_aside.html' %}
 
 {% endblock content %}

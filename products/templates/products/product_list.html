@@ -1,10 +1,7 @@
 {% extends '_base.html' %}
 
 {% load i18n %}
-{% load humanize %}
 {% load static %}
-
-{% load farsi_tags %}
 
 {% block title %}{% trans 'Products List' %}{% endblock %}
 
@@ -31,8 +28,8 @@
                             <div class="col-12">
                                 <div class="tab-content" id="product-tab-content">
                                     <div class="tab-pane fade show active" id="nav-all">
-                                        <div class="row xxl-block-grid-6 grid-space-20">
 
+                                        <div class="row xxl-block-grid-6 grid-space-20">
                                             {% for product in women_shoes %}
                                                 {% include 'products/product_individual.html' with product=product %}
                                             {% endfor %}
@@ -42,30 +39,40 @@
                                             {% for product in men_shoes %}
                                                 {% include 'products/product_individual.html' with product=product %}
                                             {% endfor %}
+                                        </div>
+
+                                        <div class="row xxl-block-grid-6 grid-space-20">
                                             {% for product in bags %}
                                                 {% include 'products/product_individual.html' with product=product %}
                                             {% endfor %}
+                                        </div>
+
+                                        <div class="row xxl-block-grid-6 grid-space-20">
                                             {% for product in clothing %}
                                                 {% include 'products/product_individual.html' with product=product %}
                                             {% endfor %}
+                                        </div>
+
+                                        <div class="row xxl-block-grid-6 grid-space-20">
                                             {% for product in accessory %}
                                                 {% include 'products/product_individual.html' with product=product %}
                                             {% endfor %}
+                                        </div>
+
+                                        <div class="row xxl-block-grid-6 grid-space-20">
                                             {% for product in shoescare %}
                                                 {% include 'products/product_individual.html' with product=product %}
                                             {% endfor %}
-
                                         </div>
+
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- Main Content Wrapper Start -->
-
 
         </div>
     </div>

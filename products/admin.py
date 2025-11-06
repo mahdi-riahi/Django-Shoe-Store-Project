@@ -22,7 +22,7 @@ class CoverInline(admin.StackedInline):
 
 class ProductVariantInline(admin.StackedInline):
     model = ProductVariant
-    extra = 1
+    extra = 0
 
 
 class ProductAdmin(admin.ModelAdmin):

@@ -1,6 +1,8 @@
 {% load static %}
 {% load i18n %}
 {% load product_tags %}
+{% load farsi_tags %}
+{% load humanize %}
 
 <div class="col-xl-2 col-md-4 col-sm-9 mb--20">
     <div class="ShoppingYar-product">
@@ -23,26 +25,32 @@
                 {% endif %}
             </figure>
             <div class="product-info">
-                <div class="row justify-content-center">
-                    {% for variant in product.variants|active_objects %}
-                        <div style="background-color: {{ variant.get_color_display }}; width: 20px; height: 20px"></div>
-
+                <div style="float: right;">
+                    {% with product.get_active_variants_colors|dict_first_three_elements as colors %}
+                    {% for color_display in colors.values %}
+                        <div class="circleBase type_free" style="background-color: {{ color_display }};"></div> &nbsp; &nbsp; &nbsp;
                     {% endfor %}
+                    {% if product.get_active_variants_colors|length > 3 %}
+                        <div class="circleBase type_free">+</div> &nbsp; &nbsp; &nbsp;
+
+                    {% endif %}
+                    {% endwith %}
                 </div>
+                <br>
                 <div>
                 <h3 class="product-title h6 mb--15">
-                    <a href="product-details.html">{{ product.title }}</a>
+                    <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
                 </h3>
                 </div>
                 <div class="product-price-wrapper mb--30">
                     {% if product.offer %}
-                        <span class="money-separator">-</span>
+                        <span class="money-separator"></span>
                         <span class="old-price text-danger">
-                            <span class="money text-danger">{{ product.price }} {% trans 'Toman' %}</span>
+                            <span class="money text-danger">{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
                         </span>
-                        <span class="money text-success">{{ product.offer_price }} {% trans 'Toman' %}</span>
+                        <span class="money text-success">{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
                     {% else %}
-                        <span class="money">{{ product.price }} {% trans 'Toman' %}</span>
+                        <span class="money">{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
                     {% endif %}
                 </div>
 

@@ -101,3 +101,9 @@ class Cart:
             variant = item['variant_obj']
             if not variant.is_available(item['quantity']):
                 self.add(variant, variant.quantity, update=True)
+
+    def get_total_price_no_offer(self):
+            return sum(item['quantity'] * item['product_obj'].price for item in self.cart)
+
+    def get_total_price(self):
+        return sum(item['quantity'] * item['product_obj'].offer_price for item in self.cart)
