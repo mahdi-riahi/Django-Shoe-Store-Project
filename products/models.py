@@ -237,7 +237,7 @@ class ProductVariant(models.Model):
         ('ShoesCare', tuple((i, str(i)) for i in range(36,46))),
     )
 
-    color = models.CharField(_('Color'), max_length=2, choices=COLORS, blank=True)
+    color = models.CharField(_('Color'), max_length=2, choices=COLORS)
     size = models.PositiveIntegerField(_('Size'), choices=SIZES, blank=True, null=True)
 
     product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='variants')

@@ -51,18 +51,27 @@
                                 {% endif %}
                             </div>
                             <div class="product-action d-flex align-items-sm-center align-content-center mb--30">
-{#                                Needs fixing! important!!!!!!!!!!!!!!!#}
-                                <form action="{% url 'cart:cart_add' product.id %}">
-                                    {% csrf_token %}
-                                    <div class="quantity-wrapper d-flex justify-content-start">
-                                        <div class="quantity">
-                                            <input type="number" class="quantity-input" name="quantity" id="qty" value="1" min="1" max="30">
-                                            <button type="submit" class="btn btn-danger btn-bg-red btn-hover-2">
-                                                {% trans 'Add to cart' %}
-                                            </button>
+                                {% for color_display,color_form in color_form_dict.items %}
+
+                                    <div class="circleBase type_free" style="background-color: {{ color_display }}"></div>
+
+                                    <form action="{% url 'cart:cart_add' product.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <div class="quantity-wrapper d-flex justify-content-start">
+                                            {{ color_form.color }}
+                                            {{ color_form.size }}
+                                            <div class="container">
+                                                <div class="quantity">
+                                                    <input type="number" class="quantity-input" name="quantity" id="qty" value="1" min="1" max="30">
+                                                </div>
+                                                <button type="submit" class="btn btn-danger btn-bg-red btn-hover-2">
+                                                    {% trans 'Add to cart' %}
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+
+                                {% endfor %}
                             </div>
                             <br>
                             <div class="product-footer-meta mt-5 pt-5">

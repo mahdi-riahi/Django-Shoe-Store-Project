@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 
 from .models import Product, Comment
 from .forms import CommentForm
+from cart.forms import AddToCartForm
 
 
 class ProductListView(generic.ListView):
@@ -49,6 +50,19 @@ class ProductDetailView(generic.DetailView):
         comment_page_obj = paginator.get_page(page_number)
         context['comments_page_obj'] = comment_page_obj
         context['comments_num_pages'] = paginator.num_pages
+
+        context['color_form_dict'] = {
+            color_display: AddToCartForm(
+                kwargs={
+                    variant.size: variant.get_size_display() for variant in self.object.variants.filter(is_active=True, color=color).order_by('size')
+                },
+                initial={
+                    'color': color,
+                },
+            )
+            for color, color_display in self.object.get_active_variants_colors().items()
+        }
+
         return context
 
 
