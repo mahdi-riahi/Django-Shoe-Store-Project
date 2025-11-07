@@ -4,14 +4,39 @@
 
 {% block title %}{{ category }}{% endblock %}
 
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock mini_cart_icon %}
+
 {% block content %}
 
-    <h3>{{ category }} - {{ major_category }}</h3>
+    {% include 'products/category_navbar.html' %}
 
-    {% for product in products %}
-        <h1>
-    	{{ product.title }}
-        </h1>
-    {% endfor %}
+    <div class="container-fluid">
+    <h3>{{ category }} - {{ major_category }}</h3>
+    </div>
+    <div class="row xxl-block-grid-6 grid-space-20">
+        {% for product in products_page_obj %}
+            {% include 'products/product_individual.html' with product=product %}
+        {% endfor %}
+
+        <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
+            <ul class="pagination">
+                {% with products_page_obj as page %}
+                        <li><a href="?page=1" class="page-link">1</a></li>
+                    <li><a href="#" class="next page-number"><i class="fa fa-angle-double-right"></i></a></li>
+                        {% if page.has_previous %}
+                            <li><a href="?page={{ page.previous_page_number }}" class="page-number">{{ page.previous_page_number }}</a></li>
+                        {% endif %}
+                    <li><span class="current page-number">{{ page.number }}</span></li>
+                        {% if page.has_next %}
+                            <li><a href="?page={{ page.next_page_number }}" class="page-number">{{ page.next_page_number }}</a></li>
+                        {% endif %}
+                    <li><a href="#" class="prev page-number"><i class="fa fa-angle-double-left"></i></a></li>
+                        <li><a href="?page={{ products_num_pages }}" class="page-link">{{ products_num_pages }}</a></li>
+                {% endwith %}
+            </ul>
+        </nav>
+    </div>
+
+    {% include 'cart/mini_cart_aside.html' %}
 
 {% endblock %}

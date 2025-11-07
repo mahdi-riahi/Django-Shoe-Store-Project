@@ -25,12 +25,11 @@ class ProductListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
-        context['women_shoes'] = Product.active_product_manager.filter(major_category='Women')[:5]
-        context['men_shoes'] = Product.active_product_manager.filter(major_category='Men')[:5]
-        context['bags'] = Product.active_product_manager.filter(major_category='Bags')[:5]
-        context['clothing'] = Product.active_product_manager.filter(major_category='Clothing')[:5]
-        context['accessory'] = Product.active_product_manager.filter(major_category='Accessory')[:5]
-        context['shoescare'] = Product.active_product_manager.filter(major_category='ShoesCare')[:5]
+        query_dict = {
+            major_category: Product.active_product_manager.filter(major_category=major_category)[:5]
+            for major_category in Product.get_major_categories_list()
+        }
+        context['query_dict'] = query_dict
         return context
 
 
@@ -57,7 +56,7 @@ def product_major_category_list_view(request, major_category):
     if major_category not in Product.get_major_categories_list():
         return HttpResponseNotFound('Page not found')
     categories = Product.get_categories_from_major_cat(major_category)
-    query_dict = {category: Product.active_product_manager.filter(category=category)[:5] for category in categories}
+    query_dict = {category_display: Product.active_product_manager.filter(category=category)[:5] for category,category_display in categories.items()}
     return render(
         request,
         'products/major_category_product_list.html',
@@ -70,13 +69,20 @@ def product_category_list_view(request, major_category, category):
         major_category not in Product.get_major_categories_list(),
         category not in Product.get_categories_from_major_cat(major_category),]):
         return HttpResponseNotFound('Page not found')
+
     products = Product.active_product_manager.filter(category=category)
+
+    paginator = Paginator(products, 30)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    category_display = Product.find_category_display_from_category(category)
+
     return render(request,'products/category_product_list.html', {
-        'products': products,
-        'category':category,
+        'products_page_obj': page_obj,
+        'products_num_pages':paginator.num_pages,
+        'category':category_display,
         'major_category': major_category,
     })
-    # Remember to add pagination to this view. other list views don't need pagination.
 
 
 @method_decorator(require_http_methods(["POST", ]), name='dispatch')

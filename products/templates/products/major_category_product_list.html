@@ -1,19 +1,54 @@
 {% extends '_base.html' %}
 
 {% load i18n %}
+{% load static %}
 
 {% block title %}{{ major_category }}{% endblock %}
 
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock mini_cart_icon %}
+
 {% block content %}
 
-    {% for cat,products in query_dict.items %}
-        <h1>
-    	{{ cat }}
-        </h1>
-        {% for product in products %}
-        	{{ product.title }}
-        {% endfor %}
+    {% include 'products/category_navbar.html' %}
 
-    {% endfor %}
+    <!-- Main Content Wrapper Start -->
+    <div class="main-content-wrapper container-fluid mt-5">
+
+        <div class="shop-page-wrapper shop-fullwidth">
+
+            <div class="main-content-wrapper container-fluid">
+                <div class="shop-page-wrapper shop-fullwidth">
+                    <div class="container-fluid shop-products">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="tab-content" id="product-tab-content">
+                                    <div class="tab-pane fade show active" id="nav-all">
+
+                                    {% for category,products in query_dict.items %}
+
+                                        <div class="container-fluid">
+                                        <h3>{{ category }}</h3>
+                                        </div>
+                                        <div class="row xxl-block-grid-6 grid-space-20">
+                                            {% for product in products %}
+                                                {% include 'products/product_individual.html' with product=product %}
+                                            {% endfor %}
+                                        </div>
+
+                                    {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Main Content Wrapper End -->
+
+    {% include 'cart/mini_cart_aside.html' %}
 
 {% endblock %}

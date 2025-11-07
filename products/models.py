@@ -140,7 +140,7 @@ class Product(models.Model):
         """
         for key, values in cls.CATEGORIES:
             if key == major_category:
-                return (value[0] for value in values)
+                return {value[0]:value[1] for value in values}
         return None
 
     @classmethod
@@ -160,6 +160,14 @@ class Product(models.Model):
             for value, label in subgroups:
                 categories_list.append(value)
         return categories_list
+
+    @classmethod
+    def find_category_display_from_category(cls, category):
+        for group_name, subgroups in cls.CATEGORIES:
+            for value, label in subgroups:
+                if value == category:
+                    return label
+        return None
 
     def sync_is_active_and_variants(self):
         """
