@@ -21,8 +21,8 @@ class Order(models.Model):
     )
 
     phone_regex = RegexValidator(
-        regex=r'^\d{11}$',
-        message=_("Phone number must be exactly 11 digits.")
+        regex=r'^09\d{9}$',
+        message=_("Phone number must be exactly 11 digits starting with '09'.")
     )
 
     first_name = models.CharField(_('First Name'), max_length=100)
@@ -43,7 +43,7 @@ class Order(models.Model):
     )
     address = models.CharField(_('Address'), max_length=700)
     notes = models.CharField(_('Any notes about your order?'), max_length=500, blank=True)
-    total_price = models.PositiveIntegerField(_('Total Price'), blank=True)  # Gets once and final amount when order is activated
+    total_price = models.PositiveIntegerField(_('Total Price'), blank=True, null=True)  # Gets once and final amount when order is activated
 
     is_paid = models.BooleanField(_('Is order paid?'), default=False)
     status = models.PositiveIntegerField(_('Order Status'), choices=STATUSES, default=0)
@@ -97,6 +97,11 @@ class Order(models.Model):
         self.is_paid = False
         self.save()
 
+        # Increase quantity of the variant when order is canceled
+        for item in self.items.all():
+            item.product_variant.increase_quantity(item.quantity)
+
+        # Refill the cart
         cart = Cart(request)
         for item in self.items.all():
             cart.add(item.product_variant, item.quantity)
@@ -126,33 +131,16 @@ class OrderItem(models.Model):
     def __str__(self):
         return f'Order {self.order.id}-{self.quantity}X{self.price}'
 
-    # def save(self, *args, **kwargs):
-    #     """
-    #     Auto-populate price before saving
-    #     """
-    #     self.price = self.product_variant.color.product.price
-    #     super().save(*args, **kwargs)
-
-    def __init__(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
         """
-        Initialize the order item
-        Fill the price when object is getting created
+        Auto-populate price before saving
         """
-        super().__init__(*args, **kwargs)
-        product = self.product_variant.product
-        self.price = product.offer_price if product.offer else product.price
+        self.price = self.product_variant.product.offer_price
+        super().save(*args, **kwargs)
 
     def get_total_price(self):
         """
         Calculate total price and refresh price with related product
         """
-        self.refresh_price()
-        return self.quantity * self.price
-
-    def refresh_price(self):
-        """
-        Refresh price amount from product
-        """
-        product = self.product_variant.product
-        self.price = product.offer_price if product.offer else product.price
         self.save()
+        return self.quantity * self.price

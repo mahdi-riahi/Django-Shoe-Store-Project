@@ -51,17 +51,21 @@ class ProductDetailView(generic.DetailView):
         context['comments_page_obj'] = comment_page_obj
         context['comments_num_pages'] = paginator.num_pages
 
-        context['color_form_dict'] = {
-            color_display: AddToCartForm(
-                kwargs={
-                    variant.size: variant.get_size_display() for variant in self.object.variants.filter(is_active=True, color=color).order_by('size')
-                },
-                initial={
-                    'color': color,
-                },
-            )
-            for color, color_display in self.object.get_active_variants_colors().items()
-        }
+        color_form_dict = {}
+        for color, color_display in self.object.get_active_variants_colors().items():
+            variants = self.object.variants.filter(is_active=True, color=color).order_by('size')
+            size_choices = [
+                (variant.size, variant.get_size_display())
+                for variant in variants
+            ]
+
+            if size_choices:
+                color_form_dict[color_display] = AddToCartForm(
+                    size_choices=size_choices,
+                    initial={'color': color}
+                )
+
+        context['color_form_dict'] = color_form_dict
 
         return context
 

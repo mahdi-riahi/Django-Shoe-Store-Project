@@ -52,7 +52,7 @@ def payment_process_sandbox(request):
 
         messages.error(request, _('Some errors happened from Zarinpal'))
         messages.error(request, errors['message'])
-        message.info(request, _('Please try again or contact support. We can only hold your order for 15 minutes'))
+        messages.info(request, _('Please try again or contact support. We can only hold your order for 15 minutes'))
         return redirect('orders:order_confirm', pk=order_id)
     return HttpResponseForbidden('<h1>Error 403 Forbidden')
 
@@ -105,7 +105,7 @@ def payment_callback_sandbox(request):
             order.activate_order()
             messages.success(request, _('Payment successfully completed'))
             messages.success(request, _('Your order is getting processed'))
-            return render(request, 'payment/payment_success.html', {'order': order})
+            return redirect('orders:order_detail', pk=order_id)
 
     else: # if status == 'NOK':
         messages.error(request, _('Payment failed. Please contact support.'))

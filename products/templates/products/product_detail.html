@@ -15,238 +15,269 @@
 {% block content %}
 
     {% include 'products/category_navbar.html' %}
-    
+
     {% trans 'Details for' as header1 %}
     {% with product.title|number_farsi as product_title %}
-    {% include 'header.html' with header1=header1 header2=product_title %}
+        {% include 'header.html' with header1=header1 header2=product_title %}
 
-    <!-- Main Content Wrapper Start -->
-    <div class="main-content-wrapper">
+        <!-- Main Content Wrapper Start -->
+        <div class="main-content-wrapper">
         <div class="page-content-inner ptb--80">
-            <div class="container">
-                <div class="row no-gutters mb--80">
-                {% if product.covers.exists %}
-                    {% for cover in product.covers.all %}
-                        <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
+        <div class="container">
+        <div class="row no-gutters mb--80">
+            {% if product.covers.exists %}
+                {% for cover in product.covers.all %}
+                    <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
                         <a href="{{ cover.cover.url }}">
                             <img src="{{ cover.cover.url }}" class="m-auto" style="max-height: 400px;">
                         </a>
-                        </div>
-                    {% endfor %}
-                    {% else %}
-                    <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
-                            <img src="{% static 'img/products/prod-7.jpg' %}" class="m-auto" style="max-height: 400px;">
-                        </div>
-                {% endif %}
-                    <div class="col-12 col-sm-8 product-main-details mt-md--50">
-                        <div class="product-summary pl-lg--30 pl-md--0 text-right p-4">
-                            <h3 class="product-title mb--20">{{ product_title }}</h3>
-                            <p class="product-short-description mb--20">
-                            {{ product.short_description }}</p>
-                            <div class="my-5 py-5 product-price-wrapper mb--25">
-                                <span class="money text-success">{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
-                                {% if product.offer %}
-                                <span class="price-separator">-</span>
-                                <span class="money old-price text-danger">{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
-                                {% endif %}
-                            </div>
-                            <div class="product-action d-flex align-items-sm-center align-content-center mb--30">
-                                {% for color_display,color_form in color_form_dict.items %}
-
-                                    <div class="circleBase type_free" style="background-color: {{ color_display }}"></div>
-
-                                    <form action="{% url 'cart:cart_add' product.id %}" method="POST">
-                                        {% csrf_token %}
-                                        <div class="quantity-wrapper d-flex justify-content-start">
-                                            {{ color_form.color }}
-                                            {{ color_form.size }}
-                                            <div class="container">
-                                                <div class="quantity">
-                                                    <input type="number" class="quantity-input" name="quantity" id="qty" value="1" min="1" max="30">
-                                                </div>
-                                                <button type="submit" class="btn btn-danger btn-bg-red btn-hover-2">
-                                                    {% trans 'Add to cart' %}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                {% endfor %}
-                            </div>
-                            <br>
-                            <div class="product-footer-meta mt-5 pt-5">
-                                <p><span class="m-0">{% trans 'Categories' %}:</span>
-                                    <a href="{% url 'products:product_major_cat_list' product.major_category %}">{{ product.major_category }}</a>,
-                                    <a href="{% url 'products:product_category_list' product.major_category product.category %}">{{ product.get_category_display }}</a>
-                                </p>
-                            </div>
-                        </div>
                     </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
+                    <img src="{% static 'img/products/prod-7.jpg' %}" class="m-auto" style="max-height: 400px;">
                 </div>
-                <div class="row justify-content-center">
-                    <div class="col-12">
-                        <div class="product-data-tab tab-style-3">
-                            <div class="nav nav-tabs product-data-tab__head" id="product-tab" role="tablist">
-                                <a class="m-0 product-data-tab__link nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-description" role="tab" aria-selected="true">
-                                    <span>{% trans 'Product Description' %}</span>
-                                </a>
-                                <a class="m-0 product-data-tab__link nav-link" id="nav-info-tab" data-toggle="tab" href="#nav-info" role="tab" aria-selected="true">
-                                    <span>{% trans 'Properties' %}</span>
-                                </a>
-                                <a class="m-0 product-data-tab__link nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-selected="true">
-                                    <span>{% trans 'Comments' %} ({{ product.comments.count|number_farsi }})</span>
-                                </a>
+            {% endif %}
+            <div class="col-12 col-sm-8 product-main-details mt-md--50">
+                <div class="product-summary pl-lg--30 pl-md--0 text-right p-4">
+                    <h3 class="product-title mb--20">{{ product_title }}</h3>
+                    <p class="product-short-description mb--20">
+                        {{ product.short_description }}</p>
+                    <div class="my-5 py-5 product-price-wrapper mb--25">
+                        <span class="money text-success">{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
+                        {% if product.offer %}
+                            <span class="price-separator">-</span>
+                            <span class="money old-price text-danger">{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="product-action d-flex align-items-sm-center align-content-center mb--30">
+                        {% for color_display, color_form in color_form_dict.items %}
+                            <div class="color-option me-4">
+                                <!-- Color indicator -->
+                                <div class="color-swatch mb-2"
+                                     style="width: 30px; height: 30px; border-radius: 50%; background-color: {{ color_display }}; border: 2px solid #ddd;">
+                                </div>
+
+                                <!-- Form for this color -->
+                                <form action="{% url 'cart:cart_add' product.id %}" method="POST" class="color-form">
+                                    {% csrf_token %}
+
+                                    {{ color_form|crispy }}
+
+                                    {#                                    <!-- Hidden color field -->#}
+                                    {#                                    {{ color_form.color }}#}
+
+                                    {#                                    <!-- Size selection -->#}
+                                    {#                                    <div class="mb-2">#}
+                                    {#                                        <label class="form-label small">{{ color_form.size.label }}</label>#}
+                                    {#                                        {{ color_form.size }}#}
+                                    {#                                    </div>#}
+                                    {##}
+                                    {#                                    <!-- Quantity selection -->#}
+                                    {#                                    <div class="mb-2">#}
+                                    {#                                        <label class="form-label small">{{ color_form.quantity.label }}</label>#}
+                                    {#                                        {{ color_form.quantity }}#}
+                                    {#                                    </div>#}
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-danger btn-sm btn-bg-red btn-hover-2 w-100">
+                                        {% trans 'Add to cart' %}
+                                    </button>
+                                </form>
                             </div>
-                            <div class="tab-content product-data-tab__content" id="product-tabContent">
-                                <div class="tab-pane fade show active" id="nav-description" role="tabpanel" aria-labelledby="nav-description-tab">
-                                    <div class="product-description text-justify">
-                                        <p>{{ product.description|linebreaksbr }}</p>
-                                    </div>
-                                </div>
-                                <div class="tab-pane text-right" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
-                                    <div class="table-content table-responsive">
-                                        <table class="table shop_attributes">
-                                            <tbody>
-                                                <tr>
-                                                    <th>{% trans 'Material' %}</th>
-                                                    <td>{{ product.material }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>{% trans 'Sizes' %}</th>
-                                                    <td>
-                                                    {% for size_display in product.get_active_variants_sizes.values %}
-                                                        <a href="#">{{ size_display|number_farsi }}</a>,
-                                                    {% endfor %}
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>{% trans 'Colors' %}</th>
-                                                    <td>
-                                                    {% for color_display in product.get_active_variants_colors.values %}
-                                                        <a href="#">{{ color_display }}</a>,
-                                                    {% endfor %}
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
-                                    <div class="product-reviews">
-                                        <h3 class="review__title">{{ product.comments.count|number_farsi }} {% trans 'Comments for' %}
-                                            {{ product_title|truncatewords:10 }}</h3>
-                                        {% endwith %}
-                                        <ul class="review__list">
-
-{#                                        {% for comment in product.comments.all|active_objects %}#}
-                                        {% for comment in comments_page_obj %}
-                                            <li class="review__item">
-                                                <div class="review__container">
-                                                    <div class="review__text">
-                                                        <div class="d-flex flex-sm-row flex-row">
-                                                            <img
-                                                                src="{% if comment.user.profile_photo %}
-                                                                {{ user.profile_photo.url }}
-                                                                {% else %}{% static 'img/others/comment-1.jpg' %}
-                                                                {% endif %}" alt="Review Avatar" class="review__avatar">
-                                                            <div class="pr-2">
-                                                                <div class="review__meta">
-                                                                    <strong class="review__author px-4" style="float: right">{{ comment.name }}</strong>
-                                                                    <span class="review__dash">-</span>
-                                                                    <span class="review__published-date">{{ comment.datetime_modified|number_farsi }}</span>
-                                                                </div>
-                                                                <div class="product-rating pr-3">
-                                                                    {% if comment.rate %}
-                                                                    <div class="m-0 star-rating star-{{ comment.rate|turn_number_to_letter }}">
-                                                                        <span>Rated <strong class="rating"></strong> out of 5</span>
-                                                                    </div>
-                                                                    {% endif %}
-                                                                </div>
-                                                                <div class="pr-3 pt-2 product-price-wrapper mb--25">
-                                                                    {% if comment.recommend %}
-                                                                        <span class="money text-success">👍 {% trans 'I recommend this product' %}</span>
-                                                                    {% else %}
-                                                                    <span class="money text-danger">👎 {% trans "I don't recommend this product" %}</span>
-                                                                    {% endif %}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                            <p class="review__description text-right px-4">
-                                                                {{ comment.text|linebreaksbr }}
-                                                            </p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                        <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
-                                            <ul class="pagination">
-                                                {% with comments_page_obj as page %}
-                                                        <li><a href="?page=1" class="page-link">1</a></li>
-                                                    <li><a href="#" class="next page-number"><i class="fa fa-angle-double-right"></i></a></li>
-                                                        {% if page.has_previous %}
-                                                            <li><a href="?page={{ page.previous_page_number }}" class="page-number">{{ page.previous_page_number }}</a></li>
-                                                        {% endif %}
-                                                    <li><span class="current page-number">{{ page.number }}</span></li>
-                                                        {% if page.has_next %}
-                                                            <li><a href="?page={{ page.next_page_number }}" class="page-number">{{ page.next_page_number }}</a></li>
-                                                        {% endif %}
-                                                    <li><a href="#" class="prev page-number"><i class="fa fa-angle-double-left"></i></a></li>
-                                                        <li><a href="?page={{ comments_num_pages }}" class="page-link">{{ comments_num_pages }}</a></li>
-                                                {% endwith %}
-                                            </ul>
-                                        </nav>
-
-                                        </ul>
-                                        <div class="review-form-wrapper">
-                                            <div class="row">
-                                                <div class="border-top py-5 w-100"></div>
-                                                <div class="col-lg-8 m-auto">
-                                                    <span class="reply-title pull-right">{% trans 'Add your own comment' %}</span>
-                                                    <br>
-                                                    <form action="{% url 'products:comment_create' product.id %}" method="POST" class="form text-right">
-                                                        {% csrf_token %}
-
-                                                        {% if not user.is_authenticated %}
-                                                        <div class="form-notes mb--20">
-                                                            <p class="my-3"><span class="required">*</span>{% trans 'Your email will not be shown to others' %}</p>
-                                                        </div>
-                                                        <div class="form__group mb--20">
-                                                            <label class="form__label d-block" for="name">{% trans 'Your Name' %}<span class="required">*</span></label>
-                                                            <input type="text" name="name" id="name" class="form__input">
-                                                        </div>
-                                                        <div class="form__group mb--20">
-                                                            <label class="form__label d-block" for="email">{% trans 'Your Email' %}<span class="required">*</span></label>
-                                                            <input type="email" name="email" id="email" class="form__input">
-                                                        </div>
-                                                        {% endif %}
-
-                                                        <div class="form__group mb--10">
-                                                            {{ comment_form.text|as_crispy_field }}
-                                                            {{ comment_form.recommend|as_crispy_field }}
-                                                            {{ comment_form.rate|as_crispy_field }}
-                                                        </div>
-                                                        <div class="form__group">
-                                                            <div class="form-row">
-                                                                <div class="col-12">
-                                                                    <input type="submit" value="{% trans 'Send' %}" class="btn-submit">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        {% empty %}
+                            <div class="col-12">
+                                <p class="text-muted">{% trans 'No variants available' %}</p>
                             </div>
-                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <br>
+                    <div class="product-footer-meta mt-5 pt-5">
+                        <p><span class="m-0">{% trans 'Categories' %}:</span>
+                            <a href="{% url 'products:product_major_cat_list' product.major_category %}">{{ product.major_category }}</a>,
+                            <a href="{% url 'products:product_category_list' product.major_category product.category %}">{{ product.get_category_display }}</a>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="row justify-content-center">
+        <div class="col-12">
+        <div class="product-data-tab tab-style-3">
+        <div class="nav nav-tabs product-data-tab__head" id="product-tab" role="tablist">
+            <a class="m-0 product-data-tab__link nav-link active" id="nav-description-tab" data-toggle="tab"
+               href="#nav-description" role="tab" aria-selected="true">
+                <span>{% trans 'Product Description' %}</span>
+            </a>
+            <a class="m-0 product-data-tab__link nav-link" id="nav-info-tab" data-toggle="tab" href="#nav-info"
+               role="tab" aria-selected="true">
+                <span>{% trans 'Properties' %}</span>
+            </a>
+            <a class="m-0 product-data-tab__link nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-reviews"
+               role="tab" aria-selected="true">
+                <span>{% trans 'Comments' %} ({{ product.comments.count|number_farsi }})</span>
+            </a>
+        </div>
+        <div class="tab-content product-data-tab__content" id="product-tabContent">
+        <div class="tab-pane fade show active" id="nav-description" role="tabpanel"
+             aria-labelledby="nav-description-tab">
+            <div class="product-description text-justify">
+                <p>{{ product.description|linebreaksbr }}</p>
+            </div>
+        </div>
+        <div class="tab-pane text-right" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+            <div class="table-content table-responsive">
+                <table class="table shop_attributes">
+                    <tbody>
+                    <tr>
+                        <th>{% trans 'Material' %}</th>
+                        <td>{{ product.material }}</td>
+                    </tr>
+                    <tr>
+                        <th>{% trans 'Sizes' %}</th>
+                        <td>
+                            {% for size_display in product.get_active_variants_sizes.values %}
+                                <a href="#">{{ size_display|number_farsi }}</a>,
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{% trans 'Colors' %}</th>
+                        <td>
+                            {% for color_display in product.get_active_variants_colors.values %}
+                                <a href="#">{{ color_display }}</a>,
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
+        <div class="product-reviews">
+        <h3 class="review__title">{{ product.comments.count|number_farsi }} {% trans 'Comments for' %}
+            {{ product_title|truncatewords:10 }}</h3>
+    {% endwith %}
+<ul class="review__list">
+
+    {#                                        {% for comment in product.comments.all|active_objects %}#}
+    {% for comment in comments_page_obj %}
+        <li class="review__item">
+            <div class="review__container">
+                <div class="review__text">
+                    <div class="d-flex flex-sm-row flex-row">
+                        <img
+                                src="{% if comment.user.profile_photo %}
+                                                                                                                    {{ user.profile_photo.url }}
+
+                                                        {% else %}{% static 'img/others/comment-1.jpg' %}
+                                                                                                                    {% endif %}"
+                                alt="Review Avatar" class="review__avatar">
+                        <div class="pr-2">
+                            <div class="review__meta">
+                                <strong class="review__author px-4" style="float: right">{{ comment.name }}</strong>
+                                <span class="review__dash">-</span>
+                                <span class="review__published-date">{{ comment.datetime_modified|number_farsi }}</span>
+                            </div>
+                            <div class="product-rating pr-3">
+                                {% if comment.rate %}
+                                    <div class="m-0 star-rating star-{{ comment.rate|turn_number_to_letter }}">
+                                        <span>Rated <strong class="rating"></strong> out of 5</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="pr-3 pt-2 product-price-wrapper mb--25">
+                                {% if comment.recommend %}
+                                    <span class="money text-success">👍 {% trans 'I recommend this product' %}</span>
+                                {% else %}
+                                    <span class="money text-danger">👎 {% trans "I don't recommend this product" %}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <p class="review__description text-right px-4">
+                        {{ comment.text|linebreaksbr }}
+                    </p>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+    <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
+        <ul class="pagination">
+            {% with comments_page_obj as page %}
+                <li><a href="?page=1" class="page-link">1</a></li>
+                <li><a href="#" class="next page-number"><i class="fa fa-angle-double-right"></i></a></li>
+                {% if page.has_previous %}
+                    <li><a href="?page={{ page.previous_page_number }}"
+                           class="page-number">{{ page.previous_page_number }}</a></li>
+                {% endif %}
+                <li><span class="current page-number">{{ page.number }}</span></li>
+                {% if page.has_next %}
+                    <li><a href="?page={{ page.next_page_number }}" class="page-number">{{ page.next_page_number }}</a>
+                    </li>
+                {% endif %}
+                <li><a href="#" class="prev page-number"><i class="fa fa-angle-double-left"></i></a></li>
+                <li><a href="?page={{ comments_num_pages }}" class="page-link">{{ comments_num_pages }}</a></li>
+            {% endwith %}
+        </ul>
+    </nav>
+
+</ul>
+<div class="review-form-wrapper">
+    <div class="row">
+        <div class="border-top py-5 w-100"></div>
+        <div class="col-lg-8 m-auto">
+            <span class="reply-title pull-right">{% trans 'Add your own comment' %}</span>
+            <br>
+            <form action="{% url 'products:comment_create' product.id %}" method="POST" class="form text-right">
+                {% csrf_token %}
+
+                {% if not user.is_authenticated %}
+                    <div class="form-notes mb--20">
+                        <p class="my-3"><span
+                                class="required">*</span>{% trans 'Your email will not be shown to others' %}</p>
+                    </div>
+                    <div class="form__group mb--20">
+                        <label class="form__label d-block" for="name">{% trans 'Your Name' %}<span
+                                class="required">*</span></label>
+                        <input type="text" name="name" id="name" class="form__input">
+                    </div>
+                    <div class="form__group mb--20">
+                        <label class="form__label d-block" for="email">{% trans 'Your Email' %}<span
+                                class="required">*</span></label>
+                        <input type="email" name="email" id="email" class="form__input">
+                    </div>
+                {% endif %}
+
+                <div class="form__group mb--10">
+                    {{ comment_form.text|as_crispy_field }}
+                    {{ comment_form.recommend|as_crispy_field }}
+                    {{ comment_form.rate|as_crispy_field }}
+                </div>
+                <div class="form__group">
+                    <div class="form-row">
+                        <div class="col-12">
+                            <input type="submit" value="{% trans 'Send' %}" class="btn-submit">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
     <!-- Main Content Wrapper End -->
-    
+
     {% include 'cart/mini_cart_aside.html' %}
 
 {% endblock content %}

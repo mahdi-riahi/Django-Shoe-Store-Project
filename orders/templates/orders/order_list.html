@@ -1,0 +1,62 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+{% load static %}
+{% load farsi_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans 'Orders List' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock %}
+
+{% block content %}
+
+    <!-- Main Content Wrapper Start -->
+    <div class="main-content-wrapper">
+        <div class="page-content-inner ptb--80">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="product-data-tab tab-style-3">
+
+                            <div class="nav nav-tabs product-data-tab__head" id="product-tab" role="tablist">
+                                <a class="m-0 product-data-tab__link nav-link active" id="nav-description-tab" data-toggle="tab" href="#nav-processing" role="tab" aria-selected="true">
+                                    <span>{% trans 'Processing' %}</span>
+                                </a>
+                                <a class="m-0 product-data-tab__link nav-link" id="nav-info-tab" data-toggle="tab" href="#nav-delivered" role="tab" aria-selected="true">
+                                    <span>{% trans 'Delivered' %}</span>
+                                </a>
+                                <a class="m-0 product-data-tab__link nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-canceled" role="tab" aria-selected="true">
+                                    <span>{% trans 'Canceled' %}</span>
+                                </a>
+                                <a class="m-0 product-data-tab__link nav-link" id="nav-reviews-tab" data-toggle="tab" href="#nav-returned" role="tab" aria-selected="true">
+                                    <span>{% trans 'Returned' %}</span>
+                                </a>
+                            </div>
+
+                            <div class="tab-content product-data-tab__content" id="product-tabContent">
+                                <div class="tab-pane fade show active" id="nav-processing" role="tabpanel" aria-labelledby="nav-description-tab">
+                                    {% include 'orders/order_division_list.html' with orders=processing_orders %}
+                                </div>
+                                <div class="tab-pane text-right" id="nav-delivered" role="tabpanel" aria-labelledby="nav-info-tab">
+                                    {% include 'orders/order_division_list.html' with orders=delivered_orders %}
+                                </div>
+                                <div class="tab-pane fade" id="nav-canceled" role="tabpanel" aria-labelledby="nav-reviews-tab">
+                                    {% include 'orders/order_division_list.html' with orders=canceled_orders %}
+                                </div>
+                                <div class="tab-pane fade" id="nav-returned" role="tabpanel" aria-labelledby="nav-reviews-tab">
+                                    {% include 'orders/order_division_list.html' with orders=returned_orders %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Wrapper End -->
+
+{% include 'cart/mini_cart_aside.html' %}
+
+{% endblock content%}

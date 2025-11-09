@@ -38,10 +38,14 @@ def cart_update_view(request, pk):
     messages.error(request, _('Form is not valid'))
     return redirect('products:product_detail', pk=pk)
 
+
 @require_POST
 def cart_add_view(request, pk):
     product = get_object_or_404(Product, pk=pk)
     form = AddToCartForm(request.POST)
+    print(form)
+    print(form.cleaned_data)
+
     if form.is_valid():
         cleaned_data = form.cleaned_data
         quantity = cleaned_data.get('quantity')
@@ -49,26 +53,29 @@ def cart_add_view(request, pk):
         size = cleaned_data.get('size')
 
         try:
-            variant = product.variants.get(color=color, size=size)
-            # variant = ProductVariant.objects.get(color=color, size=size)
-            product = variant.product
+            variant = product.variants.get(color=color, size=size, is_active=True)
 
-            cart = Cart(request)
-            cart.add(variant=variant, quantity=quantity)
+            # Check if enough quantity is available
+            if variant.quantity >= quantity:
+                cart = Cart(request)
+                cart.add(variant=variant, quantity=quantity)
+                messages.success(request, _('Product added to cart successfully!'))
+                return redirect('products:product_detail', pk=product.id)
+            else:
+                messages.error(request, _('Not enough stock available.'))
 
-            return redirect('products:product_detail', pk=product.id)
+        except ProductVariant.DoesNotExist:
+            messages.error(request, _('Selected variant is not available.'))
 
-        except ObjectDoesNotExist:
-            return HttpResponseNotFound('<h1>Error 404 : Page Not Found</h1>')
+    else:
+        messages.error(request, _('Please correct the errors in the form.'))
 
-    messages.error(request, _('Form is not valid'))
     return redirect('products:product_detail', pk=pk)
 
-
-def cart_remove_product_view(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+def cart_remove_product_view(request, variant_id):
+    variant = get_object_or_404(ProductVariant, pk=variant_id)
     cart = Cart(request)
-    cart.remove(product)
+    cart.remove(variant)
     return redirect('cart:cart_detail')
 
 

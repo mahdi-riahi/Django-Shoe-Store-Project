@@ -12,9 +12,7 @@ from cart.cart import Cart
 from .forms import OrderCreateForm
 
 @login_required
-def order_create_view(request):   # Form invalid messaging!!!!!!!!!!
-    # Form invalid messaging : Remember!!!!!!!!!!! ***********
-
+def order_create_view(request):
     """
     Create a new order + order-items and redirect to order confirm view
     """
@@ -48,7 +46,6 @@ def order_create_view(request):   # Form invalid messaging!!!!!!!!!!
             # Redirect to order_confirm url
             return redirect('orders:order_confirm', pk=order.id)
 
-        # If form not valid --> Messages
         messages.add_message(request, messages.INFO, _('Some fields in the form are not valid'))
 
     else:
@@ -75,6 +72,21 @@ class OrderListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
 
+    def get_context_data(self, **kwargs):
+        context = super(OrderListView, self).get_context_data()
+
+        processing_statuses = [0, 1, 2,]
+        context['processing_orders'] = Order.objects.filter(
+            user=self.request.user,
+            status__in=processing_statuses
+        ).order_by('status')
+
+        context['delivered_orders'] = Order.objects.filter(user=self.request.user, status=3)
+        context['canceled_orders'] = Order.objects.filter(user=self.request.user, status=4)
+        context['returned_orders'] = Order.objects.filter(user=self.request.user, status=5)
+
+        return context
+
 
 class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
     """
@@ -94,7 +106,9 @@ class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateVie
     Update(edit) the order and redirect to order confirm view
     """
     model = Order
-    fields = ['first_name', 'last_name', 'email', 'phone_number', 'address', 'notes', ]
+    form_class = OrderCreateForm
+    # fields = ['first_name', 'last_name', 'email', 'phone_number', 'address', 'notes', ]
+    template_name = 'orders/order_update.html'
 
     def test_func(self):
         return self.request.user == self.get_object().user and self.get_object().is_paid == False
@@ -106,6 +120,11 @@ class OrderUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateVie
         messages.success(self.request, _('Your order was successfully updated'))
         return super().form_valid(form)
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('Please correct errors below'))
+        print(form.errors)
+        return super().form_invalid(form)
+
 
 @login_required
 def order_confirm_view(request, pk):
@@ -115,8 +134,9 @@ def order_confirm_view(request, pk):
     order = get_object_or_404(Order, pk=pk)
 
     if order.user == request.user:
+
         # Check if order is already paid before
-        if order.is_paid:
+        if order.is_paid or order.status != 0:
             messages.info(request, _('Payment is already done for your order'))
             return redirect('orders:order_detail', pk=pk)
 
@@ -129,4 +149,5 @@ def order_confirm_view(request, pk):
         messages.success(request, _('Confirm your information and go to payment'))
         return render(request, 'orders/order_confirm.html', {'order': order})
 
+    # If user is not order's user
     return HttpResponseForbidden('<h1>ERROR 403 Forbidden</h1>')

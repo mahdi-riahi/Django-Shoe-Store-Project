@@ -3,6 +3,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 
 
 class ActiveModelManager(models.Manager):
@@ -97,14 +98,41 @@ class Product(models.Model):
         return reverse("products:product_detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
-        """
-        Auto-populate major_category, sync is_active with variants, fill offer_price before saving
-        """
+        # First, validate the model
+        self.full_clean()
+
+        # Save first to get a primary key
+        super().save(*args, **kwargs)
+
+        # Now we can safely check variants (only for existing products)
+        if self.pk:  # Only if product has been saved and has a primary key
+            has_active_variants = self.variants.filter(is_active=True).exists()
+            if self.is_active != has_active_variants:
+                self.is_active = has_active_variants
+                # Save again if changed, but avoid infinite recursion
+                super().save(update_fields=['is_active'])
         self.major_category = self.get_major_category()
-        self.is_active = True if self.variants.filter(is_active=True) else False
         if not self.offer:
             self.offer_price = self.price
-        super().save(*args, **kwargs)
+        super().save(update_fields=['major_category', 'offer_price', ])
+
+    def clean(self):
+        super().clean()
+
+        if self.offer:
+
+            if not self.offer_price:
+                raise ValidationError({
+                    'offer_price': _('Offer price is required when offer is True')
+                })
+            if self.offer_price <= 0:
+                raise ValidationError({
+                    'offer_price': _('Offer price must be a positive number')
+                })
+            if self.offer_price >= self.price:
+                raise ValidationError({
+                    'offer_price': _('Offer price must be lower than price')
+                })
 
 
     def get_rating_counts(self):
@@ -279,6 +307,10 @@ class ProductVariant(models.Model):
             self.quantity -= quantity
             self.save()
             self.sync_is_active_quantity()
+
+    def increase_quantity(self, quantity):
+        self.quantity += quantity
+        self.save()
 
 
 class Cover(models.Model):

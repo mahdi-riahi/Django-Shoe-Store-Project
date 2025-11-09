@@ -41,7 +41,7 @@
                                                 {% for item in my_cart %}
                                                     {% with item.product_obj as product %}
                                                     <tr>
-                                                        <td class="product-remove text-left"><a href="{% url 'cart:cart_remove' product.id %}"><i class="flaticon flaticon-cross"></i></a></td>
+                                                        <td class="product-remove text-left"><a href="{% url 'cart:cart_remove' item.variant_obj.id %}"><i class="flaticon flaticon-cross"></i></a></td>
                                                         <td class="product-thumbnail text-left">
 
                                                             <img src="{% if product.covers.exists %}

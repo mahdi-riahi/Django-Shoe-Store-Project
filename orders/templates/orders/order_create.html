@@ -1,0 +1,129 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+{% load humanize %}
+{% load static %}
+{% load farsi_tags %}
+{% load global_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% trans 'Order Registration' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
+
+{% block content %}
+
+    <!-- Main Content Wrapper Start -->
+    <div class="main-content-wrapper">
+        <div class="page-content-inner">
+            <div class="container">
+                <div class="row pt--50 pt-md--40 pt-sm--20"></div>
+                <div class="row pb--80 pb-md--60 pb-sm--40">
+                    <!-- Order Registration Form -->
+                    <div class="col-lg-10">
+                        <div class="checkout-title mt--10">
+                            <h2>{% trans 'Order Information' %}</h2>
+                        </div>
+                        <div class="checkout-form">
+                             {% if form.errors %}
+                                    <div class="alert alert-danger">{{ form.errors }}</div>
+                             {% endif %}
+                            <form action="" method="POST" class="form form--checkout">
+                                {% csrf_token %}
+                                <div class="form-row mb--20">
+                                    <div class="form__group col-md-6 mb-sm--30">
+{#                                        <label for="billing_fname" class="form__label form__label--2">{{ form.first_name.label}}<span class="required">*</span></label>#}
+                                        {{ form.first_name|as_crispy_field }}
+                                    </div>
+                                    <div class="form__group col-md-6">
+{#                                        <label for="billing_lname" class="form__label form__label--2">{{ form.last_name.label}}<span class="required">*</span></label>#}
+                                        {{ form.last_name|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="form-row mb--20">
+                                    <div class="form__group col-12">
+{#                                        <label for="billing_company" class="form__label form__label--2">{{ form.address.label }}</label>#}
+                                        {{ form.address|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="form-row mb--20">
+                                    <div class="form__group col-12">
+{#                                        <label for="billing_phone" class="form__label form__label--2">{{ form.phone_number.label }}<span class="required">*</span></label>#}
+                                        {{ form.phone_number|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="form-row mb--20">
+                                    <div class="form__group col-12">
+{#                                        <label for="billing_email" class="form__label form__label--2">{{ form.email.label }}<span class="required">*</span></label>#}
+                                        {{ form.email|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form__group col-12">
+{#                                        <label for="orderNotes" class="form__label form__label--2">{{ form.notes.label }}</label>#}
+                                        {{ form.notes|as_crispy_field }}
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success ">{% trans 'Register my order' %}</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Cart Details -->
+                    <div class="col-xl-10 offset-xl-1 col-lg-6 mt-md--40 pt-3">
+                        <div class="order-details">
+                            <div class="checkout-title mt--10">
+                                <h2>{% trans 'Order Items' %}</h2>
+                            </div>
+                            <div class="table-content table-responsive mb--30">
+                                <table class="table order-table order-table-2">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>{% trans 'Product' %}</th>
+                                            <th>{% trans 'Price' %}</th>
+                                            <th class="text-right">{% trans 'Offer Price' %}</th>
+                                            <th>{% trans 'Quantity' %}</th>
+                                            <th>{% trans 'Total Price' %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in cart %}
+                                        {% with item.product_obj as product %}
+                                        <tr>
+                                            <td><img src="
+                                                    {% if product.covers.exists %}{{ product.covers.first.cover.url }}
+                                                    {% else %}{% static 'img/products/prod-9.jpg' %}{% endif %}"
+                                                     alt="" width="100px" height="100px" ></td>
+                                            <th>{{ product.title }}</th>
+                                            <td>{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                            <td>{{ product.offer_price|intcomma:False|number_farsi }}</td>
+                                            <td>{{ item.quantity|number_farsi }} {% trans 'Toman' %}</td>
+                                            <td>{{ product.offer_price|multiply:item.quantity|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                        </tr>
+                                        {% endwith %}
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="cart-subtotal">
+                                            <td></td>
+                                            <th>{% trans 'Total' %}</th>
+                                            <td class="text-right money text-danger">{{ cart.get_total_price_no_offer|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th>{% trans 'Total with discount' %}</th>
+                                            <td class="text-right money text-success">{{ cart.get_total_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Wrapper Start -->
+
+{% endblock %}
