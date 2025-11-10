@@ -19,6 +19,7 @@
             <div class="container">
                 <div class="row pt--50 pt-md--40 pt-sm--20"></div>
                 <div class="row pb--80 pb-md--60 pb-sm--40">
+                {% if cart %}
                     <!-- Order Registration Form -->
                     <div class="col-lg-10">
                         <div class="checkout-title mt--10">
@@ -120,6 +121,14 @@
                             </div>
                         </div>
                     </div>
+                {% else %}
+                    <div class="container">
+                        <div class="order-details text-center">
+                        <h1>{% trans 'Your cart is empty. Please add some items to your cart' %}</h1>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-primary">{% trans 'Products List' %}</a>
+                        </div>
+                    </div>
+                {% endif %}
                 </div>
             </div>
         </div>

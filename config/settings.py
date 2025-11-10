@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     # Third party apps
     'crispy_forms',
     'crispy_bootstrap5',
+    'allauth',
+    'allauth.account',
 
     # my local apps
     'pages.apps.PagesConfig',
@@ -70,6 +72,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # AllAuth
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -127,6 +131,14 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+]
+
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # AllAuth
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 
