@@ -1,0 +1,221 @@
+{% extends '_base.html' %}
+
+{% load global_tags %}
+{% load farsi_tags %}
+
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+
+{% block title %}{% trans 'Order' %} #{{ order.id|number_farsi }} {% trans 'Details' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
+
+{% block content %}
+
+    {% trans 'Order Details for #' as pre_header %}
+    {% with order.id|number_farsi as header %}
+    {% include 'header.html' with header1=pre_header header2=header %}
+    {% endwith %}
+
+    <!-- Main Content Wrapper Start -->
+    <div class="main-content-wrapper">
+        <div class="page-content-inner ptb--80">
+            <div class="container">
+                <div class="row no-gutters mb--80 ">
+
+                    <!-- Order Items -->
+                    <div class="col-xl-6 offset-xl-1 col-lg-9 mt-md--40 pt-3">
+                        <div class="order-details">
+                            <div class="checkout-title mt--10">
+                                <h2>{% trans 'Order Items' %}</h2>
+                            </div>
+                            <div class="table-content table-responsive mb--30">
+                                <table class="table order-table order-table-2">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>{% trans 'Product' %}</th>
+                                        <th>{% trans 'Price' %}</th>
+                                        <th>{% trans 'Offer Price' %}</th>
+                                        <th>{% trans 'Quantity' %}</th>
+                                        <th>{% trans 'Total Price' %}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in order.items.all %}
+                                        {% with item.product_variant.product as product %}
+                                            <tr>
+                                                <td><img src="
+                                                    {% if product.covers.exists %}{{ product.covers.first.cover.url }}
+                                                    {% else %}{% static 'img/products/prod-9.jpg' %}{% endif %}"
+                                                         alt="" width="50px" height="50px"></td>
+                                                <th>{{ product.title }}</th>
+                                                <td>{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                                <td>{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                                <td>{{ item.quantity|number_farsi }}</td>
+                                                <td>{{ product.offer_price|multiply:item.quantity|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                            </tr>
+                                        {% endwith %}
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="cart-subtotal">
+                                        <td></td>
+                                        <th>{% trans 'Total with discount' %}</th>
+                                        <td class="text-right money text-success">{{ order.get_total_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Details -->
+                    <div class="col-xl-5 pt-3">
+                        <div class="order-details">
+                            <div class="checkout-title mt--10">
+                                <h2>{% trans 'Order Details' %}</h2>
+                            </div>
+                            <div class="table-content table-responsive mb--30">
+                                <table class="table order-table order-table-2">
+                                    <tbody>
+                                        <tr>
+                                            <th>{% trans 'Order id' %}</th>
+                                            <td></td>
+                                            <td>{{ order.id|number_farsi }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{% trans 'Status' %}</th>
+                                            <td></td>
+                                            <td>{{ order.get_status_display }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{% trans 'Total price' %}</th>
+                                            <td></td>
+                                            <td>{{ order.get_total_price|intcomma:False|number_farsi }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{% trans 'Is paid' %}</th>
+                                            <td></td>
+                                            <td>{% if order.is_paid %}
+                                                ✅ {% else %} ❌
+                                            {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% if order.zarinpal_authority|length > 0 %}
+                                        <tr>
+                                            <th>{% trans 'Payment Authority' %}</th>
+                                            <td></td>
+                                            <td>{{ order.zarinpal_authority }}</td>
+                                        </tr>
+                                        {% endif %}
+                                        {% if order.zarinpal_ref_id|length > 0 %}
+                                        <tr>
+                                            <th>{% trans 'Payment Zarinpal Ref ID' %}</th>
+                                            <td></td>
+                                            <td>{{ order.zarinpal_ref_id }}</td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <th>{% trans 'Created At' %}</th>
+                                            <td></td>
+                                            <td>{{ order.datetime_created|number_farsi }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Links / Comment Links -->
+                    <div class="col-xl-5 product-main-details mt-md--50">
+                        {% if order.is_paid %}
+
+                            <!-- Comment Links -->
+                            <h1 class="py-5 text-center">{% trans 'Share your feelings about your shopping' %}</h1>
+                            <p class="review__description">{% trans 'Add comments about products you bought and help others to make better decisions' %}</p>
+                            <div class="container">
+                            {% for item in order.items.all %}
+                            <div class="card" style="width: 50%;height: 300pt ;float: right">
+                            {% with item.product_variant.product.covers as covers %}
+                                {% if covers.exists %}
+                                    <img src="{{ covers.first.cover.url }}" class="card-img-top" alt="product-cover"
+                                         height="200px">
+                                {% else %}
+                                    <img src="{% static 'img/products/prod-9.jpg' %}" alt="" height="200px">
+                                {% endif %}
+                            {% endwith %}
+                                <div class="card-body">
+                                    <div class="text-center" style="height: 50%">
+                                    <h5 class="card-title">{{ item.product_variant.product.title }}</h5>
+                                    </div>
+                                    <div class="text-center" style="height: 40%">
+                                    <a href="{% url 'products:product_detail' item.product_variant.product.pk %}" class="btn-fullwidth">
+                                        <img src="{% static 'img/comment.png' %}" width="50px" height="50px">
+                                        <p class="review-text">{% trans 'Add your comment' %}</p>
+                                    </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            </div>
+
+                        {% elif order.status != 0 %}
+                            <div class="order-details">
+                                <div class="checkout-payment">
+                                    <h1 class="py-5 text-center" style="color: chocolate">{% trans 'Your order is not ready to be paid' %}</h1>
+                                    <h1 class="py-5 text-center">{% trans 'Your order status is ' %}{{ order.get_status_display }}</h1>
+                                    <div class="payment-group mb--10 text-center">
+                                        <a href="{% url 'pages:contact_page' %}" class="btn btn-info">
+                                            {% translate 'Contact Support' %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% else %}
+                            <!-- Payment Form -->
+                            <div class="order-details">
+                                <div class="checkout-payment">
+                                    <h1 class="py-5 text-center" style="color: #1c7430">{% trans 'Your order is ready to be paid' %}</h1>
+                                    <h1 class="py-5 text-center">{% trans 'Please Confirm your order as soon as possible' %}</h1>
+                                    <div class="payment-group mb--10 text-center">
+                                            <a class="btn  btn-bg-red btn-danger"
+                                               href="{% url 'orders:order_confirm' order.id %}">{% trans 'Confirm order and checkout' %}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- User Information -->
+                    <div class="col-xl-6 pr--100 pr--200 product-main-details mt-md--50">
+                        <div class="product-summary text pl-lg--30 pl-md--0 p-4">
+
+                            <div class="my-5 product-price-wrapper mb--25">
+                                <span style="color: #0d70a5"><i>{% trans 'Full Name' %}</i></span>
+                                <p>{{ order.first_name }} {{ order.last_name }}</p>
+                            </div>
+                            <div class="product-price-wrapper mb--25">
+                                <span style="color: #0d70a5"><i>{% trans 'Phone Number' %}</i></span>
+                                <p style="color: #006b1b">{{ order.phone_number }}</p>
+                            </div>
+                            <div class="product-price-wrapper mb--25">
+                                <span style="color: #0d70a5"><i>{% trans 'Address' %}</i></span>
+                                <p>{{ order.address }}</p>
+                            </div>
+                            <div class="product-price-wrapper mb--25">
+                                <span style="color: #0d70a5"><i>{% trans 'Email' %}</i></span>
+                                <p>{{ order.email }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Wrapper End -->
+{% endblock %}

@@ -97,6 +97,12 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVie
     template_name = 'orders/order_detail.html'
     context_object_name = 'order'
 
+    def get_context_data(self, **kwargs):
+        if self.object.require_payment():
+            messages.warning(self.request, _('We can not hold your order more than 15 minutes after its registration'))
+            messages.info(self.request, _('Please confirm your order as soon as possible'))
+        return super(OrderDetailView, self).get_context_data()
+
     def test_func(self):
         return self.request.user == self.get_object().user
 
@@ -136,8 +142,12 @@ def order_confirm_view(request, pk):
     if order.user == request.user:
 
         # Check if order is already paid before
-        if order.is_paid or order.status != 0:
+        if order.is_paid:
             messages.info(request, _('Payment is already done for your order'))
+            return redirect('orders:order_detail', pk=pk)
+
+        if order.status !=0:
+            messages.info(request, _('This order is not ready for payment. Check its status'))
             return redirect('orders:order_detail', pk=pk)
 
         # Redirect to payment process

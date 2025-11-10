@@ -60,6 +60,9 @@ class Order(models.Model):
     def __str__(self):
         return f'User:{self.user}-Order:{self.id}'
 
+    def __len__(self):
+        return sum(item.quantity for item in self.items.all())
+
     def get_absolute_url(self):
         return reverse('orders:order_detail', kwargs={'pk': self.id})
 
@@ -120,6 +123,9 @@ class Order(models.Model):
         if not user.email:
             user.email = self.email
         user.save()
+
+    def require_payment(self):
+        return not self.is_paid and self.status == 0
 
 
 class OrderItem(models.Model):

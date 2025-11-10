@@ -45,16 +45,6 @@
 </div>
 <!-- Preloader End -->
 
-<!-- Messages Start -->
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-<!-- Messages End -->
-
 <!-- Main Wrapper Start -->
 <div class="wrapper">
 
@@ -155,6 +145,18 @@
         </div>
     </header>
     <!-- Header End -->
+
+    <!-- Messages Start -->
+    {% if messages %}
+        <div class="container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    <!-- Messages End -->
 
     {% block content %}
     {% endblock content %}
