@@ -193,10 +193,10 @@
     <div class="searchform__popup" id="searchForm">
         <a href="#" class="btn-close"><i class="flaticon flaticon-cross"></i></a>
         <div class="searchform__body">
-            <p>در باکس زیر عبارت خود را وارد کنید</p>
-            <form class="searchform">
-                <input type="text" name="popup-search" id="popup-search" class="searchform__input"
-                       placeholder="جستجو در بین محصولات...">
+            <p>{% trans 'Type here what you want to search' %}</p>
+            <form class="searchform" action="{% url 'products:search' %}" method="GET">
+                <input type="text" name="q" id="popup-search" class="searchform__input"
+                       placeholder="{% trans 'Search among products' %}" value="{{ request.GET.q }}">
                 <button type="submit" class="searchform__submit"><i class="flaticon flaticon-magnifying-glass-icon"></i>
                 </button>
             </form>

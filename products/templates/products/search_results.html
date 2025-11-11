@@ -1,0 +1,45 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+{% load farsi_tags %}
+
+{% block title %}{% trans 'Search results for' %} {{ query }}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock mini_cart_icon %}
+
+{% block content %}
+
+    {% include 'products/category_navbar.html' %}
+
+    <div class="container-fluid">
+    {% if results_count %}
+    <h3><b>{{ results_count }}</b>{% trans 'results found for' %} <i>{{ query|number_farsi }}</i></h3>
+    {% else %}
+    <h3>{% trans 'No results found for' %} <i>{{ query|number_farsi }}</i></h3>
+    {% endif %}
+    </div>
+    <div class="row xxl-block-grid-6 grid-space-20">
+        {% for product in page_obj %}
+            {% include 'products/product_individual.html' with product=product %}
+        {% endfor %}
+
+        <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
+            <ul class="pagination">
+                    <li><a href="?page=1" class="page-link">1</a></li>
+                <li><a href="#" class="next page-number"><i class="fa fa-angle-double-right"></i></a></li>
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}" class="page-number">{{ page_obj.previous_page_number }}</a></li>
+                    {% endif %}
+                <li><span class="current page-number">{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li><a href="?page={{ page_obj.next_page_number }}" class="page-number">{{ page_obj.next_page_number }}</a></li>
+                    {% endif %}
+                <li><a href="#" class="prev page-number"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li><a href="?page={{ num_pages }}" class="page-link">{{ num_pages }}</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    {% include 'cart/mini_cart_aside.html' %}
+
+{% endblock %}

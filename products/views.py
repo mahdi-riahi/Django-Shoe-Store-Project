@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 from .models import Product, Comment
 from .forms import CommentForm
@@ -16,7 +17,6 @@ from cart.forms import AddToCartForm
 class ProductListView(generic.ListView):
     template_name = 'products/product_list.html'
     context_object_name = 'products'
-    paginate_by = 10
     queryset = Product.active_product_manager.all()
 
     # Product.objects.filter(variants__size=42) I'm gonna use it later
@@ -83,10 +83,12 @@ def product_major_category_list_view(request, major_category):
 
 
 def product_category_list_view(request, major_category, category):
-    if any([
-        major_category not in Product.get_major_categories_list(),
-        category not in Product.get_categories_from_major_cat(major_category),]):
-        return HttpResponseNotFound('Page not found')
+    if major_category not in Product.get_major_categories_list():
+        return HttpResponseNotFound('Page not found. Major category not found')
+    if category not in Product.get_major_categories_list():
+        return HttpResponseNotFound('Page not found. Category not found')
+    if category not in Product.get_categories_from_major_cat(major_category):
+        return HttpResponseNotFound('Page not found. Category is not in this major category')
 
     products = Product.active_product_manager.filter(category=category)
 
@@ -135,3 +137,34 @@ class CommentCreateView(generic.CreateView):
     def form_invalid(self, form):
         messages.error(self.request, _('Please correct the errors for comment.'))
         return redirect(self.get_success_url())
+
+
+def search_view(request):
+    """
+    Implement search among products
+    """
+    results_count = 0
+    query = request.GET.get('q')
+
+    if query:
+        products = Product.objects.filter(
+            Q(title__icontains=query)|
+            Q(category__icontains=query)|
+            Q(major_category__icontains=query)|
+            Q(short_description__icontains=query)
+        # distinct prevents duplicates
+        ).distinct().order_by('-is_active')
+
+        results_count = products.count()
+    else:
+        products = Product.objects.all()
+
+    paginator = Paginator(products, 25)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    num_pages = paginator.num_pages
+
+    return render(
+        request,
+        'products/search_results.html',
+        {'query':query, 'page_obj': page_obj, 'num_pages': num_pages, 'results_count': results_count}
+    )

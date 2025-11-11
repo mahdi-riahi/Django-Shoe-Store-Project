@@ -168,7 +168,8 @@ class Product(models.Model):
         """
         for key, values in cls.CATEGORIES:
             if key == major_category:
-                return {value[0]:value[1] for value in values}
+                categories = {value[0]:value[1] for value in values}
+                return categories
         return None
 
     @classmethod
