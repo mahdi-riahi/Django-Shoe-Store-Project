@@ -1,21 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
+from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
+from datetime import timedelta
+
+
+class PhoneVerification(models.Model):
+    phone_number = PhoneNumberField(verbose_name=_('Phone Number'))
+    code = models.CharField(_('Code'), max_length=6)
+    datetime_created = models.DateTimeField(_('Created At'), auto_now_add=True)
+    is_used = models.BooleanField(_('Is used?'), default=False)
+
+    def __str__(self):
+        return f'{self.phone_number}-{self.code}'
+
+    def is_expired(self):
+        return timezone.now() > self.datetime_created + timedelta(minutes=2)
 
 
 class CustomUser(AbstractUser):
-    def __str__(self):
-        return self.username
+    email = models.EmailField(_('Email Address'), unique=True)
+    phone_number = PhoneNumberField(verbose_name=_('Phone Number'), unique=True, region='IR')
+    phone_verified = models.BooleanField(_('Phone Verified'), default=False)
 
+    username = None
 
-class CustomUserFavorite(models.Model):
-    user = models.ForeignKey(verbose_name=_('User'), to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favorites')
-    product = models.ForeignKey(verbose_name=_('Product'), to="products.Product", on_delete=models.CASCADE, related_name='liked_by_users')
-    datetime_created = models.DateTimeField(_('Created At'), auto_now_add=True)
-
-    class Meta:
-        unique_together = ['user', 'product', ]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['phone_number']
 
     def __str__(self):
-        return f'{self.user}-{self.product}'
+        return self.email

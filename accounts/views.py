@@ -1,65 +1,61 @@
-from django.views import generic
-from django.contrib.auth import get_user_model
-from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
+import random
 
-from .models import CustomUserFavorite
+from .sms_service import send_sms_verification
+from accounts.models import PhoneVerification
 
+@login_required
+def verify_phone(request):
+    if request.method == 'POST':
+        entered_code = request.POST.get('code')
 
-class ProfileView(LoginRequiredMixin, generic.DetailView):
-    template_name = 'accounts/profile.html'
-    context_object_name = 'user_profile'
+        try:
+            verification = PhoneVerification.objects.filter(
+                phone_number=request.user.phone_number,
+                is_used=False,
+            ).latest('datetime_created')
 
-    def get_object(self, queryset=None):
-        return self.request.user
+            if verification.is_expired():
+                messages.error(request, _('Validation code is expired. Please ask for a new code'))
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['recent_orders'] = self.request.user.orders.all()[:5]
-        context['favorites_count'] = self.request.user.favorites.count()
-        return context
+            elif verification.code == entered_code:
+                verification.is_used = True
+                verification.save()
 
+                request.user.phone_verified = True
+                request.user.save()
 
-class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
-    template_name = 'accounts/profile_update.html'
-    model = get_user_model()
-    fields = ['profile_photo', 'first_name', 'last_name', 'username', 'email', 'phone_number', ]
-    success_url = reverse_lazy('users:profile')
+                messages.success(request, _('Your phone number is verified'))
+                return redirect('pages:home_page')
 
-    def get_object(self, queryset=None):
-        """Ensure users can only edit their own profile"""
-        return self.request.user
-    
-    def form_valid(self, form):
-        messages.success(self.request, _('Your profile updated successfully'))
-        super().form_valid(form)
+            else:
+                messages.error(request, _('Your code is not valid'))
 
-    def form_invalid(self, form):
-        messages.error(self.request, _('Please correct the errors below.'))
-        super().form_valid(form)
+        except PhoneVerification.DoesNotExist:
+            messages.error(request, _('Error happened during code validation'))
 
+    return render(request, 'accounts/verify_phone.html')
 
-class PaymentListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'payment/payment_history.html'
-    context_object_name = 'orders'
+@login_required
+def resend_code(request):
+    new_code = str(random.randint(100000, 999999))
 
-    def get_queryset(self):
-        return self.request.user.orders.exclude(zarinpal_authority="")
+    PhoneVerification.objects.filter(
+        phone_number=request.user.phone_number,
+        is_used=False,
+    ).update(is_used = True)
 
+    PhoneVerification.objects.create(
+        phone_number=request.user.phone_number,
+        code=new_code,
+    )
 
-class FavoriteListView(LoginRequiredMixin, generic.ListView):
-    template_name = 'accounts/favorites.html'
-    context_object_name = 'favorite_products'
+    if send_sms_verification(request.user.phone_number, new_code):
+        messages.success(request, _('New verification code was sent'))
+    else:
+        messages.error(request, _('Error sending sms message. Please try again'))
 
-    def get_queryset(self):
-        return self.request.user.favorites.all()
-
-# Need Working
-class FavoriteCreateView(generic.CreateView):
-    model = CustomUserFavorite
-
-# Need Working
-class FavoriteDeleteView(generic.DeleteView):
-    model = CustomUserFavorite
+    return redirect('accounts:verify_phone')

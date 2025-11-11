@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Added for allauth
+    'django.contrib.sites',
     # Humanize
     'django.contrib.humanize',
 
@@ -53,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'allauth',
     'allauth.account',
+    'phonenumber_field',
 
     # my local apps
     'pages.apps.PagesConfig',
@@ -62,6 +65,7 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
+    'profiles.apps.ProfilesConfig',
 ]
 
 MIDDLEWARE = [
@@ -135,8 +139,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
-    'django.contrib.auth.backends.ModelBackend',
+    # Needed to login by email or phone number instead of username
+    'accounts.backends.EmailOrPhoneBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
+
     # AllAuth
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
@@ -169,8 +175,32 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Email Backends
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 # Auth
 AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+
+# AllAuth Settings
+SITE_ID = 1
+
+ACCOUNT_LOGIN_METHODS = {'email'}  # Login with email
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_SESSION_REMEMBER = True
+
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+
+# Phone Number Settings
+PHONENUMBER_DEFAULT_REGION = 'IR'
+PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
+
+# Kavehnegar Settings
+KAVEHNEGAR_API_KEY = env.str("DJANGO_KAVEHNEGAR_API_KEY")
 
 # Messages settings
 MESSAGE_TAGS = {

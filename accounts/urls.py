@@ -1,15 +1,15 @@
 from django.urls import path
+from allauth.account.views import LoginView, SignupView
 
 from . import views
+from .forms import CustomLoginForm, CustomSignupForm
 
 
-app_name = 'users'
+app_name = 'accounts'
 
 urlpatterns = [
-    path('profile/', views.ProfileView.as_view(), name='profile'),
-    path('profile/settings/', views.ProfileUpdateView.as_view(), name='profile_update'),
-    path('payment_history/', views.PaymentListView.as_view(), name='payment_history'),
-    path('favorites/', views.FavoriteListView.as_view(), name='favorite_list'),
-    path('favorites/add/', views.FavoriteCreateView.as_view(), name='favorite_create'),
-    path('favorites/remove/', views.FavoriteDeleteView.as_view(), name='favorite_delete'),
+    path('signup/', SignupView.as_view(form_class=CustomSignupForm), name='signup'),
+    path('login/', LoginView.as_view(form_class=CustomLoginForm), name='login'),
+    path('verify_phone', views.verify_phone, name='verify_phone'),
+    path('resend_code', views.resend_code, name='resend_code'),
 ]
