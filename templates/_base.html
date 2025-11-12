@@ -105,29 +105,53 @@
                                     <i class="flaticon flaticon-like"></i>
                                 </a>
                             </li>
+
                             <li class="header-toolbar__item mini-cart-item">
                                 {% block mini_cart_icon %}{% endblock mini_cart_icon %}
+                            </li>
 
-                            </li>
-                            <li class="header-toolbar__item user-info">
-                                <a href="{% url 'profile:profile_detail' %}" class="header-toolbar__btn">
-                                    <i class="flaticon flaticon-user"></i>
-                                </a>
-                                <ul class="user-info-menu">
-                                    <li>
-                                        <a class="text-right" href="{% url 'profile:profile_detail' %}">{% trans 'Profile' %}</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-right" href="{% url 'cart:cart_detail' %}">{% trans 'Shopping cart' %}</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-right" href="{% url 'orders:order_list' %}">{% trans 'Order history' %}</a>
-                                    </li>
-                                    <li>
-                                        <a class="text-right" href="{% url 'profile:payment_history' %}">{% trans 'Payment history' %}</a>
-                                    </li>
-                                </ul>
-                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="header-toolbar__item user-info">
+                                    <a href="{% url 'profile:profile_detail' %}" class="header-toolbar__btn">
+                                        <i class="flaticon flaticon-user"></i>
+                                    </a>
+                                    <ul class="user-info-menu">
+                                        <li>
+                                            <a class="text-right" href="{% url 'profile:profile_detail' %}">{% trans 'Profile' %}</a>
+                                        </li>
+                                        <li>
+                                            <a class="text-right" href="{% url 'cart:cart_detail' %}">{% trans 'Shopping cart' %}</a>
+                                        </li>
+                                        <li>
+                                            <a class="text-right" href="{% url 'orders:order_list' %}">{% trans 'Order history' %}</a>
+                                        </li>
+                                        <li>
+                                            <a class="text-right" href="{% url 'profile:payment_history' %}">{% trans 'Payment history' %}</a>
+                                        </li>
+                                        <li>
+                                            <form class="text-right" action="{% url 'logout' %}" method="POST">
+                                                {% csrf_token %}
+                                                <input type="submit" class="text-right" value="{% trans 'Logout' %}">
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="header-toolbar__item user-info">
+                                    <a href="#" class="header-toolbar__btn">
+                                        <i class="flaticon flaticon-user"></i>
+                                    </a>
+                                    <ul class="user-info-menu">
+                                        <li>
+                                            <a class="text-right" href="{% url 'accounts:login' %}">{% trans 'Login' %}</a>
+                                        </li>
+                                        <li>
+                                            <a class="text-right" href="{% url 'accounts:signup' %}">{% trans 'Signup' %}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+
                             <li class="header-toolbar__item">
                                 <a href="#searchForm" class="header-toolbar__btn toolbar-btn">
                                     <i class="flaticon flaticon-search"></i>

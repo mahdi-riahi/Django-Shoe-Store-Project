@@ -1,0 +1,53 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% translate 'Login' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
+
+{% block content %}
+
+    {% trans 'Login Form' as header_name %}
+    {% include 'header.html' with header=header_name %}
+
+    <!-- Main Content Wrapper Start -->
+    <div class="main-content-wrapper">
+        <div class="page-content-inner pt--75 pb--80">
+            <div class="container">
+                <div class="justify-content-center">
+                    <div class="col-md-10 mb-sm--50">
+                        <div class="login-box">
+                            <h3 class="heading__tertiary mb--30">{% trans 'Login' %}</h3>
+                            {% if form.errors %}
+                                    <div class="alert alert-danger">{{ form.errors }}</div>
+                             {% endif %}
+                            <form method="POST" class="form form--login">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+{#                                <div class="form__group mb--20">#}
+{#                                    <label class="form__label form__label--2" for="username_email">ایمیل شما <span class="required">*</span></label>#}
+{#                                    <input type="text" class="form__input form__input--2" id="username_email" name="username_email">#}
+{#                                </div>#}
+{#                                <div class="form__group mb--20">#}
+{#                                   <label class="form__label form__label--2" for="login_password">رمز عبور <span class="required">*</span></label>#}
+{#                                    <input type="password" class="form__input form__input--2" id="login_password" name="login_password">#}
+{#                                </div>#}
+                                <a class="forgot-pass" href="{% url 'password_reset' %}">{% trans 'Forgot password?' %}</a>
+                                <div class="d-flex align-items-center mt--20">
+                                    <div class="form__group">
+                                        <input type="submit" value="{% trans 'Login' %}" class="btn-submit">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Wrapper Start -->
+
+{% endblock %}

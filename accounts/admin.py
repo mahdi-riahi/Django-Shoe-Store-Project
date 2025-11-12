@@ -3,20 +3,21 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
 from .models import CustomUser
-from .forms import CustomUserChangeForm, CustomUserCreationForm
+from .forms import CustomUserChangeForm, AdminUserCreationForm
 
 
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    add_form = CustomUserCreationForm
+    add_form = AdminUserCreationForm
     form = CustomUserChangeForm
+
     list_display = ('email', 'phone_number','is_staff', )
     ordering = ('email', )
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name", "phone_number")}),
+        (_("Personal info"), {"fields": ("username", "first_name", "last_name", "phone_number", "phone_verified", "email_verified")}),
         (
             _("Permissions"),
             {
@@ -36,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "phone_number", "password1", "password2"),
+                "fields": ("email", "phone_number", "phone_verified", "password1", "password2", ),
             },
         ),
     )

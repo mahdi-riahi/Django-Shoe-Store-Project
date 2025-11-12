@@ -46,15 +46,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Added for allauth
-    'django.contrib.sites',
+    # 'django.contrib.sites',
     # Humanize
     'django.contrib.humanize',
 
     # Third party apps
     'crispy_forms',
     'crispy_bootstrap5',
-    'allauth',
-    'allauth.account',
+    # 'allauth',
+    # 'allauth.account',
     'phonenumber_field',
 
     # my local apps
@@ -77,7 +77,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # AllAuth
-    "allauth.account.middleware.AccountMiddleware",
+    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -138,14 +138,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-AUTHENTICATION_BACKENDS = [
-    # Needed to login by email or phone number instead of username
-    'accounts.backends.EmailOrPhoneBackend',
-    # 'django.contrib.auth.backends.ModelBackend',
-
-    # AllAuth
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'accounts.backends.EmailOrPhoneBackend',
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
 
 
 # Internationalization
@@ -181,19 +177,21 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # Auth
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = '/'
-ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # AllAuth Settings
-SITE_ID = 1
+# SITE_ID = 1
+#
+# ACCOUNT_AUTHENTICATION_METHOD = 'email'
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_USERNAME_REQUIRED = False
+# ACCOUNT_EMAIL_VERIFICATION = 'optional'
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_SESSION_REMEMBER = True
 
-ACCOUNT_LOGIN_METHODS = {'email'}  # Login with email
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_SESSION_REMEMBER = True
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
 # Phone Number Settings
 PHONENUMBER_DEFAULT_REGION = 'IR'

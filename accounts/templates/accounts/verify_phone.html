@@ -2,7 +2,9 @@
 
 {% load i18n %}
 
-{% block mini_cart_icon %}{% translate 'Phone Verification' %}{% endblock %}
+{% block title %}{% translate 'Phone Number Verification' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -10,24 +12,26 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4>{% trans 'Phone number confirmation' %}</h4>
+                    <h4>{% trans 'Phone Number Verification' %}</h4>
                 </div>
                 <div class="card-body">
-                    <p>{% trans 'Verification code was sent to' %}{{ request.user.phone_number }}</p>
+                    <p>{% trans 'Verification code was sent to' %}{{ phone_number }}</p>
 
-                    <form method="post" action="">
+                    <form method="POST" action="">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label for="code" class="form-label">{% trans 'Confirmation code' %}</label>
+                            <label for="code" class="form-label">{% trans 'Verification code' %}</label>
                             <input type="text" name="code" class="form-control" id="code"
-                                   placeholder="XXXXXX" maxlength="6" required>
+                                   placeholder="XXXXXX" maxlength="6" minlength="6" required>
                         </div>
                         <button type="submit" class="btn btn-primary">{% trans 'Submit' %}</button>
                     </form>
 
                     <div class="mt-3">
+                        <h3>{% trans 'Verification codes have 2 minutes expiry time' %}</h3>
+                        <p>{% trans "Didn't receive the code?" %} </p>
                         <a href="{% url 'accounts:resend_code' %}" class="btn btn-outline-secondary">
-                            {% trans 'Send me again' %}
+                            {% trans 'Resend code' %}
                         </a>
                     </div>
                 </div>
