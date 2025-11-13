@@ -2,9 +2,12 @@ from django.views import generic
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import get_object_or_404, redirect
 
+from products.models import Product
 from .models import CustomUserFavorite
 
 
@@ -57,11 +60,48 @@ class FavoriteListView(LoginRequiredMixin, generic.ListView):
         return self.request.user.favorites.all()
 
 
-# Need Working
-class FavoriteCreateView(generic.CreateView):
-    model = CustomUserFavorite
+@login_required
+def favorite_add_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    previous_url = request.META.get('HTTP_REFERER')
+
+    if not CustomUserFavorite.objects.filter(
+        user=request.user,
+        product=product,
+    ).exists():
+
+        CustomUserFavorite.objects.create(
+            user=request.user,
+            product=product,
+        )
+        messages.success(request, _('Product added to favorites'))
+
+    else:
+        messages.info(request, _('Product is already in your favorite list'))
+
+    try:
+        return redirect(previous_url)
+    except:
+        return redirect('profile:favorite_list')
 
 
-# Need Working
-class FavoriteDeleteView(generic.DeleteView):
-    model = CustomUserFavorite
+@login_required
+def favorite_remove_view(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    previous_url = request.META.get('HTTP_REFERER')
+
+    try:
+        favorite = CustomUserFavorite.objects.get(
+            user=request.user,
+            product=product,
+        )
+        favorite.delete()
+        messages.success(request, _('Product removed from favorites'))
+
+    except CustomUserFavorite.DoesNotExist:
+        messages.info(request, _('Product is not in your favorite list'))
+
+    try:
+        return redirect(previous_url)
+    except:
+        return redirect('profile:favorite_list')

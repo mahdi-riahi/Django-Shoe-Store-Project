@@ -5,6 +5,7 @@
 {% load farsi_tags %}
 {% load static %}
 {% load global_tags %}
+{% load crispy_forms_tags %}
 
 {% block title %}{% translate 'Shopping Cart' %}{% endblock title %}
 
@@ -22,7 +23,7 @@
                 {% if cart %}
 
                     <div class="row">
-                        <div class="col-lg-8 mb-md--50">
+                        <div class="col-lg-11 mb-md--50">
                                 <div class="row no-gutters">
                                     <div class="col-12">
                                         <div class="table-content table-responsive">
@@ -30,8 +31,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th>{% trans 'Product Cover' %}</th>
-                                                        <th class="text-left">{% trans 'Product Name' %}</th>
+                                                        <th>{% trans 'Cover' %}</th>
+                                                        <th>{% trans 'Product' %}</th>
+                                                        <th>{% trans 'Color' %}</th>
+                                                        <th>{% trans 'Size' %}</th>
                                                         <th>{% trans 'Price' %}</th>
                                                         <th>{% trans 'Quantity' %}</th>
                                                         <th>{% trans 'Total' %}</th>
@@ -39,6 +42,7 @@
                                                 </thead>
                                                 <tbody>
                                                 {% for item in my_cart %}
+
                                                     {% with item.product_obj as product %}
                                                     <tr>
                                                         <td class="product-remove text-left"><a href="{% url 'cart:cart_remove' item.variant_obj.id %}"><i class="flaticon flaticon-cross"></i></a></td>
@@ -54,6 +58,12 @@
                                                                 <a href="{{ product.get_absolute_url }}">{{ product.title }}</a>
                                                             </h3>
                                                         </td>
+                                                        <td class="pr--40">
+                                                            <div class="color-swatch"
+                                                                 style="width: 30px; height: 30px; border-radius: 50%; background-color: {{ item.variant_obj.get_color_display }}; border: 2px solid #ddd;">
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ item.variant_obj.size }}</td>
                                                         <td class="product-price-wrapper">
                                                             {% if product.offer %}
                                                                 <span class="money-separator"></span>
@@ -65,9 +75,16 @@
                                                                 <span class="money">{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
                                                             {% endif %}
                                                         </td>
+                                                        {% if form.errors %}
+                                                            <div class="alert alert-danger">
+                                                                <strong>Form errors:</strong>
+                                                                {{ form.errors }}
+                                                            </div>
+                                                        {% endif %}
                                                         <td class="product-quantity">
-                                                            <form action="{% url 'cart:cart_update' product.id %}" method="POST">
+                                                            <form action="{% url 'cart:cart_update' item.variant_obj.id %}" method="POST">
                                                                 {% csrf_token %}
+{#                                                                {{ item.form|crispy }}#}
                                                                 <div class="quantity">
                                                                     <input type="number" class="quantity-input" name="quantity" id="qty-1" value="{{ item.quantity }}" min="1" max="30">
                                                                     {{ item.form.variant_id }}
@@ -94,7 +111,7 @@
                                     </div>
                                 </div>
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-9 pr--200 justify-content-around">
                             <div class="cart-collaterals">
                                 <div class="cart-totals">
                                     <h5 class="font-size-14 font-bold mb--15">{% trans 'Total' %}</h5>
@@ -113,7 +130,7 @@
                                             </div>
                                             <div class="cart-calculator__item--value">
                                                 <span class="product-price-wrapper">
-                                                    <span class="money">{{ my_cart.get_total_price }} {% trans 'Toman' %}</span>
+                                                    <span class="money">{{ my_cart.get_total_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
                                                 </span>
                                             </div>
                                         </div>

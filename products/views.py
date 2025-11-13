@@ -156,8 +156,9 @@ def search_view(request):
         ).distinct().order_by('-is_active')
 
         results_count = products.count()
-    else:
-        products = Product.objects.all()
+
+    if results_count == 0:
+        products = Product.active_product_manager.all()
 
     paginator = Paginator(products, 25)
     page_obj = paginator.get_page(request.GET.get('page'))

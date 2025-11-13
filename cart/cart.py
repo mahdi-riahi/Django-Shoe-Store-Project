@@ -16,10 +16,9 @@ class Cart:
         if not cart:
             cart = self.session['cart'] = {}
         self.cart = cart
-        # Fix updating variant quantities
 
-        # Update variant quantities based on variant.is_addable_to_cart
-        # self.update_variant_quantities()
+        # Update variant quantities based on availability
+        self.update_variant_quantities()
 
     def save(self):
         """
@@ -33,26 +32,37 @@ class Cart:
         """
         if not variant.is_available(quantity):
             messages.error(self.request, _('Addition to cart failed. Not enough variant in store.'))
-            return
+            return False
 
-        if variant.id not in self.cart:
-            self.cart[variant.id] = {'quantity': 0}
-        if not update:
-            self.cart[variant.id]['quantity'] += quantity
-            messages.success(self.request, _('Product added to cart successfully'))
+        variant_id = str(variant.id)
+
+        if variant_id not in self.cart:
+            self.cart[variant_id] = {'quantity': 0}
 
         if update:
-            self.cart[variant.id]['quantity'] = quantity
+            self.cart[variant_id]['quantity'] = quantity
             messages.success(self.request, _('Product quantity in cart updated'))
 
+        else:
+            new_quantity = self.cart[variant_id]['quantity'] + quantity
+            if variant.is_available(new_quantity):
+                self.cart[variant_id]['quantity'] += quantity
+                messages.success(self.request, _('Product added to cart successfully'))
+
+            else:
+                messages.error(self.request, _("Can not add more items. Not enough stock."))
+                return False
+
         self.save()
+        return True
 
     def remove(self, variant):
         """
         Remove variant from cart
         """
-        if variant.id in self.cart:
-            del self.cart[variant.id]
+        variant_id = str(variant.id)
+        if variant_id in self.cart:
+            del self.cart[variant_id]
             messages.success(self.request, _('Product variant removed from cart successfully'))
             self.save()
             return
@@ -81,33 +91,46 @@ class Cart:
         cart = self.cart.copy()
 
         for variant in variants:
-            cart[variant.id]['product_obj'] = variant.product
-            cart[variant.id]['variant_obj'] = variant
+            variant_id = str(variant.id)
+            cart[variant_id]['product_obj'] = variant.product
+            cart[variant_id]['variant_obj'] = variant
 
         for item in cart.values():
-            yield item
+            if 'product_obj' in item and 'variant_obj' in item:
+                yield item
 
     def get_variant_objects(self):
         """
         Get all variants in the cart (in a list)
         """
-        variant_ids = [variant_id for variant_id in self.cart.keys()]
+        variant_ids = [int(variant_id) for variant_id in self.cart.keys()]
         return ProductVariant.objects.filter(id__in=variant_ids)
 
     def update_variant_quantities(self):
         """
         Update variants quantities if variants aren't available (if variant is added to someone else's order)
         """
-        for item in self.cart:
-            variant = item['variant_obj']
-            if not variant.is_available(item['quantity']):
-                self.add(variant, variant.quantity, update=True)
+        variants = self.get_variant_objects()
+        for variant in variants:
+            variant_id = str(variant.id)
+            current_quantity = self.cart[str(variant_id)]['quantity']
+            if not variant.is_available(current_quantity):
+
+                if variant.quantity > 0:
+                    self.add(variant, variant.quantity, update=True)
+                    messages.warning(self.request,
+                                     _('Quantity reduced for %s due to stock limits') % variant.product.title)
+
+                else:
+                    self.remove(variant)
+                    messages.warning(self.request,
+                                     _('%s removed from cart due to stock limits') % variant.product.title)
 
     def get_total_price_no_offer(self):
         """
         Calculate total price without discount
         """
-        return sum(item['quantity'] * item['product_obj'].price for item in self.cart)
+        return sum(item['quantity'] * item['product_obj'].price for item in self)
 
     def get_total_price(self):
         """
@@ -115,4 +138,4 @@ class Cart:
         :param self:
         :return:
         """
-        return sum(item['quantity'] * item['product_obj'].offer_price for item in self.cart)
+        return sum(item['quantity'] * item['product_obj'].offer_price for item in self)

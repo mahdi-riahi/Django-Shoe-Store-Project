@@ -58,8 +58,13 @@
                                 <div class="color-swatch mb-2"
                                      style="width: 30px; height: 30px; border-radius: 50%; background-color: {{ color_display }}; border: 2px solid #ddd;">
                                 </div>
-
                                 <!-- Form for this color -->
+                                {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <strong>Form errors:</strong>
+                                        {{ form.errors }}
+                                    </div>
+                                {% endif %}
                                 <form action="{% url 'cart:cart_add' product.id %}" method="POST" class="color-form">
                                     {% csrf_token %}
 

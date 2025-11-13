@@ -27,3 +27,13 @@ class UpdateCartForm(forms.Form):
     QUANTITY_CHOICES = [(i, str(i)) for i in range(1,31)]
     variant_id = forms.IntegerField(validators=[MinValueValidator(0), ], widget=forms.HiddenInput)
     quantity = forms.TypedChoiceField(choices=QUANTITY_CHOICES, coerce=int)
+
+    def clean_variant_id(self):
+        variant_id = self.cleaned_data['variant_id']
+        try:
+            variant = ProductVariant.objects.get(id=variant_id, is_active=True)
+
+        except ProductVariant.DoesNotExist:
+            raise forms.ValidationError(_('Invalid product variant'))
+
+        return variant_id

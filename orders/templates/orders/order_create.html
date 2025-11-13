@@ -80,12 +80,13 @@
                                 <table class="table order-table order-table-2">
                                     <thead>
                                         <tr>
-                                            <th></th>
-                                            <th>{% trans 'Product' %}</th>
+                                            <th>{% trans 'Cover' %}</th>
+                                            <th class="text-center">{% trans 'Product' %}</th>
+                                            <th>{% trans 'Color' %}</th>
+                                            <th>{% trans 'Size' %}</th>
                                             <th>{% trans 'Price' %}</th>
-                                            <th class="text-right">{% trans 'Offer Price' %}</th>
                                             <th>{% trans 'Quantity' %}</th>
-                                            <th>{% trans 'Total Price' %}</th>
+                                            <th class="text-center">{% trans 'Total' %}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -96,10 +97,17 @@
                                                     {% if product.covers.exists %}{{ product.covers.first.cover.url }}
                                                     {% else %}{% static 'img/products/prod-9.jpg' %}{% endif %}"
                                                      alt="" width="100px" height="100px" ></td>
-                                            <th>{{ product.title }}</th>
-                                            <td>{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
-                                            <td>{{ product.offer_price|intcomma:False|number_farsi }}</td>
-                                            <td>{{ item.quantity|number_farsi }} {% trans 'Toman' %}</td>
+                                            <th>{{ product.title }}
+                                            </th>
+                                            <td class="pr--40">
+                                                <div class="color-swatch"
+                                                     style="width: 30px; height: 30px; border-radius: 50%; background-color: {{ item.variant_obj.get_color_display }}; border: 2px solid #ddd;">
+                                                </div>
+                                            </td>
+                                            <td>{{ item.variant_obj.size }}</td>
+{#                                            <td>{{ product.price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>#}
+                                            <td>{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
+                                            <td class="text-center">{{ item.quantity|number_farsi }}</td>
                                             <td>{{ product.offer_price|multiply:item.quantity|intcomma:False|number_farsi }} {% trans 'Toman' %}</td>
                                         </tr>
                                         {% endwith %}
