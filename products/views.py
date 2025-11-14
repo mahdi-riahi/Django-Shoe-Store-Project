@@ -85,7 +85,7 @@ def product_major_category_list_view(request, major_category):
 def product_category_list_view(request, major_category, category):
     if major_category not in Product.get_major_categories_list():
         return HttpResponseNotFound('Page not found. Major category not found')
-    if category not in Product.get_major_categories_list():
+    if category not in Product.get_categories_list():
         return HttpResponseNotFound('Page not found. Category not found')
     if category not in Product.get_categories_from_major_cat(major_category):
         return HttpResponseNotFound('Page not found. Category is not in this major category')

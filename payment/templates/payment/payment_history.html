@@ -1,0 +1,149 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load farsi_tags %}
+{% load humanize %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="fas fa-history text-info me-2"></i>{% trans 'Payment History' %}</h2>
+        <a href="{% url 'profile:profile_detail' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-right me-2"></i>{% trans 'Back to profile' %}
+        </a>
+    </div>
+
+    {% if orders %}
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>{% trans 'Order ID' %}</th>
+                                <th>{% trans 'Payment Date' %}</th>
+                                <th>{% trans 'Paid Price' %}</th>
+                                <th>{% trans 'Ref ID' %}</th>
+                                <th>{% trans 'Status' %}</th>
+                                <th>{% trans 'Details' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr>
+                                <td>
+                                    <strong>#{{ order.id|number_farsi }}</strong>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-calendar text-muted me-2"></i>
+                                        {{ order.datetime_modified|number_farsi }}
+                                    </div>
+                                    <small class="text-muted">{{ order.datetime_payment|number_farsi }}</small>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-success">{{ order.total_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
+                                </td>
+                                <td>
+                                    {% if order.zarinpal_ref_id %}
+                                        <code class="bg-light px-2 py-1 rounded">{{ order.zarinpal_ref_id }}</code>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge {% if order.is_paid %}bg-success{% else %}bg-warning{% endif %}">
+                                        {% if order.is_paid %}
+                                            <i class="fas fa-check me-1"></i>{% trans 'Success' %}
+                                        {% else %}
+                                            <i class="fas fa-clock me-1"></i>{% trans 'Waiting' %}
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'orders:order_detail' order.pk %}"
+                                           class="btn btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i>{% trans 'Go to' %}
+                                        </a>
+                                        {% if order.zarinpal_ref_id %}
+                                        <button type="button"
+                                                class="btn btn-outline-info"
+                                                data-bs-toggle="tooltip"
+                                                title="{% trans 'Tracking code' %}: {{ order.zarinpal_ref_id }}">
+                                            <i class="fas fa-receipt"></i>
+                                        </button>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payments -->
+        <div class="row mt-4">
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card bg-primary text-white text-center">
+                    <div class="card-body">
+                        <h4 class="mb-0">{{ orders.count|number_farsi }}</h4>
+                        <small>{% trans 'All payments' %}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card bg-success text-white text-center">
+                    <div class="card-body">
+                        <h4 class="mb-0">{{ success_payment_orders_count|number_farsi }}</h4>
+                        <small>{% trans 'Successful Payments' %}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card bg-info text-white text-center">
+                    <div class="card-body">
+                        <h4 class="mb-0">{{ success_payment_total_amount|intcomma:False|number_farsi }}{% trans 'Toman' %}</h4>
+                        <small>{% trans 'Successful Paid Orders Amount' %} ({% trans 'Toman' %})</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+                <div class="card bg-warning text-dark text-center">
+                    <div class="card-body">
+                        <h4 class="mb-0">{{ orders.last.datetime_payment|number_farsi }}</h4>
+                        <small>{% trans 'Last payment' %}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-credit-card fa-4x text-muted"></i>
+            </div>
+            <h4 class="text-muted mb-3">{% trans 'No payment history' %}</h4>
+            <p class="text-muted mb-4">{% trans 'After your first payment, you can see payment history here' %}</p>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg me-2">
+                <i class="fas fa-shopping-bag me-2"></i>{% trans 'Go to products' %}
+            </a>
+            <a href="{% url 'orders:order_list' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-list me-2"></i>{% translate 'Go to orders' %}
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Activate tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+</script>
+{% endblock %}

@@ -111,6 +111,10 @@ class Product(models.Model):
                 self.is_active = has_active_variants
                 # Save again if changed, but avoid infinite recursion
                 super().save(update_fields=['is_active'])
+
+            self.sell_count = self.get_sell_count()
+            super().save(update_fields=['sell_count'])
+
         self.major_category = self.get_major_category()
         if not self.offer:
             self.offer_price = self.price
@@ -213,7 +217,6 @@ class Product(models.Model):
         for variant in self.variants.all():
             for item in variant.order_items.all():
                 sell_count += item.quantity
-        self.sell_count = sell_count
         return sell_count
 
     @property
@@ -233,6 +236,9 @@ class Product(models.Model):
             if variant.size and variant.size not in sizes:
                 sizes[variant.size] = variant.get_size_display()
         return sizes
+
+    def get_offer_percent(self):
+        return (self.price - self.offer_price) / self.price * 100
 
 
 class ProductVariant(models.Model):

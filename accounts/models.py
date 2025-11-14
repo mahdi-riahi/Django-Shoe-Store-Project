@@ -1,5 +1,4 @@
-import random
-
+from django.shortcuts import reverse
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
@@ -7,32 +6,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.utils import timezone
 from datetime import timedelta
 import random
-
-
-# class CustomUserManager(BaseUserManager):
-#     def create_user(self, email, phone_number, password=None, **extra_fields):
-#         if not email:
-#             raise ValueError('The Email must be set')
-#         if not phone_number:
-#             raise ValueError('The Phone Number must be set')
-#
-#         email = self.normalize_email(email)
-#         user = self.model(email=email, phone_number=phone_number, **extra_fields)
-#         user.set_password(password)
-#         user.save(using=self._db)
-#         return user
-#
-#     def create_superuser(self, email, phone_number, password=None, **extra_fields):
-#         extra_fields.setdefault('is_staff', True)
-#         extra_fields.setdefault('is_superuser', True)
-#         extra_fields.setdefault('is_active', True)
-#
-#         if extra_fields.get('is_staff') is not True:
-#             raise ValueError('Superuser must have is_staff=True.')
-#         if extra_fields.get('is_superuser') is not True:
-#             raise ValueError('Superuser must have is_superuser=True.')
-#
-#         return self.create_user(email, phone_number, password, **extra_fields)
 
 
 class PhoneVerification(models.Model):
@@ -63,12 +36,11 @@ class CustomUser(AbstractUser):
     email_verified = models.BooleanField(_('Email Verified'), default=False)
 
     username = models.CharField(_('Username'), max_length=50, null=True, blank=True)
-    # username = None
+
+    profile_photo = models.ImageField(_('Profile Photo'), upload_to='profiles/photos/', blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['phone_number', 'username']
-
-    # objects = CustomUserManager()
 
     class Meta:
         verbose_name = _('user')
@@ -76,3 +48,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+    def get_absolute_url(self):
+        return reverse('profile:profile_detail')

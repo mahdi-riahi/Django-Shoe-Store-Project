@@ -45,16 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Added for allauth
-    # 'django.contrib.sites',
     # Humanize
     'django.contrib.humanize',
 
     # Third party apps
     'crispy_forms',
     'crispy_bootstrap5',
-    # 'allauth',
-    # 'allauth.account',
     'phonenumber_field',
 
     # my local apps
@@ -76,8 +72,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # AllAuth
-    # "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -138,12 +132,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# AUTHENTICATION_BACKENDS = [
-#     'accounts.backends.EmailOrPhoneBackend',
-#     'allauth.account.auth_backends.AuthenticationBackend',
-# ]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -178,20 +166,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 AUTH_USER_MODEL = 'accounts.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-
-# AllAuth Settings
-# SITE_ID = 1
-#
-# ACCOUNT_AUTHENTICATION_METHOD = 'email'
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_EMAIL_VERIFICATION = 'optional'
-# ACCOUNT_UNIQUE_EMAIL = True
-# ACCOUNT_SESSION_REMEMBER = True
-
-
-# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-# ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 
 # Phone Number Settings
 PHONENUMBER_DEFAULT_REGION = 'IR'

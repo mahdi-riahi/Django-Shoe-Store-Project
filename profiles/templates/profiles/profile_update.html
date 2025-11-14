@@ -3,7 +3,153 @@
 
 {% block title %}{% translate 'Profile Change' %}{% endblock %}
 
-{% block content %}
-{{ form }}
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
 
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i>ویرایش پروفایل</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Profile Photo -->
+                        <div class="text-center mb-4">
+                            <div class="position-relative d-inline-block">
+                                {% if form.instance.profile_photo %}
+                                    <img id="profile-preview"
+                                         src="{{ form.instance.profile_photo.url }}"
+                                         alt="Preview"
+                                         class="rounded-circle img-thumbnail"
+                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                {% else %}
+                                    <div id="profile-preview"
+                                         class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto"
+                                         style="width: 150px; height: 150px;">
+                                        <i class="fas fa-user fa-3x text-secondary"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-3">
+                                <label for="{{ form.profile_photo.id_for_label }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-camera me-1"></i>{% trans 'Choose a picture' %}
+                                </label>
+                                {{ form.profile_photo }}
+                                {% if form.profile_photo.errors %}
+                                    <div class="text-danger small mt-1">{{ form.profile_photo.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <!-- First Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">{% trans 'First Name' %}</label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.first_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">{% trans 'Last Name' %}</label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <div class="text-danger small mt-1">{{ form.last_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Username -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label">{% trans 'Username' %}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">@</span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-md-6 mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">{% trans 'Email Address' %}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div class="col-12 mb-3">
+                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">{% trans 'Phone Number' %}</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    {{ form.phone_number }}
+                                </div>
+                                {% if form.phone_number.errors %}
+                                    <div class="text-danger small mt-1">{{ form.phone_number.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'profile:profile_detail' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-right me-1"></i>{% trans 'Cancel' %}
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>{% trans 'Save Changes' %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// پیش‌نمایش تصویر پروفایل
+document.getElementById('{{ form.profile_photo.id_for_label }}').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('profile-preview');
+            if (preview.tagName === 'IMG') {
+                preview.src = e.target.result;
+            } else {
+                // اگر div است، آن را به img تبدیل کن
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'rounded-circle img-thumbnail';
+                img.style = 'width: 150px; height: 150px; object-fit: cover;';
+                img.alt = 'Preview';
+                preview.parentNode.replaceChild(img, preview);
+                img.id = 'profile-preview';
+            }
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// استایل دادن به فیلدهای فرم
+document.querySelectorAll('input, select, textarea').forEach(element => {
+    element.classList.add('form-control');
+});
+</script>
 {% endblock %}

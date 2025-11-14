@@ -1,0 +1,164 @@
+{% extends '_base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load farsi_tags %}
+{% load humanize %}
+
+{% block title %}{% translate 'Dashboard' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Side Bar -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <!-- Profile Picture -->
+                    <div class="position-relative d-inline-block">
+                        {% if user_profile.profile_photo %}
+                            <img src="{{ user_profile.profile_photo.url }}"
+                                 alt="Profile Photo"
+                                 class="rounded-circle img-thumbnail"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto"
+                                 style="width: 150px; height: 150px;">
+                                <i class="fas fa-user fa-3x text-secondary"></i>
+                            </div>
+                        {% endif %}
+                        <span class="position-absolute bottom-0 end-0 bg-success rounded-circle p-2 border border-3 border-white">
+                            <i class="fas fa-check text-white"></i>
+                        </span>
+                    </div>
+
+                    <h4 class="mt-3 mb-1">{{ user_profile.get_full_name|default:user_profile.email }}</h4>
+                    <p class="text-muted mb-3">@{{ user_profile.phone_number|number_farsi }}</p>
+
+                    <!-- آمار -->
+                    <div class="row text-center mb-3">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h5 class="mb-0 text-primary">{{ orders_count|number_farsi }}</h5>
+                                <small class="text-muted">{% trans 'Orders' %}</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h5 class="mb-0 text-warning">{{ favorites_count|number_farsi }}</h5>
+                            <small class="text-muted">{% trans 'Favorite Products' %}</small>
+                        </div>
+                    </div>
+
+                    <!-- Profile Edit Link -->
+                    <a href="{% url 'profile:profile_update' %}" class="btn btn-primary btn-sm w-100 mb-2">
+                        <i class="fas fa-edit me-2"></i>{% trans 'Profile Settings' %}
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Menu -->
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-transparent">
+                    <h6 class="mb-0"><i class="fas fa-link me-2"></i>{% trans 'Quick Access' %}</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush">
+                        <a href="{% url 'profile:favorite_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-heart text-danger me-2"></i>{% trans 'Favorites List' %}
+                        </a>
+                        <a href="{% url 'profile:payment_history' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-history text-info me-2"></i>{% trans 'Payment History' %}
+                        </a>
+                        <a href="{% url 'orders:order_list' %}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-shopping-bag text-success me-2"></i>{% trans 'My Orders' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- User Information -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-circle me-2"></i>{% trans 'Personal Info' %}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">{% trans 'Full name' %}</label>
+                            <p class="mb-0 fw-bold">{{ user_profile.get_full_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">{% trans 'Email Address' %}</label>
+                            <p class="mb-0 fw-bold">{{ user_profile.email }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">{% trans 'Phone number' %}</label>
+                            <p class="mb-0 fw-bold">{{ user_profile.phone_number|number_farsi }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted small">{% trans 'Username' %}</label>
+                            <p class="mb-0 fw-bold">@{{ user_profile.username }}</p>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small">{% trans 'Date Joined' %}</label>
+                            <p class="mb-0 fw-bold">{{ user_profile.date_joined|number_farsi }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Orders -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-clock me-2"></i>{% trans 'Last Orders' %}</h5>
+                    <a href="{% url 'orders:order_list' %}" class="btn btn-light btn-sm">{% trans 'See all' %}</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_orders %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>{% trans 'Order ID' %}</th>
+                                        <th>{% trans 'Date' %}</th>
+                                        <th>{% trans 'Price' %}</th>
+                                        <th>{% trans 'Status' %}</th>
+                                        <th>{% trans 'Action' %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td>#{{ order.id }}</td>
+                                        <td>{{ order.datetime_created|number_farsi }}</td>
+                                        <td>{{ order.total_price|default:order.get_total_price|intcomma:False|number_farsi }}
+                                            {% trans 'Toman' %}</td>
+                                        <td>{{ order.get_status_display }}</td>
+                                        <td>
+                                            <a href="{% url 'orders:order_detail' order.pk %}" class="btn btn-outline-primary btn-sm">
+                                                {% trans 'Details' %}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">{% trans 'You have not registered orders yet' %}</p>
+                            <a href="{% url 'products:product_list' %}" class="btn btn-primary">{% trans 'Start Shopping' %}</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

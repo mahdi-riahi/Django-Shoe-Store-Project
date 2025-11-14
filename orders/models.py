@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.shortcuts import reverse
 from django.core.validators import RegexValidator
+from django.utils import timezone
 
 from datetime import datetime, timedelta
 
@@ -56,6 +57,7 @@ class Order(models.Model):
 
     datetime_created = models.DateTimeField(_('Datetime Created'), auto_now_add=True)
     datetime_modified = models.DateTimeField(_('Datetime Modified'), auto_now=True)
+    datetime_payment = models.DateTimeField(_('Payment Datetime'), blank=True, null=True)
 
     def __str__(self):
         return f'User:{self.user}-Order:{self.id}'
@@ -74,6 +76,7 @@ class Order(models.Model):
         self.status = self.STATUSES[1][0]
         self.is_paid = True
         self.total_price = self.get_total_price()
+        self.datetime_payment = timezone.now()
         self.save()
 
     def get_total_price(self):
@@ -98,6 +101,7 @@ class Order(models.Model):
         """
         self.status = self.STATUSES[4][0]
         self.is_paid = False
+        self.datetime_payment = timezone.now()
         self.save()
 
         # Increase quantity of the variant when order is canceled
