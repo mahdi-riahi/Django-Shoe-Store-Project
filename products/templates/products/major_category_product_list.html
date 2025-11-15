@@ -2,8 +2,9 @@
 
 {% load i18n %}
 {% load static %}
+{% load product_tags %}
 
-{% block title %}{{ major_category }}{% endblock %}
+{% block title %}{{ major_category }} - {% trans 'Products' %}{% endblock %}
 
 {% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock mini_cart_icon %}
 
@@ -11,43 +12,135 @@
 
     {% include 'products/category_navbar.html' %}
 
-    <!-- Main Content Wrapper Start -->
-    <div class="main-content-wrapper container-fluid mt-5">
-
-        <div class="shop-page-wrapper shop-fullwidth">
-
-            <div class="main-content-wrapper container-fluid">
-                <div class="shop-page-wrapper shop-fullwidth">
-                    <div class="container-fluid shop-products">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="tab-content" id="product-tab-content">
-                                    <div class="tab-pane fade show active" id="nav-all">
-
-                                    {% for category,products in query_dict.items %}
-
-                                        <div class="container-fluid">
-                                        <h3>{{ category }}</h3>
-                                        </div>
-                                        <div class="row xxl-block-grid-6 grid-space-20">
-                                            {% for product in products %}
-                                                {% include 'products/product_individual.html' with product=product %}
-                                            {% endfor %}
-                                        </div>
-
-                                    {% endfor %}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Page Header -->
+    <section class="page-header bg-gradient-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent p-0 mb-3">
+                            <li class="breadcrumb-item"><a href="{% url 'pages:home_page' %}" class="text-white">{% trans 'Home' %}</a></li>
+                            <li class="breadcrumb-item active text-white" aria-current="page">{{ major_category }}</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-5 fw-bold mb-3">{{ major_category }}</h1>
+                    <p class="lead mb-0">{% trans 'Explore our amazing collection in this category' %}</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div class="category-icon">
+                        {% if major_category == 'Women' %}
+                            <i class="fas fa-female fa-4x text-white opacity-75"></i>
+                        {% elif major_category == 'Men' %}
+                            <i class="fas fa-male fa-4x text-white opacity-75"></i>
+                        {% elif major_category == 'Bags' %}
+                            <i class="fas fa-briefcase fa-4x text-white opacity-75"></i>
+                        {% elif major_category == 'Clothing' %}
+                            <i class="fas fa-tshirt fa-4x text-white opacity-75"></i>
+                        {% elif major_category == 'Accessory' %}
+                            <i class="fas fa-gem fa-4x text-white opacity-75"></i>
+                        {% else %}
+                            <i class="fas fa-shoe-prints fa-4x text-white opacity-75"></i>
+                        {% endif %}
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
-    <!-- Main Content Wrapper End -->
+    </section>
+
+    <!-- Categories Navigation -->
+    <section class="categories-nav py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        {% for category_display, products in query_dict.items %}
+                            {% with category_display|find_category_from_category_display_product as category %}
+                                <a href="
+                                    {% url 'products:product_category_list' major_category=major_category category=category %}"
+                                   class="btn btn-outline-primary btn-sm">
+                                    {{ products.0.get_category_display }}
+                                </a>
+                            {% endwith %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="products-section py-5">
+        <div class="container">
+            {% for category_display, products in query_dict.items %}
+                {% with category_display|find_category_from_category_display_product as category %}
+            <div class="category-section mb-5">
+                <!-- Category Header -->
+                <div class="row mb-4">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <h3 class="section-title fw-bold">{{ category_display }}</h3>
+                        <a href="{% url 'products:product_category_list' major_category category %}"
+                           class="btn btn-outline-primary btn-sm">
+                            {% trans 'View All' %} <i class="fas fa-arrow-left ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endwith %}
+
+                <!-- Products Grid -->
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        {% include 'products/partials/product_card.html' with product=product %}
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-4">
+                        <div class="empty-state">
+                            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">{% trans 'No products found' %}</h5>
+                            <p class="text-muted">{% trans 'There are no products available in this category yet.' %}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <style>
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .section-title {
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 2px;
+    }
+
+    .category-section {
+        border-bottom: 1px solid #e9ecef;
+        padding-bottom: 2rem;
+    }
+
+    .category-section:last-child {
+        border-bottom: none;
+    }
+
+    .empty-state {
+        padding: 3rem 1rem;
+    }
+    </style>
 
     {% include 'cart/mini_cart_aside.html' %}
 

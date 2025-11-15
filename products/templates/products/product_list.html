@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load static %}
 
-{% block title %}{% trans 'Products List' %}{% endblock %}
+{% block title %}{% trans 'All Products' %} - {% trans 'Complete Collection' %}{% endblock %}
 
 {% block mini_cart_icon %}
     {% include 'cart/mini_cart_icon_with_aside.html' %}
@@ -50,7 +50,408 @@
     </div>
     <!-- Main Content Wrapper Start -->
 
+    <!-- Page Header -->
+    <section class="page-header bg-gradient-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent p-0 mb-3">
+                            <li class="breadcrumb-item"><a href="{% url 'pages:home_page' %}" class="text-white">{% trans 'Home' %}</a></li>
+                            <li class="breadcrumb-item active text-white" aria-current="page">{% trans 'All Products' %}</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-5 fw-bold mb-3">{% trans 'Complete Collection' %}</h1>
+                    <p class="lead mb-0">{% trans 'Explore our entire range of shoes, bags, and accessories' %}</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <div class="collection-stats">
+                        <div class="stats-badge bg-white text-primary rounded-pill px-3 py-2">
+                            <i class="fas fa-cubes me-2"></i>
+                            <span class="fw-bold">{{ products.paginator.count }}</span>
+                            <span class="ms-1">{% trans 'Products' %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Categories Navigation -->
+    <section class="categories-quick-nav py-4 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        {% for major_category in query_dict.keys %}
+                        <a href="{% url 'products:product_major_cat_list' major_category=major_category %}"
+                           class="btn btn-outline-primary btn-sm">
+                            {% if major_category == 'Women' %}
+                                <i class="fas fa-female me-2"></i>
+                            {% elif major_category == 'Men' %}
+                                <i class="fas fa-male me-2"></i>
+                            {% elif major_category == 'Bags' %}
+                                <i class="fas fa-briefcase me-2"></i>
+                            {% elif major_category == 'Clothing' %}
+                                <i class="fas fa-tshirt me-2"></i>
+                            {% elif major_category == 'Accessory' %}
+                                <i class="fas fa-gem me-2"></i>
+                            {% else %}
+                                <i class="fas fa-shoe-prints me-2"></i>
+                            {% endif %}
+                            {{ major_category }}
+                        </a>
+                        {% endfor %}
+                        <a href="{% url 'products:product_offer_list' %}" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-tag me-2"></i>{% trans 'Special Offers' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Categories -->
+    <section class="featured-categories py-5">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-12 text-center">
+                    <h2 class="section-title fw-bold mb-3">{% trans 'Shop by Category' %}</h2>
+                    <p class="text-muted">{% trans 'Browse our products by your favorite categories' %}</p>
+                </div>
+            </div>
+
+            {% for major_category, products in query_dict.items %}
+            <div class="category-section mb-5">
+                <!-- Category Header -->
+                <div class="row mb-4">
+                    <div class="col-12 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <div class="category-icon me-3">
+                                {% if major_category == 'Women' %}
+                                    <i class="fas fa-female fa-2x text-pink"></i>
+                                {% elif major_category == 'Men' %}
+                                    <i class="fas fa-male fa-2x text-blue"></i>
+                                {% elif major_category == 'Bags' %}
+                                    <i class="fas fa-briefcase fa-2x text-brown"></i>
+                                {% elif major_category == 'Clothing' %}
+                                    <i class="fas fa-tshirt fa-2x text-green"></i>
+                                {% elif major_category == 'Accessory' %}
+                                    <i class="fas fa-gem fa-2x text-purple"></i>
+                                {% else %}
+                                    <i class="fas fa-shoe-prints fa-2x text-orange"></i>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <h3 class="mb-1">{{ major_category }}</h3>
+                                <p class="text-muted mb-0">
+                                    {% blocktrans with count=products|length %}
+                                    Featured {{ count }} products
+                                    {% endblocktrans %}
+                                </p>
+                            </div>
+                        </div>
+                        <a href="{% url 'products:product_major_cat_list' major_category=major_category %}"
+                           class="btn btn-outline-primary">
+                            {% trans 'View All' %} <i class="fas fa-arrow-left ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="row g-4">
+                    {% for product in products %}
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        {% include 'products/partials/product_card.html' with product=product %}
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-4">
+                        <div class="empty-state">
+                            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">{% trans 'No products found' %}</h5>
+                            <p class="text-muted">{% trans 'There are no products available in this category yet.' %}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- All Products Section -->
+    <section class="all-products-section py-5 bg-light">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-12 text-center">
+                    <h2 class="section-title fw-bold mb-3">{% trans 'All Products' %}</h2>
+                    <p class="text-muted">{% trans 'Complete collection of all our products' %}</p>
+                </div>
+            </div>
+
+            <!-- Filters and Sorting -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body py-3">
+                            <div class="row align-items-center">
+                                <div class="col-md-4 mb-2 mb-md-0">
+                                    <h6 class="mb-0 text-muted">{% trans 'Filter by:' %}</h6>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                                        <select class="form-select form-select-sm" style="width: auto;">
+                                            <option>{% trans 'All Categories' %}</option>
+                                            {% for major_category in query_dict.keys %}
+                                            <option>{{ major_category }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <select class="form-select form-select-sm" style="width: auto;">
+                                            <option>{% trans 'All Prices' %}</option>
+                                            <option>{% trans 'Under 100,000 Tomans' %}</option>
+                                            <option>{% trans '100,000 - 500,000 Tomans' %}</option>
+                                            <option>{% trans 'Over 500,000 Tomans' %}</option>
+                                        </select>
+                                        <select class="form-select form-select-sm" style="width: auto;">
+                                            <option>{% trans 'Sort by: Newest' %}</option>
+                                            <option>{% trans 'Sort by: Price Low to High' %}</option>
+                                            <option>{% trans 'Sort by: Price High to Low' %}</option>
+                                            <option>{% trans 'Sort by: Most Popular' %}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- All Products Grid -->
+            <div class="row g-4">
+                {% for product in products %}
+                <div class="col-xl-3 col-lg-4 col-md-6">
+                    {% include 'products/partials/product_card.html' with product=product %}
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <div class="empty-state">
+                        <i class="fas fa-search fa-4x text-muted mb-4"></i>
+                        <h4 class="text-muted mb-3">{% trans 'No products found' %}</h4>
+                        <p class="text-muted mb-4">{% trans 'We couldn\'t find any products matching your criteria.' %}</p>
+                        <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                            <i class="fas fa-redo me-2"></i>{% trans 'Reset Filters' %}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if products.paginator.num_pages > 1 %}
+            <div class="row mt-5">
+                <div class="col-12">
+                    <nav aria-label="{% trans 'Products pagination' %}">
+                        <ul class="pagination justify-content-center">
+                            {% if products.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="{% trans 'Previous' %}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                            </li>
+                            {% endif %}
+
+                            {% for num in products.paginator.page_range %}
+                                {% if products.number == num %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if products.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="{% trans 'Next' %}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+
+                    <div class="text-center mt-3">
+                        <p class="text-muted small">
+                            {% blocktrans with number=products.number num_pages=products.paginator.num_pages %}
+                            Page {{ number }} of {{ num_pages }}
+                            {% endblocktrans %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Features Banner -->
+    <section class="features-banner py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-4 text-center">
+                    <div class="feature-item">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-shipping-fast fa-2x text-primary"></i>
+                        </div>
+                        <h5>{% trans 'Free Shipping' %}</h5>
+                        <p class="text-muted">{% trans 'For purchases over 500,000 Tomans' %}</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="feature-item">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-shield-alt fa-2x text-success"></i>
+                        </div>
+                        <h5>{% trans 'Quality Guarantee' %}</h5>
+                        <p class="text-muted">{% trans 'Premium quality products guaranteed' %}</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="feature-item">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-headset fa-2x text-info"></i>
+                        </div>
+                        <h5>{% trans 'Customer Support' %}</h5>
+                        <p class="text-muted">{% trans 'Dedicated support for all your needs' %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Mini Cart Aside -->
     {% include 'cart/mini_cart_aside.html' %}
+
+<style>
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stats-badge {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: 15px;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 2px;
+}
+
+.category-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 3rem;
+}
+
+.category-section:last-child {
+    border-bottom: none;
+}
+
+.empty-state {
+    padding: 3rem 1rem;
+}
+
+.feature-item {
+    padding: 30px 20px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateY(-5px);
+}
+
+.pagination .page-link {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    border: 1px solid #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+}
+
+/* Color variables for category icons */
+.text-pink { color: #e83e8c; }
+.text-blue { color: #007bff; }
+.text-brown { color: #8b4513; }
+.text-green { color: #28a745; }
+.text-purple { color: #6f42c1; }
+.text-orange { color: #fd7e14; }
+
+.category-icon {
+    transition: transform 0.3s ease;
+}
+
+.category-section:hover .category-icon {
+    transform: scale(1.1);
+}
+</style>
+
+<script>
+// اسکریپت برای فیلترها و سورتینگ
+document.addEventListener('DOMContentLoaded', function() {
+    // افزودن event listener به فیلترها
+    const filters = document.querySelectorAll('.form-select');
+    filters.forEach(filter => {
+        filter.addEventListener('change', function() {
+            // در اینجا می‌توانید منطق فیلتر کردن را پیاده‌سازی کنید
+            console.log('Filter changed:', this.value);
+            // می‌توانید از AJAX برای فیلتر کردن محصولات استفاده کنید
+        });
+    });
+
+    // انیمیشن برای اسکرول به بخش‌ها
+    const quickNavLinks = document.querySelectorAll('.categories-quick-nav a');
+    quickNavLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (this.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    });
+});
+</script>
 
 {% endblock %}

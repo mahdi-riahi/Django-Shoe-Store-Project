@@ -202,6 +202,14 @@ class Product(models.Model):
                     return label
         return None
 
+    @classmethod
+    def find_category_from_category_display(cls, display):
+        for group_name, subgroups in cls.CATEGORIES:
+            for value, label in subgroups:
+                if label == display:
+                    return value
+        return None
+
     def sync_is_active_and_variants(self):
         """
         Set 'is_active' False if there is no active variants

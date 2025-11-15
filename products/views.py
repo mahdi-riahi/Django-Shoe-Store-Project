@@ -105,6 +105,13 @@ def product_category_list_view(request, major_category, category):
     })
 
 
+class ProductOfferListView(generic.ListView):
+    template_name = 'products/offer_list.html'
+    queryset = Product.objects.filter(is_active=True, offer=True).order_by('-datetime_created', '-sell_count')
+    context_object_name = 'products'
+    paginate_by = 30
+
+
 @method_decorator(require_http_methods(["POST", ]), name='dispatch')
 class CommentCreateView(generic.CreateView):
     model = Comment
@@ -157,7 +164,7 @@ def search_view(request):
 
         results_count = products.count()
 
-    if results_count == 0:
+    if results_count == 0 or not query:
         products = Product.active_product_manager.all()
 
     paginator = Paginator(products, 25)

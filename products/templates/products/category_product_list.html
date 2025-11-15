@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block title %}{{ category }}{% endblock %}
+{% block title %}{{ category }} - {{ major_category }}{% endblock %}
 
 {% block mini_cart_icon %}{% include 'cart/mini_cart_icon_with_aside.html' %}{% endblock mini_cart_icon %}
 
@@ -10,15 +10,137 @@
 
     {% include 'products/category_navbar.html' %}
 
-    <div class="container-fluid">
-    <h3>{{ category }} - {{ major_category }}</h3>
+<!-- Page Header -->
+<section class="page-header bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent p-0 mb-3">
+                        <li class="breadcrumb-item"><a href="{% url 'pages:home_page' %}" class="text-white">{% trans 'Home' %}</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'products:product_major_cat_list' major_category=major_category %}" class="text-white">{{ major_category }}</a></li>
+                        <li class="breadcrumb-item active text-white" aria-current="page">{{ category }}</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold mb-3">{{ category }}</h1>
+                <p class="lead mb-0">{% trans 'Discover our carefully curated selection in this category' %}</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <div class="product-count">
+                    <div class="count-badge bg-white text-primary rounded-pill px-3 py-2">
+                        <i class="fas fa-cube me-2"></i>
+                        <span class="fw-bold">{{ products_page_obj.paginator.count }}</span>
+                        <span class="ms-1">{% trans 'Products' %}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row xxl-block-grid-6 grid-space-20">
-        {% for product in products_page_obj %}
-            {% include 'products/product_individual.html' with product=product %}
-        {% endfor %}
+</section>
 
-        <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
+<!-- Products Grid -->
+<section class="products-section py-5">
+    <div class="container">
+        <!-- Results Header -->
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <div>
+                    <h4 class="mb-1">{% trans 'All Products' %}</h4>
+                    <p class="text-muted mb-0">
+                        {% blocktrans with count=products_page_obj.paginator.count %}
+                        Showing {{ count }} products
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="sort-options">
+                    <select class="form-select form-select-sm">
+                        <option>{% trans 'Sort by: Newest' %}</option>
+                        <option>{% trans 'Sort by: Price Low to High' %}</option>
+                        <option>{% trans 'Sort by: Price High to Low' %}</option>
+                        <option>{% trans 'Sort by: Most Popular' %}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="row g-4">
+            {% for product in products_page_obj %}
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                {% include 'products/partials/product_card.html' with product=product %}
+            </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="empty-state">
+                    <i class="fas fa-search fa-4x text-muted mb-4"></i>
+                    <h4 class="text-muted mb-3">{% trans 'No products found' %}</h4>
+                    <p class="text-muted mb-4">{% trans 'We couldn\'t find any products matching your criteria.' %}</p>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary">
+                        <i class="fas fa-shopping-bag me-2"></i>{% trans 'Browse All Products' %}
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if products_page_obj.paginator.num_pages > 1 %}
+
+            <!-- Two appearance for Pagination -->
+
+{#            <div class="row mt-5">#}
+{#                <div class="col-12">#}
+{#                    <nav aria-label="{% trans 'Products pagination' %}">#}
+{#                        <ul class="pagination justify-content-center">#}
+{#                            {% if products_page_obj.has_previous %}#}
+{#                            <li class="page-item">#}
+{#                                <a class="page-link" href="?page={{ products_page_obj.previous_page_number }}" aria-label="{% trans 'Previous' %}">#}
+{#                                    <i class="fas fa-chevron-right"></i>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            {% else %}#}
+{#                            <li class="page-item disabled">#}
+{#                                <span class="page-link"><i class="fas fa-chevron-right"></i></span>#}
+{#                            </li>#}
+{#                            {% endif %}#}
+{#    #}
+{#                            {% for num in products_page_obj.paginator.page_range %}#}
+{#                                {% if products_page_obj.number == num %}#}
+{#                                <li class="page-item active">#}
+{#                                    <span class="page-link">{{ num }}</span>#}
+{#                                </li>#}
+{#                                {% elif num > products_page_obj.number|add:'-3' and num < products_page_obj.number|add:'3' %}#}
+{#                                <li class="page-item">#}
+{#                                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>#}
+{#                                </li>#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#    #}
+{#                            {% if products_page_obj.has_next %}#}
+{#                            <li class="page-item">#}
+{#                                <a class="page-link" href="?page={{ products_page_obj.next_page_number }}" aria-label="{% trans 'Next' %}">#}
+{#                                    <i class="fas fa-chevron-left"></i>#}
+{#                                </a>#}
+{#                            </li>#}
+{#                            {% else %}#}
+{#                            <li class="page-item disabled">#}
+{#                                <span class="page-link"><i class="fas fa-chevron-left"></i></span>#}
+{#                            </li>#}
+{#                            {% endif %}#}
+{#                        </ul>#}
+{#                    </nav>#}
+{#    #}
+{#                    <div class="text-center mt-3">#}
+{#                        <p class="text-muted small">#}
+{#                            {% blocktrans with number=products_page_obj.number num_pages=products_page_obj.paginator.num_pages %}#}
+{#                            Page {{ number }} of {{ num_pages }}#}
+{#                            {% endblocktrans %}#}
+{#                        </p>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+            <nav class="pagination-wrap mt--35 mt-md--25 pb-5">
             <ul class="pagination">
                 {% with products_page_obj as page %}
                         <li><a href="?page=1" class="page-link">1</a></li>
@@ -35,7 +157,41 @@
                 {% endwith %}
             </ul>
         </nav>
+
+        {% endif %}
+
     </div>
+</section>
+
+<style>
+.page-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.count-badge {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.empty-state {
+    padding: 4rem 1rem;
+}
+
+.pagination .page-link {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 2px;
+    border: 1px solid #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-color: #667eea;
+}
+</style>
 
     {% include 'cart/mini_cart_aside.html' %}
 

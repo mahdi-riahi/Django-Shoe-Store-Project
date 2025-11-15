@@ -75,9 +75,10 @@ class PaymentListView(LoginRequiredMixin, generic.ListView):
 
 class FavoriteListView(LoginRequiredMixin, generic.ListView):
     template_name = 'profiles/favorites.html'
-    context_object_name = 'favorite_products'
+    context_object_name = 'favorites'
 
     def get_queryset(self):
+        print(self.request.user.favorites.all())
         return self.request.user.favorites.all()
 
 

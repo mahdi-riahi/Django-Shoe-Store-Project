@@ -6,6 +6,7 @@ app_name = 'products'
 
 urlpatterns = [
     path('', views.ProductListView.as_view(), name='product_list'),
+    path('offer/', views.ProductOfferListView.as_view(), name='product_offer_list'),
     path('<int:pk>/', views.ProductDetailView.as_view(), name='product_detail'),
     path('<int:pk>/comment_add/', views.CommentCreateView.as_view(), name='comment_create'),
     # Search

@@ -1,4 +1,8 @@
 {% load static %}
+{% load i18n %}
+{% load farsi_tags %}
+{% load humanize %}
+
 <div class="card product-card h-100 shadow-sm">
     <div class="position-relative">
         {% if product.covers.first %}
@@ -15,16 +19,16 @@
 
         {% if product.offer %}
             <span class="position-absolute top-0 start-0 badge bg-danger m-2">
-                {{ product.get_offer_percent|floatformat:0 }}% تخفیف
+                {{ product.get_offer_percent|floatformat:0|number_farsi }}% {% trans 'Discount' %}
             </span>
         {% endif %}
 
         <div class="position-absolute top-0 end-0 m-2">
-            <button class="btn btn-light btn-sm rounded-circle favorite-btn"
-                    data-product-id="{{ product.id }}"
-                    title="افزودن به علاقه‌مندی‌ها">
+            <a class="btn btn-light btn-sm rounded-circle favorite-btn"
+                    data-product-id="{{ product.id }}" href="{% url 'profile:favorite_add' product.id %}"
+                    title="{% trans 'Add to favorites' %}">
                 <i class="far fa-heart"></i>
-            </button>
+            </a>
         </div>
     </div>
 
@@ -38,35 +42,35 @@
             <div class="d-flex justify-content-between align-items-center mb-2">
                 {% if product.offer %}
                     <div>
-                        <span class="text-danger fw-bold">{{ product.offer_price|floatformat:0 }} تومان</span>
+                        <span class="text-danger fw-bold">{{ product.offer_price|intcomma:False|number_farsi }} {% trans 'Tomans' %}</span>
                         <small class="text-muted text-decoration-line-through ms-2">
-                            {{ product.price|floatformat:0 }}
+                            {{ product.price|intcomma:False|number_farsi }}
                         </small>
                     </div>
                 {% else %}
-                    <span class="fw-bold text-dark">{{ product.price|floatformat:0 }} تومان</span>
+                    <span class="fw-bold text-dark">{{ product.price|intcomma:False|number_farsi }} {% trans 'Tomans' %}</span>
                 {% endif %}
 
                 {% if product.get_rating_average %}
                     <small class="text-warning">
                         <i class="fas fa-star"></i>
-                        {{ product.get_rating_average|floatformat:1 }}
+                        {{ product.get_rating_average|floatformat:1|number_farsi }}
                     </small>
                 {% endif %}
             </div>
 
             <div class="d-grid gap-2">
                 <a href="{{ product.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
-                    مشاهده جزئیات
+                    {% trans 'View Details' %}
                 </a>
                 {% if product.active_variants %}
-                    <button class="btn btn-primary btn-sm add-to-cart"
+                    <a href="{{ product.get_absolute_url }}" class="btn btn-primary btn-sm add-to-cart"
                             data-product-id="{{ product.id }}">
-                        <i class="fas fa-cart-plus me-1"></i>افزودن به سبد
-                    </button>
+                        <i class="fas fa-cart-plus me-1"></i>{% trans 'Add to Cart' %}
+                    </a>
                 {% else %}
                     <button class="btn btn-secondary btn-sm" disabled>
-                        ناموجود
+                        {% trans 'Out of Stock' %}
                     </button>
                 {% endif %}
             </div>
