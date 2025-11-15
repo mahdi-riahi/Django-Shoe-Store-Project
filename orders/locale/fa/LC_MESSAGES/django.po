@@ -1,0 +1,393 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:08+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: forms.py:12
+msgid "Please enter your full address"
+msgstr ""
+
+#: models.py:16
+msgid "Not Paid"
+msgstr ""
+
+#: models.py:17 templates/orders/order_list.html:24
+msgid "Processing"
+msgstr ""
+
+#: models.py:18
+msgid "Posted"
+msgstr ""
+
+#: models.py:19 templates/orders/order_list.html:27
+msgid "Delivered"
+msgstr ""
+
+#: models.py:20 templates/orders/order_list.html:30
+msgid "Canceled"
+msgstr ""
+
+#: models.py:21 templates/orders/order_list.html:33
+msgid "Returned"
+msgstr ""
+
+#: models.py:26
+msgid "Phone number must be exactly 11 digits starting with '09'."
+msgstr ""
+
+#: models.py:29
+msgid "First Name"
+msgstr ""
+
+#: models.py:30
+msgid "Last Name"
+msgstr ""
+
+#: models.py:31 templates/orders/order_confirm.html:100
+#: templates/orders/order_detail.html:209
+msgid "Email"
+msgstr ""
+
+#: models.py:33
+msgid "User"
+msgstr ""
+
+#: models.py:39 templates/orders/order_confirm.html:92
+#: templates/orders/order_detail.html:201
+msgid "Phone Number"
+msgstr ""
+
+#: models.py:45 templates/orders/order_confirm.html:96
+#: templates/orders/order_detail.html:205
+msgid "Address"
+msgstr ""
+
+#: models.py:46
+msgid "Any notes about your order?"
+msgstr ""
+
+#: models.py:47 templates/orders/order_confirm.html:37
+#: templates/orders/order_detail.html:42
+msgid "Total Price"
+msgstr ""
+
+#: models.py:49
+msgid "Is order paid?"
+msgstr ""
+
+#: models.py:50 templates/orders/order_division_list.html:33
+msgid "Order Status"
+msgstr ""
+
+#: models.py:54
+msgid "Zarinpal Authority"
+msgstr ""
+
+#: models.py:55
+msgid "Zarinpal Reference ID"
+msgstr ""
+
+#: models.py:56
+msgid "Zarinpal Data"
+msgstr ""
+
+#: models.py:58
+msgid "Datetime Created"
+msgstr ""
+
+#: models.py:59
+msgid "Datetime Modified"
+msgstr ""
+
+#: models.py:60
+msgid "Payment Datetime"
+msgstr ""
+
+#: models.py:136 templates/orders/order_confirm.html:36
+#: templates/orders/order_create.html:88 templates/orders/order_detail.html:41
+msgid "Quantity"
+msgstr ""
+
+#: models.py:137 templates/orders/order_confirm.html:34
+#: templates/orders/order_create.html:87 templates/orders/order_detail.html:39
+msgid "Price"
+msgstr ""
+
+#: models.py:138
+msgid "Product Variant"
+msgstr ""
+
+#: models.py:139 templates/orders/order_detail.html:10
+msgid "Order"
+msgstr ""
+
+#: templates/orders/order_confirm.html:10
+msgid "Order Confirmation"
+msgstr ""
+
+#: templates/orders/order_confirm.html:26 templates/orders/order_create.html:77
+#: templates/orders/order_detail.html:31
+msgid "Order Items"
+msgstr ""
+
+#: templates/orders/order_confirm.html:33 templates/orders/order_create.html:84
+#: templates/orders/order_detail.html:38
+msgid "Product"
+msgstr ""
+
+#: templates/orders/order_confirm.html:35 templates/orders/order_detail.html:40
+msgid "Offer Price"
+msgstr ""
+
+#: templates/orders/order_confirm.html:49
+#: templates/orders/order_confirm.html:50
+#: templates/orders/order_confirm.html:52
+#: templates/orders/order_confirm.html:61
+#: templates/orders/order_confirm.html:111
+#: templates/orders/order_create.html:109
+#: templates/orders/order_create.html:111
+#: templates/orders/order_create.html:120
+#: templates/orders/order_create.html:125 templates/orders/order_detail.html:54
+#: templates/orders/order_detail.html:55 templates/orders/order_detail.html:57
+#: templates/orders/order_detail.html:66
+#: templates/orders/order_division_list.html:29
+msgid "Toman"
+msgstr ""
+
+#: templates/orders/order_confirm.html:60
+#: templates/orders/order_create.html:124 templates/orders/order_detail.html:65
+msgid "Total with discount"
+msgstr ""
+
+#: templates/orders/order_confirm.html:72
+msgid "Your Information"
+msgstr ""
+
+#: templates/orders/order_confirm.html:88
+#: templates/orders/order_detail.html:197
+msgid "Full Name"
+msgstr ""
+
+#: templates/orders/order_confirm.html:104
+msgid "Notes"
+msgstr ""
+
+#: templates/orders/order_confirm.html:110
+msgid "Order Price"
+msgstr ""
+
+#: templates/orders/order_confirm.html:116
+msgid "Change Information"
+msgstr ""
+
+#: templates/orders/order_confirm.html:121
+msgid "Checkout gates"
+msgstr ""
+
+#: templates/orders/order_confirm.html:128
+msgid "Zarinpal Secure Payment Gate"
+msgstr ""
+
+#: templates/orders/order_confirm.html:131
+msgid "Confirm and Checkout"
+msgstr ""
+
+#: templates/orders/order_create.html:10
+msgid "Order Registration"
+msgstr ""
+
+#: templates/orders/order_create.html:26 templates/orders/order_update.html:18
+msgid "Order Information"
+msgstr ""
+
+#: templates/orders/order_create.html:68 templates/orders/order_update.html:60
+msgid "Register my order"
+msgstr ""
+
+#: templates/orders/order_create.html:83
+msgid "Cover"
+msgstr ""
+
+#: templates/orders/order_create.html:85
+msgid "Color"
+msgstr ""
+
+#: templates/orders/order_create.html:86
+msgid "Size"
+msgstr ""
+
+#: templates/orders/order_create.html:89 templates/orders/order_create.html:119
+msgid "Total"
+msgstr ""
+
+#: templates/orders/order_create.html:135
+msgid "Your cart is empty. Please add some items to your cart"
+msgstr ""
+
+#: templates/orders/order_create.html:136
+msgid "Products List"
+msgstr ""
+
+#: templates/orders/order_detail.html:10
+msgid "Details"
+msgstr ""
+
+#: templates/orders/order_detail.html:16
+msgid "Order Details for #"
+msgstr ""
+
+#: templates/orders/order_detail.html:78
+msgid "Order Details"
+msgstr ""
+
+#: templates/orders/order_detail.html:84
+msgid "Order id"
+msgstr ""
+
+#: templates/orders/order_detail.html:89
+msgid "Status"
+msgstr ""
+
+#: templates/orders/order_detail.html:94
+msgid "Total price"
+msgstr ""
+
+#: templates/orders/order_detail.html:99
+msgid "Is paid"
+msgstr ""
+
+#: templates/orders/order_detail.html:108
+msgid "Payment Authority"
+msgstr ""
+
+#: templates/orders/order_detail.html:115
+msgid "Payment Zarinpal Ref ID"
+msgstr ""
+
+#: templates/orders/order_detail.html:121
+msgid "Created At"
+msgstr ""
+
+#: templates/orders/order_detail.html:136
+msgid "Share your feelings about your shopping"
+msgstr ""
+
+#: templates/orders/order_detail.html:137
+msgid ""
+"Add comments about products you bought and help others to make better "
+"decisions"
+msgstr ""
+
+#: templates/orders/order_detail.html:156
+msgid "Add your comment"
+msgstr ""
+
+#: templates/orders/order_detail.html:167
+msgid "Your order is not ready to be paid"
+msgstr ""
+
+#: templates/orders/order_detail.html:168
+msgid "Your order status is "
+msgstr ""
+
+#: templates/orders/order_detail.html:171
+msgid "Contact Support"
+msgstr ""
+
+#: templates/orders/order_detail.html:181
+msgid "Your order is ready to be paid"
+msgstr ""
+
+#: templates/orders/order_detail.html:182
+msgid "Please Confirm your order as soon as possible"
+msgstr ""
+
+#: templates/orders/order_detail.html:185
+msgid "Confirm order and checkout"
+msgstr ""
+
+#: templates/orders/order_division_list.html:16
+msgid "Paid"
+msgstr ""
+
+#: templates/orders/order_division_list.html:20
+msgid "Not paid"
+msgstr ""
+
+#: templates/orders/order_division_list.html:25
+msgid "Order-id"
+msgstr ""
+
+#: templates/orders/order_division_list.html:39
+msgid "Order Registration Date"
+msgstr ""
+
+#: templates/orders/order_division_list.html:66
+msgid "No orders found"
+msgstr ""
+
+#: templates/orders/order_list.html:8
+msgid "Orders List"
+msgstr ""
+
+#: templates/orders/order_update.html:6
+msgid "Update Order Info"
+msgstr ""
+
+#: templates/orders/order_update.html:12
+msgid "Update Order Information"
+msgstr ""
+
+#: views.py:24
+msgid "Your cart is empty. Please add some products to your cart."
+msgstr ""
+
+#: views.py:45
+msgid "Your order was successfully created"
+msgstr ""
+
+#: views.py:49
+msgid "Some fields in the form are not valid"
+msgstr ""
+
+#: views.py:102
+msgid "We can not hold your order more than 15 minutes after its registration"
+msgstr ""
+
+#: views.py:103
+msgid "Please confirm your order as soon as possible"
+msgstr ""
+
+#: views.py:126
+msgid "Your order was successfully updated"
+msgstr ""
+
+#: views.py:130
+msgid "Please correct errors below"
+msgstr ""
+
+#: views.py:146
+msgid "Payment is already done for your order"
+msgstr ""
+
+#: views.py:150
+msgid "This order is not ready for payment. Check its status"
+msgstr ""
+
+#: views.py:159
+msgid "Confirm your information and go to payment"
+msgstr ""

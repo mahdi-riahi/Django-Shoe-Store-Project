@@ -1,0 +1,759 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:10+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: models.py:25
+msgid "Women Summer Shoes"
+msgstr ""
+
+#: models.py:26
+msgid "Women Casual Shoes"
+msgstr ""
+
+#: models.py:27
+msgid "Women Sport Shoes"
+msgstr ""
+
+#: models.py:28
+msgid "Women Medical Shoes"
+msgstr ""
+
+#: models.py:29
+msgid "Women Formal Shoes"
+msgstr ""
+
+#: models.py:30
+msgid "Women Heels Shoes"
+msgstr ""
+
+#: models.py:31
+msgid "Women Winter Shoes"
+msgstr ""
+
+#: models.py:35
+msgid "Men Summer Shoes"
+msgstr ""
+
+#: models.py:36
+msgid "Men Sport Shoes"
+msgstr ""
+
+#: models.py:37
+msgid "Men Medical Shoes"
+msgstr ""
+
+#: models.py:38
+msgid "Men Formal Shoes"
+msgstr ""
+
+#: models.py:39
+msgid "Men Occasional Shoes"
+msgstr ""
+
+#: models.py:40
+msgid "Men Winter Shoes"
+msgstr ""
+
+#: models.py:44 templates/products/category_navbar.html:53
+msgid "Handbag"
+msgstr ""
+
+#: models.py:45 templates/products/category_navbar.html:54
+msgid "Shoulder bags"
+msgstr ""
+
+#: models.py:46
+msgid "Office bag"
+msgstr ""
+
+#: models.py:47
+msgid "Travel bag"
+msgstr ""
+
+#: models.py:48
+msgid "Backpack"
+msgstr ""
+
+#: models.py:49
+msgid "Card holder"
+msgstr ""
+
+#: models.py:50
+msgid "Coat bag"
+msgstr ""
+
+#: models.py:51 templates/products/category_navbar.html:60
+msgid "Checkbook bag"
+msgstr ""
+
+#: models.py:55 templates/products/category_navbar.html:68
+msgid "Men Jackets"
+msgstr ""
+
+#: models.py:56 templates/products/category_navbar.html:69
+msgid "Women Jackets"
+msgstr ""
+
+#: models.py:57 templates/products/category_navbar.html:70
+msgid "Hats"
+msgstr ""
+
+#: models.py:66 templates/products/category_navbar.html:87
+msgid "Medical insole"
+msgstr ""
+
+#: models.py:67 templates/products/category_navbar.html:88
+msgid "Wax"
+msgstr ""
+
+#: models.py:71
+msgid "Title"
+msgstr ""
+
+#: models.py:72
+msgid "Short Description"
+msgstr ""
+
+#: models.py:73
+msgid "Description"
+msgstr ""
+
+#: models.py:74
+msgid "Materials"
+msgstr ""
+
+#: models.py:75
+msgid "Price"
+msgstr ""
+
+#: models.py:76
+msgid "Is The Product Active ?"
+msgstr ""
+
+#: models.py:77
+msgid "How many items of this product were sold?"
+msgstr ""
+
+#: models.py:80
+msgid "Does this product have an offer?"
+msgstr ""
+
+#: models.py:81
+msgid "Offer Price"
+msgstr ""
+
+#: models.py:83
+msgid "Category"
+msgstr ""
+
+#: models.py:84
+msgid "Major Category"
+msgstr ""
+
+#: models.py:86 models.py:363
+msgid "Datetime Created"
+msgstr ""
+
+#: models.py:87 models.py:364
+msgid "Datetime Modified"
+msgstr ""
+
+#: models.py:88 models.py:354
+msgid "User"
+msgstr ""
+
+#: models.py:130
+msgid "Offer price is required when offer is True"
+msgstr ""
+
+#: models.py:134
+msgid "Offer price must be a positive number"
+msgstr ""
+
+#: models.py:138
+msgid "Offer price must be lower than price"
+msgstr ""
+
+#: models.py:254
+msgid "White"
+msgstr ""
+
+#: models.py:255
+msgid "Black"
+msgstr ""
+
+#: models.py:256
+msgid "Yellow"
+msgstr ""
+
+#: models.py:257
+msgid "Red"
+msgstr ""
+
+#: models.py:258
+msgid "Blue"
+msgstr ""
+
+#: models.py:259
+msgid "Chocolate"
+msgstr ""
+
+#: models.py:260
+msgid "Brown"
+msgstr ""
+
+#: models.py:261
+msgid "Wheat"
+msgstr ""
+
+#: models.py:262
+msgid "Lightyellow"
+msgstr ""
+
+#: models.py:283
+msgid "Color"
+msgstr ""
+
+#: models.py:284
+msgid "Size"
+msgstr ""
+
+#: models.py:286 models.py:332 models.py:355
+msgid "Product"
+msgstr ""
+
+#: models.py:287
+msgid "Quantity"
+msgstr ""
+
+#: models.py:288
+msgid "Is the variant active?"
+msgstr ""
+
+#: models.py:333
+msgid "Product Cover"
+msgstr ""
+
+#: models.py:341
+msgid "Yes"
+msgstr ""
+
+#: models.py:342
+msgid "No"
+msgstr ""
+
+#: models.py:345
+msgid "1/5  Very Bad"
+msgstr ""
+
+#: models.py:346
+msgid "2/5  Low Quality"
+msgstr ""
+
+#: models.py:347
+msgid "3/5  Average"
+msgstr ""
+
+#: models.py:348
+msgid "4/5  Good"
+msgstr ""
+
+#: models.py:349
+msgid "5/5  Perfect"
+msgstr ""
+
+#: models.py:352
+msgid "Name"
+msgstr ""
+
+#: models.py:353
+msgid "Email"
+msgstr ""
+
+#: models.py:357
+msgid "Text"
+msgstr ""
+
+#: models.py:359
+msgid "Do you recommend this product to others?"
+msgstr ""
+
+#: models.py:360
+msgid "Rate this product from 1-5"
+msgstr ""
+
+#: models.py:361
+msgid "Is this comment active"
+msgstr ""
+
+#: templates/products/category_navbar.html:15
+#: templates/products/offer_list.html:6 templates/products/offer_list.html:22
+#: templates/products/offer_list.html:25
+#: templates/products/product_list.html:106
+msgid "Special Offers"
+msgstr "تخفیف های ویژه"
+
+#: templates/products/category_navbar.html:18
+msgid "Offers"
+msgstr ""
+
+#: templates/products/category_navbar.html:23
+#: templates/products/category_navbar.html:79
+msgid "Women"
+msgstr ""
+
+#: templates/products/category_navbar.html:26
+#: templates/products/category_navbar.html:40
+msgid "Summer"
+msgstr ""
+
+#: templates/products/category_navbar.html:27
+msgid "Casual"
+msgstr ""
+
+#: templates/products/category_navbar.html:28
+#: templates/products/category_navbar.html:41
+msgid "Sport"
+msgstr ""
+
+#: templates/products/category_navbar.html:29
+#: templates/products/category_navbar.html:42
+msgid "Medical"
+msgstr ""
+
+#: templates/products/category_navbar.html:30
+#: templates/products/category_navbar.html:43
+msgid "Formal"
+msgstr ""
+
+#: templates/products/category_navbar.html:31
+msgid "Heels"
+msgstr ""
+
+#: templates/products/category_navbar.html:32
+#: templates/products/category_navbar.html:45
+msgid "Winter"
+msgstr ""
+
+#: templates/products/category_navbar.html:37
+#: templates/products/category_navbar.html:78
+msgid "Men"
+msgstr ""
+
+#: templates/products/category_navbar.html:44
+msgid "Occasional"
+msgstr ""
+
+#: templates/products/category_navbar.html:50
+msgid "Bags"
+msgstr ""
+
+#: templates/products/category_navbar.html:55
+msgid "office bag"
+msgstr ""
+
+#: templates/products/category_navbar.html:56
+msgid "travel bag"
+msgstr ""
+
+#: templates/products/category_navbar.html:57
+msgid "backpack"
+msgstr ""
+
+#: templates/products/category_navbar.html:58
+msgid "card holder"
+msgstr ""
+
+#: templates/products/category_navbar.html:59
+msgid "coat bag"
+msgstr ""
+
+#: templates/products/category_navbar.html:65
+msgid "Clothing"
+msgstr ""
+
+#: templates/products/category_navbar.html:75
+msgid "Accessory"
+msgstr ""
+
+#: templates/products/category_navbar.html:84
+msgid "Shoes Care"
+msgstr ""
+
+#: templates/products/category_product_list.html:20
+#: templates/products/major_category_product_list.html:22
+#: templates/products/offer_list.html:21
+#: templates/products/product_list.html:60
+msgid "Home"
+msgstr "خانه"
+
+#: templates/products/category_product_list.html:26
+msgid "Discover our carefully curated selection in this category"
+msgstr ""
+
+#: templates/products/category_product_list.html:33
+#: templates/products/major_category_product_list.html:7
+#: templates/products/product_list.html:72
+msgid "Products"
+msgstr ""
+
+#: templates/products/category_product_list.html:48
+#: templates/products/product_list.html:6
+#: templates/products/product_list.html:61
+#: templates/products/product_list.html:187
+msgid "All Products"
+msgstr ""
+
+#: templates/products/category_product_list.html:50
+#, python-format
+msgid ""
+"\n"
+"                        Showing %(count)s products\n"
+"                        "
+msgstr ""
+
+#: templates/products/category_product_list.html:57
+#: templates/products/product_list.html:216
+msgid "Sort by: Newest"
+msgstr ""
+
+#: templates/products/category_product_list.html:58
+#: templates/products/product_list.html:217
+msgid "Sort by: Price Low to High"
+msgstr ""
+
+#: templates/products/category_product_list.html:59
+#: templates/products/product_list.html:218
+msgid "Sort by: Price High to Low"
+msgstr ""
+
+#: templates/products/category_product_list.html:60
+#: templates/products/product_list.html:219
+msgid "Sort by: Most Popular"
+msgstr ""
+
+#: templates/products/category_product_list.html:76
+#: templates/products/major_category_product_list.html:99
+#: templates/products/product_list.html:171
+#: templates/products/product_list.html:239
+msgid "No products found"
+msgstr ""
+
+#: templates/products/category_product_list.html:77
+#: templates/products/product_list.html:240
+msgid "We couldn\\"
+msgstr ""
+
+#: templates/products/category_product_list.html:79
+#: templates/products/offer_list.html:91
+msgid "Browse All Products"
+msgstr ""
+
+#: templates/products/major_category_product_list.html:27
+msgid "Explore our amazing collection in this category"
+msgstr ""
+
+#: templates/products/major_category_product_list.html:83
+#: templates/products/product_list.html:156
+msgid "View All"
+msgstr ""
+
+#: templates/products/major_category_product_list.html:100
+#: templates/products/product_list.html:172
+msgid "There are no products available in this category yet."
+msgstr ""
+
+#: templates/products/offer_list.html:6 templates/products/offer_list.html:62
+msgid "Discounted Products"
+msgstr ""
+
+#: templates/products/offer_list.html:26
+msgid "Limited time discounts on selected products. Shop now and save!"
+msgstr ""
+
+#: templates/products/offer_list.html:42
+msgid "Limited Time Offer!"
+msgstr ""
+
+#: templates/products/offer_list.html:43
+msgid "Hurry up! These special prices won\\"
+msgstr ""
+
+#: templates/products/offer_list.html:64
+#, python-format
+msgid ""
+"\n"
+"                        %(count)s products with special discounts\n"
+"                        "
+msgstr ""
+
+#: templates/products/offer_list.html:72
+#, python-format
+msgid "Up to 50%% Off"
+msgstr ""
+
+#: templates/products/offer_list.html:88
+msgid "No offers available"
+msgstr ""
+
+#: templates/products/offer_list.html:89
+msgid ""
+"There are no discounted products at the moment. Please check back later!"
+msgstr ""
+
+#: templates/products/offer_list.html:102
+#: templates/products/product_list.html:253
+msgid "Products pagination"
+msgstr ""
+
+#: templates/products/offer_list.html:106
+#: templates/products/product_list.html:257
+msgid "Previous"
+msgstr ""
+
+#: templates/products/offer_list.html:130
+#: templates/products/product_list.html:281
+msgid "Next"
+msgstr ""
+
+#: templates/products/offer_list.html:144
+#, python-format
+msgid ""
+"\n"
+"                        Page %(number)s of %(num_pages)s\n"
+"                        "
+msgstr ""
+
+#: templates/products/partials/product_card.html:22
+msgid "Discount"
+msgstr ""
+
+#: templates/products/partials/product_card.html:29
+msgid "Add to favorites"
+msgstr ""
+
+#: templates/products/partials/product_card.html:45
+#: templates/products/partials/product_card.html:51
+msgid "Tomans"
+msgstr ""
+
+#: templates/products/partials/product_card.html:64
+msgid "View Details"
+msgstr ""
+
+#: templates/products/partials/product_card.html:69
+msgid "Add to Cart"
+msgstr ""
+
+#: templates/products/partials/product_card.html:73
+msgid "Out of Stock"
+msgstr ""
+
+#: templates/products/product_detail.html:11
+#: templates/products/product_detail.html:19
+msgid "Details for"
+msgstr ""
+
+#: templates/products/product_detail.html:47
+#: templates/products/product_detail.html:50
+#: templates/products/product_individual.html:49
+#: templates/products/product_individual.html:51
+#: templates/products/product_individual.html:53
+msgid "Toman"
+msgstr ""
+
+#: templates/products/product_detail.html:90
+msgid "Add to cart"
+msgstr ""
+
+#: templates/products/product_detail.html:96
+msgid "No variants available"
+msgstr ""
+
+#: templates/products/product_detail.html:103
+msgid "Categories"
+msgstr ""
+
+#: templates/products/product_detail.html:117
+msgid "Product Description"
+msgstr ""
+
+#: templates/products/product_detail.html:121
+msgid "Properties"
+msgstr ""
+
+#: templates/products/product_detail.html:125
+msgid "Comments"
+msgstr ""
+
+#: templates/products/product_detail.html:140
+msgid "Material"
+msgstr ""
+
+#: templates/products/product_detail.html:144
+msgid "Sizes"
+msgstr ""
+
+#: templates/products/product_detail.html:152
+msgid "Colors"
+msgstr ""
+
+#: templates/products/product_detail.html:165
+msgid "Comments for"
+msgstr ""
+
+#: templates/products/product_detail.html:198
+msgid "I recommend this product"
+msgstr ""
+
+#: templates/products/product_detail.html:200
+msgid "I don't recommend this product"
+msgstr ""
+
+#: templates/products/product_detail.html:237
+msgid "Add your own comment"
+msgstr ""
+
+#: templates/products/product_detail.html:245
+msgid "Your email will not be shown to others"
+msgstr ""
+
+#: templates/products/product_detail.html:248
+msgid "Your Name"
+msgstr ""
+
+#: templates/products/product_detail.html:253
+msgid "Your Email"
+msgstr ""
+
+#: templates/products/product_detail.html:267
+msgid "Send"
+msgstr ""
+
+#: templates/products/product_individual.html:24
+msgid "Special Offer"
+msgstr "تخفیف ویژه"
+
+#: templates/products/product_list.html:6
+#: templates/products/product_list.html:64
+msgid "Complete Collection"
+msgstr ""
+
+#: templates/products/product_list.html:65
+msgid "Explore our entire range of shoes, bags, and accessories"
+msgstr ""
+
+#: templates/products/product_list.html:119
+msgid "Shop by Category"
+msgstr ""
+
+#: templates/products/product_list.html:120
+msgid "Browse our products by your favorite categories"
+msgstr ""
+
+#: templates/products/product_list.html:148
+#, python-format
+msgid ""
+"\n"
+"                                    Featured %(count)s products\n"
+"                                    "
+msgstr ""
+
+#: templates/products/product_list.html:188
+msgid "Complete collection of all our products"
+msgstr ""
+
+#: templates/products/product_list.html:199
+msgid "Filter by:"
+msgstr ""
+
+#: templates/products/product_list.html:204
+msgid "All Categories"
+msgstr ""
+
+#: templates/products/product_list.html:210
+msgid "All Prices"
+msgstr ""
+
+#: templates/products/product_list.html:211
+msgid "Under 100,000 Tomans"
+msgstr ""
+
+#: templates/products/product_list.html:212
+msgid "100,000 - 500,000 Tomans"
+msgstr ""
+
+#: templates/products/product_list.html:213
+msgid "Over 500,000 Tomans"
+msgstr ""
+
+#: templates/products/product_list.html:242
+msgid "Reset Filters"
+msgstr ""
+
+#: templates/products/product_list.html:295
+#, python-format
+msgid ""
+"\n"
+"                            Page %(number)s of %(num_pages)s\n"
+"                            "
+msgstr ""
+
+#: templates/products/product_list.html:315
+msgid "Free Shipping"
+msgstr ""
+
+#: templates/products/product_list.html:316
+msgid "For purchases over 500,000 Tomans"
+msgstr ""
+
+#: templates/products/product_list.html:324
+msgid "Quality Guarantee"
+msgstr ""
+
+#: templates/products/product_list.html:325
+msgid "Premium quality products guaranteed"
+msgstr ""
+
+#: templates/products/product_list.html:333
+msgid "Customer Support"
+msgstr ""
+
+#: templates/products/product_list.html:334
+msgid "Dedicated support for all your needs"
+msgstr ""
+
+#: templates/products/search_results.html:6
+msgid "Search results for"
+msgstr ""
+
+#: templates/products/search_results.html:16
+msgid "results found for"
+msgstr ""
+
+#: templates/products/search_results.html:18
+msgid "No results found for"
+msgstr ""
+
+#: views.py:141
+msgid "Your comment added successfully"
+msgstr ""
+
+#: views.py:145
+msgid "Please correct the errors for comment."
+msgstr ""

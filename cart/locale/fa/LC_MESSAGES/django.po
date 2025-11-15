@@ -1,0 +1,174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:08+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: cart.py:34
+msgid "Addition to cart failed. Not enough variant in store."
+msgstr ""
+
+#: cart.py:44
+msgid "Product quantity in cart updated"
+msgstr ""
+
+#: cart.py:50
+msgid "Product added to cart successfully"
+msgstr ""
+
+#: cart.py:53
+msgid "Can not add more items. Not enough stock."
+msgstr ""
+
+#: cart.py:66
+msgid "Product variant removed from cart successfully"
+msgstr ""
+
+#: cart.py:69
+msgid "Product variant is not in cart"
+msgstr ""
+
+#: cart.py:78
+msgid "Your cart is successfully empty"
+msgstr ""
+
+#: cart.py:81
+msgid "Your cart is already empty"
+msgstr ""
+
+#: cart.py:122
+#, python-format
+msgid "Quantity reduced for %s due to stock limits"
+msgstr ""
+
+#: cart.py:127
+#, python-format
+msgid "%s removed from cart due to stock limits"
+msgstr ""
+
+#: forms.py:23 templates/cart/cart_detail.html:37
+#: templates/cart/mini_cart_aside.html:31
+msgid "Size"
+msgstr ""
+
+#: forms.py:37
+msgid "Invalid product variant"
+msgstr ""
+
+#: templates/cart/cart_detail.html:10
+msgid "Shopping Cart"
+msgstr ""
+
+#: templates/cart/cart_detail.html:16 templates/cart/mini_cart_aside.html:11
+msgid "Shopping cart"
+msgstr ""
+
+#: templates/cart/cart_detail.html:34
+msgid "Cover"
+msgstr ""
+
+#: templates/cart/cart_detail.html:35
+msgid "Product"
+msgstr ""
+
+#: templates/cart/cart_detail.html:36 templates/cart/mini_cart_aside.html:30
+msgid "Color"
+msgstr ""
+
+#: templates/cart/cart_detail.html:38
+msgid "Price"
+msgstr ""
+
+#: templates/cart/cart_detail.html:39
+msgid "Quantity"
+msgstr ""
+
+#: templates/cart/cart_detail.html:40 templates/cart/cart_detail.html:117
+#: templates/cart/cart_detail.html:121 templates/cart/mini_cart_aside.html:46
+msgid "Total"
+msgstr ""
+
+#: templates/cart/cart_detail.html:71 templates/cart/cart_detail.html:73
+#: templates/cart/cart_detail.html:75 templates/cart/cart_detail.html:97
+#: templates/cart/cart_detail.html:124 templates/cart/cart_detail.html:133
+#: templates/cart/mini_cart_aside.html:37
+#: templates/cart/mini_cart_aside.html:47
+msgid "Toman"
+msgstr ""
+
+#: templates/cart/cart_detail.html:92
+msgid "Update"
+msgstr ""
+
+#: templates/cart/cart_detail.html:110
+msgid "Clear cart"
+msgstr ""
+
+#: templates/cart/cart_detail.html:129
+msgid "Total with offer"
+msgstr ""
+
+#: templates/cart/cart_detail.html:140
+msgid "Order Registration"
+msgstr ""
+
+#: templates/cart/cart_detail.html:149
+msgid "Your shopping cart is empty"
+msgstr ""
+
+#: templates/cart/mini_cart_aside.html:51
+msgid "Go to cart detail"
+msgstr ""
+
+#: templates/cart/mini_cart_aside.html:53
+msgid "Register Order"
+msgstr ""
+
+#: templates/cart/mini_cart_aside.html:58
+msgid "Your cart is empty. Please add some items to your cart"
+msgstr ""
+
+#: templates/cart/mini_cart_aside.html:59
+msgid "Products List"
+msgstr ""
+
+#: views.py:35
+msgid "Cart updated successfully"
+msgstr ""
+
+#: views.py:38
+msgid "Product does not have enough variants"
+msgstr ""
+
+#: views.py:42
+msgid "Form is not valid"
+msgstr ""
+
+#: views.py:76
+msgid "Product added to cart successfully!"
+msgstr ""
+
+#: views.py:83
+msgid "Selected variant is not available."
+msgstr ""
+
+#: views.py:86
+msgid "An error occurred while adding to cart"
+msgstr ""
+
+#: views.py:89
+msgid "Please correct the errors in the form."
+msgstr ""

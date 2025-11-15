@@ -10,6 +10,9 @@ from .sms_service import SMSService
 
 
 def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('pages:home_page')
+
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -167,6 +170,9 @@ def resend_verification_code_view(request):
 
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('pages:home_page')
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():

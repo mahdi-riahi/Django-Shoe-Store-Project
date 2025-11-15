@@ -1,0 +1,227 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:06+0330\n"
+"PO-Revision-Date: 2025-11-15 17:50+0330\n"
+"Last-Translator:   <mm@mm.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.10.2\n"
+
+#: admin.py:20
+msgid "Personal info"
+msgstr "اطلاعات شخصی"
+
+#: admin.py:22
+msgid "Permissions"
+msgstr "مجوز ها"
+
+#: admin.py:33
+msgid "Important dates"
+msgstr "تاریخ های مهم"
+
+#: forms.py:11 forms.py:69
+msgid "Password"
+msgstr "گذرواژه"
+
+#: forms.py:20
+msgid "Password confirmation"
+msgstr "تایید گذرواژه"
+
+#: forms.py:26
+msgid "Enter the same password as before, for verification."
+msgstr "همان گذرواژه بالا را برای اعتبار سنجی وارد کنید."
+
+#: forms.py:35
+msgid "Enter your @ email"
+msgstr "ایمیل @ خود را وارد کنید"
+
+#: forms.py:36
+msgid "ex: 09123456789"
+msgstr "۰۹۱۲۳۴۵۶۷۸۹"
+
+#: forms.py:68
+msgid "Email or Phone Number"
+msgstr "ایمیل یا شماره تلفن"
+
+#: models.py:12 models.py:34
+msgid "Phone Number"
+msgstr "شماره تماس"
+
+#: models.py:13
+msgid "Code"
+msgstr "کد"
+
+#: models.py:14
+msgid "Created At"
+msgstr "تاریخ ساخت"
+
+#: models.py:15
+msgid "Expires At"
+msgstr "تاریخ انقضا"
+
+#: models.py:16
+msgid "Is used?"
+msgstr "آیا استفاده شده؟"
+
+#: models.py:33
+msgid "Email Address"
+msgstr "آدرس ایمیل"
+
+#: models.py:35
+msgid "Phone Verified"
+msgstr "تایید شماره تماس"
+
+#: models.py:36
+msgid "Email Verified"
+msgstr "تایید ایمیل"
+
+#: models.py:38
+msgid "Username"
+msgstr "نام کاربری"
+
+#: models.py:40
+msgid "Profile Photo"
+msgstr "عکس پروفایل"
+
+#: models.py:46
+msgid "user"
+msgstr "کاربر"
+
+#: models.py:47
+msgid "users"
+msgstr ""
+
+#: sms_service.py:9
+msgid "JC Classic Leather \n"
+msgstr ""
+
+#: templates/accounts/login.html:6 templates/accounts/login.html:22
+#: templates/accounts/login.html:40 templates/accounts/signup.html:38
+msgid "Login"
+msgstr ""
+
+#: templates/accounts/login.html:12
+msgid "Login Form"
+msgstr ""
+
+#: templates/accounts/login.html:37
+msgid "Forgot password?"
+msgstr ""
+
+#: templates/accounts/signup.html:6 templates/accounts/signup.html:22
+msgid "Signup"
+msgstr ""
+
+#: templates/accounts/signup.html:12
+msgid "Signup Form"
+msgstr ""
+
+#: templates/accounts/signup.html:37
+msgid "Already have an account?"
+msgstr ""
+
+#: templates/accounts/signup.html:41 templates/accounts/verify_phone.html:27
+msgid "Submit"
+msgstr ""
+
+#: templates/accounts/verify_phone.html:5
+#: templates/accounts/verify_phone.html:15
+msgid "Phone Number Verification"
+msgstr ""
+
+#: templates/accounts/verify_phone.html:18
+msgid "Verification code was sent to"
+msgstr "کد تایید ارسال برای"
+
+#: templates/accounts/verify_phone.html:23
+msgid "Verification code"
+msgstr "کد تایید"
+
+#: templates/accounts/verify_phone.html:31
+msgid "Verification codes have 2 minutes expiry time"
+msgstr "کد های تایید پس از ۲ دقیقه منقضی می‌شوند."
+
+#: templates/accounts/verify_phone.html:32
+msgid "Didn't receive the code?"
+msgstr "کد را دریافت نکردید؟‍"
+
+#: templates/accounts/verify_phone.html:34
+msgid "Resend code"
+msgstr "دوباره ارسال کن"
+
+#: views.py:30
+msgid "Please confirm your phone number"
+msgstr "لطفا شماره تماس خود را تایید کنید"
+
+#: views.py:33
+msgid "Please correct errors below"
+msgstr "لطفا خطاهای زیر را درست کنید"
+
+#: views.py:45 views.py:124
+msgid "Please complete signup first"
+msgstr "لطفا ابتدا ثبت نام را کامل کنید"
+
+#: views.py:54 views.py:132
+msgid "Signup is incomplete. Please complete signup first"
+msgstr "ثبت نام شما کامل نیست. ابتدا ثبت نام را کامل کنید"
+
+#: views.py:97
+msgid ""
+"Phone number validation was successful. Signup completed\n"
+"You are logged in now"
+msgstr ""
+"اعتبار سنجی شماره تلفن موفقیت آمیز بود. ثبت نام باموفقیت انجام شد.\n"
+"شما لاگین شدید!"
+
+#: views.py:103
+msgid "Code is expired. Please ask for a new code"
+msgstr "کد منقضی شده. لطفا کد جدید درخواست کنید"
+
+#: views.py:106
+msgid "code is not valid."
+msgstr "کد معتبر نیست"
+
+#: views.py:109
+msgid "No verification code sent"
+msgstr "کد تایید ارسال نشد"
+
+#: views.py:144
+msgid ""
+"Your last code is still valid. Use that or wait until it get expired and try"
+" again"
+msgstr ""
+"آخرین کد تایید شما همچنان فعال است. از آن استفاده کنید یا پس از منقضی شدن آن"
+" دوباره تلاش کنید."
+
+#: views.py:165
+msgid "Verification code sent successfully."
+msgstr "کد تایید با موفقیت ارسال شد."
+
+#: views.py:199
+#, python-brace-format
+msgid "You are logged in as {user.phone_number}"
+msgstr "شما به عنوان {user.phone_number} وارد شدید"
+
+#: views.py:204
+msgid "You have to verify your phone number first and then log in"
+msgstr "شما باید ابتدا شماره تماس خود را تایید کنید و سپس لاگین شوید."
+
+#: views.py:210
+msgid "Email or phone number or password invalid"
+msgstr "ایمیل یا شماره تماس یا گذرواژه نادرست است"
+
+#: views.py:211
+msgid "Email/Phone number/Password is invalid"
+msgstr "ایمیل/شماره تماس/گذرواژه نادرست است"

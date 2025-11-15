@@ -4,6 +4,7 @@
 {% load i18n %}
 {% load farsi_tags %}
 {% load humanize %}
+{% load jalali_tags %}
 
 {% block content %}
 <div class="container py-5">
@@ -38,9 +39,9 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <i class="fas fa-calendar text-muted me-2"></i>
-                                        {{ order.datetime_modified|number_farsi }}
+                                        {{ order.datetime_modified|to_jalali:'%Y %B %d'|number_farsi }}
                                     </div>
-                                    <small class="text-muted">{{ order.datetime_payment|number_farsi }}</small>
+                                    <small class="text-muted">{{ order.datetime_payment|to_jalali:'%Y %B %d'|number_farsi }}</small>
                                 </td>
                                 <td>
                                     <span class="fw-bold text-success">{{ order.total_price|intcomma:False|number_farsi }} {% trans 'Toman' %}</span>
@@ -114,7 +115,7 @@
             <div class="col-md-3 col-6 mb-3">
                 <div class="card bg-warning text-dark text-center">
                     <div class="card-body">
-                        <h4 class="mb-0">{{ orders.last.datetime_payment|number_farsi }}</h4>
+                        <h4 class="mb-0">{{ orders.last.datetime_payment|to_jalali:'%Y %B %d'|number_farsi }}</h4>
                         <small>{% trans 'Last payment' %}</small>
                     </div>
                 </div>

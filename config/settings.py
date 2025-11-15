@@ -14,6 +14,8 @@ from pathlib import Path
 from environs import Env
 import os
 from django.contrib.messages import constants as messages
+import locale
+import sys
 
 
 env = Env()
@@ -49,9 +51,12 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
 
     # Third party apps
+    'jalali_date',
     'crispy_forms',
     'crispy_bootstrap5',
     'phonenumber_field',
+    'rosetta',
+    'tinymce',
 
     # my local apps
     'pages.apps.PagesConfig',
@@ -135,13 +140,25 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fa-ir'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = (
+    ('en', 'English'),
+    ('fa', 'Persian'),
+)
+
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
+USE_L10N = True
 
 USE_TZ = True
+
+LOCALE_PATHS = (
+    'templates/locale',
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

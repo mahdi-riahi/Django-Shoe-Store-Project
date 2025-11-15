@@ -6,6 +6,7 @@
 {% load static %}
 {% load i18n %}
 {% load humanize %}
+{% load jalali_tags %}
 
 {% block title %}{% trans 'Order' %} #{{ order.id|number_farsi }} {% trans 'Details' %}{% endblock %}
 
@@ -120,7 +121,7 @@
                                         <tr>
                                             <th>{% trans 'Created At' %}</th>
                                             <td></td>
-                                            <td>{{ order.datetime_created|number_farsi }}</td>
+                                            <td>{{ order.datetime_created|to_jalali:'%Y %B %d'|number_farsi }}</td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:09+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: templates/payment/payment_history.html:11
+msgid "Payment History"
+msgstr ""
+
+#: templates/payment/payment_history.html:13
+msgid "Back to profile"
+msgstr ""
+
+#: templates/payment/payment_history.html:24
+msgid "Order ID"
+msgstr ""
+
+#: templates/payment/payment_history.html:25
+msgid "Payment Date"
+msgstr ""
+
+#: templates/payment/payment_history.html:26
+msgid "Paid Price"
+msgstr ""
+
+#: templates/payment/payment_history.html:27
+msgid "Ref ID"
+msgstr ""
+
+#: templates/payment/payment_history.html:28
+msgid "Status"
+msgstr ""
+
+#: templates/payment/payment_history.html:29
+msgid "Details"
+msgstr ""
+
+#: templates/payment/payment_history.html:46
+#: templates/payment/payment_history.html:109
+#: templates/payment/payment_history.html:110
+msgid "Toman"
+msgstr ""
+
+#: templates/payment/payment_history.html:58
+msgid "Success"
+msgstr ""
+
+#: templates/payment/payment_history.html:60
+msgid "Waiting"
+msgstr ""
+
+#: templates/payment/payment_history.html:68
+msgid "Go to"
+msgstr ""
+
+#: templates/payment/payment_history.html:74
+msgid "Tracking code"
+msgstr ""
+
+#: templates/payment/payment_history.html:94
+msgid "All payments"
+msgstr ""
+
+#: templates/payment/payment_history.html:102
+msgid "Successful Payments"
+msgstr ""
+
+#: templates/payment/payment_history.html:110
+msgid "Successful Paid Orders Amount"
+msgstr ""
+
+#: templates/payment/payment_history.html:118
+msgid "Last payment"
+msgstr ""
+
+#: templates/payment/payment_history.html:128
+msgid "No payment history"
+msgstr ""
+
+#: templates/payment/payment_history.html:129
+msgid "After your first payment, you can see payment history here"
+msgstr ""
+
+#: templates/payment/payment_history.html:131
+msgid "Go to products"
+msgstr ""
+
+#: templates/payment/payment_history.html:134
+msgid "Go to orders"
+msgstr ""
+
+#: views.py:22
+msgid "You have already paid for this order. You can enjoy using the products"
+msgstr ""
+
+#: views.py:60
+msgid "Some errors happened from Zarinpal"
+msgstr ""
+
+#: views.py:62
+msgid ""
+"Please try again or contact support. We can only hold your order for 15 "
+"minutes"
+msgstr ""
+
+#: views.py:79
+msgid ""
+"Your Zarinpal-authority-code does not match the authority of the request"
+msgstr ""
+
+#: views.py:109
+msgid "Payment Failed. Some errors happened from Zarinpal"
+msgstr ""
+
+#: views.py:115
+msgid "Payment already completed before. Check out your order status"
+msgstr ""
+
+#: views.py:123
+msgid "Payment successfully completed"
+msgstr ""
+
+#: views.py:124
+msgid "Order is activated for you. you can trace it here"
+msgstr ""
+
+#: views.py:125
+msgid "Your order is getting processed"
+msgstr ""
+
+#: views.py:129
+msgid "Payment failed. Please contact support."
+msgstr ""

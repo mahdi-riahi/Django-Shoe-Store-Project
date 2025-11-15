@@ -1,0 +1,216 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:10+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: models.py:7
+msgid "User"
+msgstr ""
+
+#: models.py:8
+msgid "Product"
+msgstr ""
+
+#: models.py:9
+msgid "Created At"
+msgstr ""
+
+#: templates/profiles/favorites.html:8
+msgid "Favorites"
+msgstr ""
+
+#: templates/profiles/favorites.html:15
+msgid "Favorite List"
+msgstr ""
+
+#: templates/profiles/favorites.html:17
+msgid "Back to profile"
+msgstr ""
+
+#: templates/profiles/favorites.html:47
+msgid "Discount"
+msgstr ""
+
+#: templates/profiles/favorites.html:60 templates/profiles/favorites.html:64
+#: templates/profiles/profile.html:140
+msgid "Toman"
+msgstr ""
+
+#: templates/profiles/favorites.html:70
+msgid "See the product"
+msgstr ""
+
+#: templates/profiles/favorites.html:85
+msgid "Your favorite list is empty"
+msgstr ""
+
+#: templates/profiles/favorites.html:86
+msgid "Save your favorite products here"
+msgstr ""
+
+#: templates/profiles/favorites.html:88
+msgid "Go to products"
+msgstr ""
+
+#: templates/profiles/profile.html:8
+msgid "Dashboard"
+msgstr ""
+
+#: templates/profiles/profile.html:45
+msgid "Orders"
+msgstr ""
+
+#: templates/profiles/profile.html:50
+msgid "Favorite Products"
+msgstr ""
+
+#: templates/profiles/profile.html:56
+msgid "Profile Settings"
+msgstr ""
+
+#: templates/profiles/profile.html:64
+msgid "Quick Access"
+msgstr ""
+
+#: templates/profiles/profile.html:69
+msgid "Favorites List"
+msgstr ""
+
+#: templates/profiles/profile.html:72
+msgid "Payment History"
+msgstr ""
+
+#: templates/profiles/profile.html:75
+msgid "My Orders"
+msgstr ""
+
+#: templates/profiles/profile.html:87
+msgid "Personal Info"
+msgstr ""
+
+#: templates/profiles/profile.html:92
+msgid "Full name"
+msgstr ""
+
+#: templates/profiles/profile.html:96 templates/profiles/profile_update.html:83
+msgid "Email Address"
+msgstr ""
+
+#: templates/profiles/profile.html:100
+msgid "Phone number"
+msgstr ""
+
+#: templates/profiles/profile.html:104
+#: templates/profiles/profile_update.html:71
+msgid "Username"
+msgstr ""
+
+#: templates/profiles/profile.html:108
+msgid "Date Joined"
+msgstr ""
+
+#: templates/profiles/profile.html:118
+msgid "Last Orders"
+msgstr ""
+
+#: templates/profiles/profile.html:119
+msgid "See all"
+msgstr ""
+
+#: templates/profiles/profile.html:127
+msgid "Order ID"
+msgstr ""
+
+#: templates/profiles/profile.html:128
+msgid "Date"
+msgstr ""
+
+#: templates/profiles/profile.html:129
+msgid "Price"
+msgstr ""
+
+#: templates/profiles/profile.html:130
+msgid "Status"
+msgstr ""
+
+#: templates/profiles/profile.html:131
+msgid "Action"
+msgstr ""
+
+#: templates/profiles/profile.html:144
+msgid "Details"
+msgstr ""
+
+#: templates/profiles/profile.html:155
+msgid "You have not registered orders yet"
+msgstr ""
+
+#: templates/profiles/profile.html:156
+msgid "Start Shopping"
+msgstr ""
+
+#: templates/profiles/profile_update.html:4
+msgid "Profile Change"
+msgstr ""
+
+#: templates/profiles/profile_update.html:41
+msgid "Choose a picture"
+msgstr ""
+
+#: templates/profiles/profile_update.html:53
+msgid "First Name"
+msgstr ""
+
+#: templates/profiles/profile_update.html:62
+msgid "Last Name"
+msgstr ""
+
+#: templates/profiles/profile_update.html:95
+msgid "Phone Number"
+msgstr ""
+
+#: templates/profiles/profile_update.html:109
+msgid "Cancel"
+msgstr ""
+
+#: templates/profiles/profile_update.html:112
+msgid "Save Changes"
+msgstr ""
+
+#: views.py:40
+msgid "Your profile updated successfully"
+msgstr ""
+
+#: views.py:44
+msgid "Please correct the errors below."
+msgstr ""
+
+#: views.py:99
+msgid "Product added to favorites"
+msgstr ""
+
+#: views.py:102
+msgid "Product is already in your favorite list"
+msgstr ""
+
+#: views.py:121
+msgid "Product removed from favorites"
+msgstr ""
+
+#: views.py:124
+msgid "Product is not in your favorite list"
+msgstr ""

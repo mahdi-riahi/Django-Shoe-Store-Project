@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load humanize %}
 {% load farsi_tags %}
+{% load jalali_tags %}
 
 <div class="product-reviews container-fluid">
     {% for order in orders %}
@@ -39,8 +40,7 @@
                                         {% trans 'Order Registration Date' %} :
                                     </span>
                                     <span class="review__published-date">
-{#                                        {{ order.datetime_created|to_jalali:'%Y %B %d'|number_farsi }}#}
-                                        {{ order.datetime_created|number_farsi }}
+                                        {{ order.datetime_created|to_jalali:'%Y %B %d'|number_farsi }}
                                     </span>
                                     </p>
                                 </p>

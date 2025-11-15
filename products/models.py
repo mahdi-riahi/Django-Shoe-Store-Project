@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 
+from tinymce.models import HTMLField
+
 
 class ActiveModelManager(models.Manager):
     def get_queryset(self):
@@ -70,7 +72,7 @@ class Product(models.Model):
 
     title = models.CharField(_('Title'), max_length=150)
     short_description = models.CharField(_('Short Description'), max_length=700)
-    description = models.TextField(_('Description'), )
+    description = HTMLField(verbose_name=_('Description'), )
     material = models.CharField(_('Materials'), max_length=400, blank=True)
     price = models.PositiveIntegerField(_('Price'), )
     is_active = models.BooleanField(_('Is The Product Active ?'), default=True)

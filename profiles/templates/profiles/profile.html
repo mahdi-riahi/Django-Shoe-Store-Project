@@ -4,6 +4,7 @@
 {% load i18n %}
 {% load farsi_tags %}
 {% load humanize %}
+{% load jalali_tags %}
 
 {% block title %}{% translate 'Dashboard' %}{% endblock %}
 
@@ -106,7 +107,7 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label text-muted small">{% trans 'Date Joined' %}</label>
-                            <p class="mb-0 fw-bold">{{ user_profile.date_joined|number_farsi }}</p>
+                            <p class="mb-0 fw-bold">{{ user_profile.date_joined|to_jalali:'%Y %B %d'|number_farsi }}</p>
                         </div>
                     </div>
                 </div>
@@ -135,7 +136,7 @@
                                     {% for order in recent_orders %}
                                     <tr>
                                         <td>#{{ order.id }}</td>
-                                        <td>{{ order.datetime_created|number_farsi }}</td>
+                                        <td>{{ order.datetime_created|to_jalali:'%Y %B %d'|number_farsi }}</td>
                                         <td>{{ order.total_price|default:order.get_total_price|intcomma:False|number_farsi }}
                                             {% trans 'Toman' %}</td>
                                         <td>{{ order.get_status_display }}</td>

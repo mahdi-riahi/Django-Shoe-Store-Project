@@ -14,42 +14,6 @@
     <!-- Category Navbar -->
     {% include 'products/category_navbar.html' %}
 
-    <!-- Main Content Wrapper Start -->
-    <div class="main-content-wrapper container-fluid mt-5">
-
-        <div class="shop-page-wrapper shop-fullwidth">
-
-            <div class="main-content-wrapper container-fluid">
-                <div class="shop-page-wrapper shop-fullwidth">
-                    <div class="container-fluid shop-products">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="tab-content" id="product-tab-content">
-                                    <div class="tab-pane fade show active" id="nav-all">
-
-                                    {% for major_category, products in query_dict.items %}
-                                        <div class="container-fluid">
-                                            <h3>{{ major_category }}</h3>
-                                        </div>
-                                    	<div class="row xxl-block-grid-6 grid-space-20">
-                                            {% for product in products %}
-                                                {% include 'products/product_individual.html' with product=product %}
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %}
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <!-- Main Content Wrapper Start -->
-
     <!-- Page Header -->
     <section class="page-header bg-gradient-primary text-white py-5">
         <div class="container">

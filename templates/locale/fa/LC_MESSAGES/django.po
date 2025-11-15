@@ -1,0 +1,190 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 17:53+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+#: _base.html:117
+msgid "Home"
+msgstr ""
+
+#: _base.html:122
+msgid "Products"
+msgstr ""
+
+#: _base.html:127
+msgid "Blog"
+msgstr ""
+
+#: _base.html:132
+msgid "Contact us"
+msgstr ""
+
+#: _base.html:137
+msgid "About us"
+msgstr ""
+
+#: _base.html:165
+msgid "Profile"
+msgstr ""
+
+#: _base.html:168
+msgid "Shopping cart"
+msgstr ""
+
+#: _base.html:171
+msgid "Order history"
+msgstr ""
+
+#: _base.html:174
+msgid "Tickets"
+msgstr ""
+
+#: _base.html:177
+msgid "Payment history"
+msgstr ""
+
+#: _base.html:182
+msgid "Logout"
+msgstr ""
+
+#: _base.html:194
+msgid "Login"
+msgstr ""
+
+#: _base.html:197
+msgid "Signup"
+msgstr ""
+
+#: _base.html:282
+msgid "Type here what you want to search"
+msgstr ""
+
+#: _base.html:285
+msgid "Search among products"
+msgstr ""
+
+#: home_page.html:6
+msgid "Home Page"
+msgstr ""
+
+#: home_page.html:19
+msgid "Welcome to the World of Fashion and Beauty"
+msgstr ""
+
+#: home_page.html:20
+msgid "With the latest collection of shoes, bags and clothing from top brands"
+msgstr ""
+
+#: home_page.html:23
+msgid "View Products"
+msgstr ""
+
+#: home_page.html:26 home_page.html:159
+msgid "Special Discounts"
+msgstr ""
+
+#: home_page.html:42
+msgid "Product Categories"
+msgstr ""
+
+#: home_page.html:43
+msgid "Find your desired products in different categories"
+msgstr ""
+
+#: home_page.html:54
+msgid "Women's Shoes"
+msgstr ""
+
+#: home_page.html:55
+msgid "Chic and diverse models"
+msgstr ""
+
+#: home_page.html:67
+msgid "Men's Shoes"
+msgstr ""
+
+#: home_page.html:68
+msgid "Formal, sports and casual"
+msgstr ""
+
+#: home_page.html:80
+msgid "Bags & Backpacks"
+msgstr ""
+
+#: home_page.html:81
+msgid "Office and daily bags"
+msgstr ""
+
+#: home_page.html:93
+msgid "Clothing"
+msgstr ""
+
+#: home_page.html:94
+msgid "Coats, jackets and hats"
+msgstr ""
+
+#: home_page.html:108
+msgid "New Products"
+msgstr ""
+
+#: home_page.html:110 home_page.html:135 home_page.html:163
+msgid "View All"
+msgstr ""
+
+#: home_page.html:121
+msgid "No new products found"
+msgstr ""
+
+#: home_page.html:133
+msgid "Best Sellers"
+msgstr ""
+
+#: home_page.html:146
+msgid "No best-selling products found"
+msgstr ""
+
+#: home_page.html:160
+msgid "Exceptional opportunity to buy at the best price"
+msgstr ""
+
+#: home_page.html:174
+msgid "No discounted products found"
+msgstr ""
+
+#: home_page.html:190
+msgid "Free Shipping"
+msgstr ""
+
+#: home_page.html:191
+msgid "For purchases over 500,000 Tomans"
+msgstr ""
+
+#: home_page.html:199
+msgid "Return Guarantee"
+msgstr ""
+
+#: home_page.html:200
+msgid "7-day product return guarantee"
+msgstr ""
+
+#: home_page.html:208
+msgid "24/7 Support"
+msgstr ""
+
+#: home_page.html:209
+msgid "Online support at all hours"
+msgstr ""
