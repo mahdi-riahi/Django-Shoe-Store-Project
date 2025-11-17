@@ -15,24 +15,24 @@
             <div class="container">
                 <div class="row pb--80">
                     <div class="col-md-7 mb-sm--30">
-                        <h2 class="heading__secondary mb--50 mb-md--35 mb-sm--20">پیام خود را به ما بگویید</h2>
+                        <h2 class="heading__secondary mb--50 mb-md--35 mb-sm--20">{% trans 'Tell us your message' %}</h2>
 
                         <!-- Contact form Start Here -->
-                        <form class="form" action="mail.php" id="contact-form">
+                        <form class="form" action="#" id="contact-form">
                             <div class="form__group mb--20">
-                                <input type="text" id="contact_name" name="contact_name" class="form__input form__input--2" placeholder="نام*">
+                                <input type="text" id="contact_name" name="contact_name" class="form__input form__input--2" placeholder="{% trans 'Name' %}*">
                             </div>
                             <div class="form__group mb--20">
-                                <input type="email" id="contact_email" name="contact_email" class="form__input form__input--2" placeholder="ایمیل*">
+                                <input type="email" id="contact_email" name="contact_email" class="form__input form__input--2" placeholder="{% trans 'Email' %}*">
                             </div>
                             <div class="form__group mb--20">
-                                <input type="text" id="contact_phone" name="contact_phone" class="form__input form__input--2" placeholder="شماره تماس*">
+                                <input type="text" id="contact_phone" name="contact_phone" class="form__input form__input--2" placeholder="{% trans 'Phone number' %}*">
                             </div>
                             <div class="form__group mb--20">
-                                <textarea class="form__input form__input--textarea" id="contact_message" name="contact_message" placeholder="پیام شما*"></textarea>
+                                <textarea class="form__input form__input--textarea" id="contact_message" name="contact_message" placeholder="{% trans 'Your message' %}*"></textarea>
                             </div>
                             <div class="form__group">
-                                <button type="submut" class="btn-submit">ارسال</button>
+                                <button type="submut" class="btn-submit">{% trans 'Submit' %}</button>
                             </div>
                             <div class="form__output"></div>
                         </form>
@@ -40,13 +40,13 @@
 
                     </div>
                     <div class="col-md-5 pl--50 pl-sm--30">
-                        <h2 class="heading__secondary mb--50">اطلاعات تماس</h2>
+                        <h2 class="heading__secondary mb--50">{% trans 'Contact Info' %}</h2>
 
                         <!-- Contact info widget start here -->
                         <div class="contact-info-widget mb--45">
                             <div class="contact-info">
-                                <h3 class="heading__tertiary">آدرس پستی</h3>
-                                <p>مکانی در خیابان کوچه فلان <br> ایران تهران </p>
+                                <h3 class="heading__tertiary">{% trans 'Address' %}</h3>
+                                <p>{% trans 'Kurosh St.' %} <br> {% trans 'Iran, Isfahan' %} </p>
                             </div>
                         </div>
                         <!-- Contact info widget end here -->
@@ -54,8 +54,8 @@
                         <!-- Contact info widget start here -->
                         <div class="contact-info-widget mb--45">
                             <div class="contact-info">
-                                <h3 class="heading__tertiary">شاپینگ یار</h3>
-                                <p>مکانی در خیابان کوچه فلان <br> ایران تهران </p>
+                                <h3 class="heading__tertiary">{% trans 'Mahdi Riahi' %}</h3>
+                                <p>{% trans 'Dariush St.' %} <br> {% trans 'Iran, Isfahan' %} </p>
                             </div>
                         </div>
                         <!-- Contact info widget end here -->
@@ -63,11 +63,11 @@
                         <!-- Contact info widget start here -->
                         <div class="contact-info-widget two-column-list sm-one-column mb--45">
                             <div class="contact-info mb-sm--35">
-                                <h3 class="heading__tertiary">شماره تماس</h3>
-                                <a href="">+98912345678</a>
+                                <h3 class="heading__tertiary">{% trans 'Phone number' %}</h3>
+                                <a href="">۰۹۱۲۳۴۵۶۷۸۹</a>
                             </div>
                             <div class="contact-info">
-                                <h3 class="heading__tertiary">ایمیل</h3>
+                                <h3 class="heading__tertiary">{% trans 'Email' %}</h3>
                                 <a href="mailto:info@la-studioweb.com">info@codingyar.com</a>
                             </div>
                         </div>
