@@ -30,6 +30,9 @@ def signup_view(request):
             # request.session['phone_number_for_verification'] = user.phone_number
             request.session['user_id'] = str(user.id)
 
+            # Temp message until SMS service gets a provider
+            messages.info(request, _(f'Your validation code is {verification.code} .'))
+
             messages.success(request, _('Please confirm your phone number'))
             return redirect('accounts:verify_phone')
 
@@ -78,9 +81,13 @@ def verify_phone_view(request):
                     ).update(is_used=True)
 
                     # Update user is_active, phone_verified
+                    print('Updating user')
                     user.phone_verified = True
+                    print('phone_verified')
                     user.is_active = True
+                    print('is_active')
                     user.save()
+                    print(f'saved. is_active:{user.is_active}, phone_verified: {user.phone_verified}')
 
                     # Send Welcome Email
                     send_mail(
@@ -165,12 +172,16 @@ def resend_verification_code_view(request):
     # Send sms
     SMSService.send_verification_code(user.phone_number, new_verification.code)
 
+    # Temp message until SMS provider is on
+    messages.info(request, _(f'Your validation code is {new_verification.code}'))
+
     messages.success(request, _('Verification code sent successfully.'))
     return redirect('accounts:verify_phone')
 
 
 def login_view(request):
     if request.user.is_authenticated:
+        messages.info(request, _('You are alredy logged in'))
         return redirect('pages:home_page')
 
     if request.method == 'POST':
@@ -196,25 +207,27 @@ def login_view(request):
                 except User.DoesNotExist:
                     user = None
 
-            # If user is authenticated
+            # If user's info is True and user is found
             if user is not None:
-                # Check if user phone_verified is True
+                # Check if user's phone is verified
                 if user.phone_verified:
                     # Log the user in
                     login(request, user)
-                    messages.success(request, _(f'You are logged in as {user.phone_number}'))
+                    print(f'user {user} logged in')
+                    messages.success(request, _(f'You are logged in as {user.email}'))
                     return redirect('pages:home_page')
 
                 # Redirect to verify_phone because user phone_verified is False
                 else:
                     messages.warning(request, _('You have to verify your phone number first and then log in'))
+                    messages.info(request, _('Ask for a new code if your last code is expired'))
                     request.session['user_id'] = str(user.id)
                     return redirect('accounts:verify_phone')
 
         # User not found
-        else:
-            messages.error(request, _('Email or phone number or password invalid'))
-            form.add_error(None, _('Email/Phone number/Password is invalid'))
+        print('User not found')
+        messages.error(request, _('Email or phone number or password invalid'))
+        form.add_error(None, _('Email/Phone number/Password is invalid'))
 
     # Request method is 'GET'
     else:

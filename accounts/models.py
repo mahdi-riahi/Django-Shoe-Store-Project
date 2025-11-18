@@ -23,7 +23,7 @@ class PhoneVerification(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.phone_number
+        return str(self.phone_number)
 
     def is_valid(self):
         return not self.is_used and timezone.now() < self.datetime_expires

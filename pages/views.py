@@ -9,43 +9,37 @@ from products.models import Product
 
 def home_page_view(request):
     # High sell products
-    best_selling_products = Product.active_product_manager.filter(
-        is_active=True
-    ).order_by('-sell_count')[:8]
+    best_selling_products = Product.objects.all().order_by('-sell_count', '-is_active', )[:8]
 
     # New products (last 2 weeks)
     two_weeks_ago = timezone.now() - timedelta(days=14)
-    new_products = Product.active_product_manager.filter(
+    new_products = Product.objects.filter(
         is_active=True,
         datetime_created__gte=two_weeks_ago
     ).order_by('-datetime_created')[:8]
 
     # Offer products
-    discounted_products = Product.active_product_manager.filter(
+    discounted_products = Product.objects.filter(
         is_active=True,
         offer=True
     )[:8]
 
     # Products Based on major category
-    women_products = Product.active_product_manager.filter(
-        is_active=True,
+    women_products = Product.objects.filter(
         major_category='Women'
-    )[:6]
+    ).order_by('-is_active')[:6]
 
-    men_products = Product.active_product_manager.filter(
-        is_active=True,
+    men_products = Product.objects.filter(
         major_category='Men'
-    )[:6]
+    ).order_by('-is_active')[:6]
 
-    bags_products = Product.active_product_manager.filter(
-        is_active=True,
+    bags_products = Product.objects.filter(
         major_category='Bags'
-    )[:6]
+    ).order_by('-is_active')[:6]
 
-    clothing_products = Product.active_product_manager.filter(
-        is_active=True,
+    clothing_products = Product.objects.filter(
         major_category='Clothing'
-    )[:6]
+    ).order_by('-is_active')[:6]
 
     context = {
         'best_selling_products': best_selling_products,
