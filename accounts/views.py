@@ -45,6 +45,10 @@ def signup_view(request):
 
 
 def verify_phone_view(request):
+    if request.user.is_authenticated:
+        messages.info(request, _('You are already logged in and your phone number is verified'))
+        return redirect('pages:home_page')
+
     # Check session for user_id
     user_id = request.session.get('user_id')
     if not user_id:
@@ -81,13 +85,9 @@ def verify_phone_view(request):
                     ).update(is_used=True)
 
                     # Update user is_active, phone_verified
-                    print('Updating user')
                     user.phone_verified = True
-                    print('phone_verified')
                     user.is_active = True
-                    print('is_active')
                     user.save()
-                    print(f'saved. is_active:{user.is_active}, phone_verified: {user.phone_verified}')
 
                     # Send Welcome Email
                     send_mail(
@@ -128,6 +128,10 @@ def verify_phone_view(request):
 
 
 def resend_verification_code_view(request):
+    if request.user.is_authenticated:
+        messages.info(request, _('You are already logged in and your phone number is verified'))
+        return redirect('pages:home_page')
+
     user_id = request.session.get('user_id')
 
     if not user_id:

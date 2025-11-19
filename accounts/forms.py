@@ -46,7 +46,7 @@ class AdminUserCreationForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_phone_verified = self.cleaned_data.get('is_phone_verified', False)
+        user.phone_verified = self.cleaned_data.get('phone_verified', False)
         user.email_verified = True
 
         if commit:
@@ -58,6 +58,12 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+
+class ProfileUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = ['profile_photo', 'first_name', 'last_name', 'username', 'email', ]
 
 
 class PhoneVerificationForm(forms.Form):

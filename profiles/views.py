@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect
 
 from products.models import Product
 from .models import CustomUserFavorite
+from accounts.forms import ProfileUserChangeForm
 
 
 class ProfileView(LoginRequiredMixin, generic.DetailView):
@@ -29,7 +30,7 @@ class ProfileView(LoginRequiredMixin, generic.DetailView):
 class ProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name = 'profiles/profile_update.html'
     model = get_user_model()
-    fields = ['profile_photo', 'first_name', 'last_name', 'username', 'email', 'phone_number', ]
+    form_class = ProfileUserChangeForm
     # success_url = reverse_lazy('profile:profile_detail')
 
     def get_object(self, queryset=None):
