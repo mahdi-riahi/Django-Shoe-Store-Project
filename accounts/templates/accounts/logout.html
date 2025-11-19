@@ -1,0 +1,31 @@
+{% extends '_base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% translate 'Logout Page' %}{% endblock %}
+
+{% block mini_cart_icon %}{% include 'cart/mini_cart_icon_alone.html' %}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>{% trans 'Logout' %}</h2>
+                </div>
+                <div class="card-body">
+                    <h2>{% trans 'Are sure you want to sign out?' %}</h2>
+
+                    <form class="text-right" action="{% url 'logout' %}" method="POST">
+                        {% csrf_token %}
+                        <a href="{% url 'pages:home_page' %}" class="btn btn-secondary">{% trans 'Back to home' %}</a>
+                        <input type="submit" class="btn btn-lg btn-outline-secondary" value="{% trans 'Logout' %}">
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

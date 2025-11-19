@@ -177,10 +177,7 @@
                                             <a class="text-right" href="{% url 'profile:payment_history' %}">{% trans 'Payment history' %}</a>
                                         </li>
                                         <li>
-                                            <form class="text-right" action="{% url 'logout' %}" method="POST">
-                                                {% csrf_token %}
-                                                <input type="submit" class="text-right" value="{% trans 'Logout' %}">
-                                            </form>
+                                            <a class="text-right" href="{% url 'accounts:logout' %}">{% trans 'Logout' %}</a>
                                         </li>
                                     </ul>
                                 </li>

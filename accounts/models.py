@@ -29,6 +29,62 @@ class PhoneVerification(models.Model):
         return not self.is_used and timezone.now() < self.datetime_expires
 
 
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, phone_number, password=None, **extra_fields):
+        if not email:
+            raise ValueError(_('Email must be set'))
+        if not phone_number:
+            raise ValueError(_('Phone number must be set'))
+
+        email = self.normalize_email(email)
+
+        if 'username' not in extra_fields:
+            extra_fields['username'] = self.generate_username_from_email(email)
+
+        user = self.model(
+            email=email,
+            phone_number=phone_number,
+            **extra_fields,
+        )
+        if password:
+            user.set_password(password)
+        else:
+            user.set_unusable_password()
+
+        user.save()
+        return user
+
+    def create_superuser(self, email, phone_number, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('phone_verified', True)
+        extra_fields.setdefault('email_verified', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('Superuser must have is_staff=True.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('Superuser must have is_superuser=True'))
+
+        self.create_user(email, phone_number, password, **extra_fields)
+
+    def generate_username_from_email(self, email):
+        if not email:
+            raise ValueError(_('Email required'))
+
+        email_parts = email.split('@')
+        base_username =  email_parts[0]
+
+        # Make sure username becomes unique
+        temp = 1
+        username = base_username
+        while self.model.objects.filter(username=username).exists():
+            username = base_username + str(temp)
+            temp += 1
+
+        return username
+
+
 class CustomUser(AbstractUser):
     email = models.EmailField(_('Email Address'), unique=True)
     phone_number = PhoneNumberField(verbose_name=_('Phone Number'), unique=True, region='IR')
@@ -40,7 +96,10 @@ class CustomUser(AbstractUser):
     profile_photo = models.ImageField(_('Profile Photo'), upload_to='profiles/photos/', blank=True)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['phone_number', 'username']
+    REQUIRED_FIELDS = ['phone_number', ]
+
+    # Manager
+    objects = CustomUserManager()
 
     class Meta:
         verbose_name = _('user')
