@@ -19,10 +19,9 @@
 
                     <form class="text-right" action="{% url 'logout' %}" method="POST">
                         {% csrf_token %}
-                        <a href="{% url 'pages:home_page' %}" class="btn btn-secondary">{% trans 'Back to home' %}</a>
                         <input type="submit" class="btn btn-lg btn-outline-secondary" value="{% trans 'Logout' %}">
                     </form>
-                    </div>
+                    <a href="{% url 'pages:home_page' %}" class="btn btn-secondary">{% trans 'Back to home' %}</a>
                 </div>
             </div>
         </div>

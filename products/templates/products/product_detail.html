@@ -237,6 +237,9 @@
         <div class="col-lg-8 m-auto">
             <span class="reply-title pull-right">{% trans 'Add your own comment' %}</span>
             <br>
+            {% if form.errors %}
+                <div class="alert alert-danger">{{ form.errors }}</div>
+            {% endif %}
             <form action="{% url 'products:comment_create' product.id %}" method="POST" class="form text-right">
                 {% csrf_token %}
 

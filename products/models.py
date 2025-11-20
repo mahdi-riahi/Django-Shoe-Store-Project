@@ -216,7 +216,7 @@ class Product(models.Model):
         """
         Set 'is_active' False if there is no active variants
         """
-        self.is_active = True if self.variants.filter(is_active=True) else False
+        self.is_active = True if self.variants.filter(is_active=True).exists() else False
         self.save()
 
     def get_sell_count(self):
@@ -256,6 +256,7 @@ class ProductVariant(models.Model):
         ('we', _('White')),
         ('bk', _('Black')),
         ('yw', _('Yellow')),
+        ('gr', _('Green')),
         ('rd', _('Red')),
         ('be', _('Blue')),
         ('ce', _('Chocolate')),
@@ -283,7 +284,7 @@ class ProductVariant(models.Model):
     )
 
     color = models.CharField(_('Color'), max_length=2, choices=COLORS)
-    size = models.PositiveIntegerField(_('Size'), choices=SIZES, blank=True, null=True)
+    size = models.PositiveIntegerField(_('Size'), choices=SIZES)
 
     product = models.ForeignKey(verbose_name=_('Product'), to=Product, on_delete=models.CASCADE, related_name='variants')
     quantity = models.PositiveIntegerField(_('Quantity'), default=1, validators=[MinValueValidator(0), ])
@@ -299,8 +300,10 @@ class ProductVariant(models.Model):
         """
         Auto-sync is_active before saving
         """
-        self.product.sync_is_active_and_variants()
         super().save(*args, **kwargs)
+        self.is_active = self.quantity > 0
+        super().save(update_fields=['is_active',])
+        self.product.sync_is_active_and_variants()
 
     def sync_is_active_quantity(self):
         """
@@ -328,6 +331,7 @@ class ProductVariant(models.Model):
     def increase_quantity(self, quantity):
         self.quantity += quantity
         self.save()
+        self.sync_is_active_quantity()
 
 
 class Cover(models.Model):
@@ -367,7 +371,7 @@ class Comment(models.Model):
 
 
     def __str__(self):
-        return f'{self.user} - {self.product}'
+        return f'{self.product} - {self.rate}'
 
     def get_absolute_url(self):
-        return reverse("product_detail", kwargs={"pk": self.product.pk})
+        return reverse("products:product_detail", kwargs={"pk": self.product.pk})

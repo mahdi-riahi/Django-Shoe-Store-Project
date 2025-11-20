@@ -27,7 +27,7 @@ class ProductListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(ProductListView, self).get_context_data(**kwargs)
         query_dict = {
-            major_category: Product.active_product_manager.filter(major_category=major_category)[:5]
+            major_category: Product.objects.filter(major_category=major_category).order_by('-is_active')[:5]
             for major_category in Product.get_major_categories_list()
         }
         context['query_dict'] = query_dict
@@ -74,7 +74,8 @@ def product_major_category_list_view(request, major_category):
     if major_category not in Product.get_major_categories_list():
         return HttpResponseNotFound('Page not found')
     categories = Product.get_categories_from_major_cat(major_category)
-    query_dict = {category_display: Product.active_product_manager.filter(category=category)[:5] for category,category_display in categories.items()}
+    query_dict = {category_display: Product.objects.filter(category=category, is_active=True)[:5]
+                  for category,category_display in categories.items()}
     return render(
         request,
         'products/major_category_product_list.html',
@@ -90,7 +91,7 @@ def product_category_list_view(request, major_category, category):
     if category not in Product.get_categories_from_major_cat(major_category):
         return HttpResponseNotFound('Page not found. Category is not in this major category')
 
-    products = Product.active_product_manager.filter(category=category)
+    products = Product.objects.filter(is_active=True, category=category).order_by('-sell_count')
 
     paginator = Paginator(products, 30)
     page_obj = paginator.get_page(request.GET.get('page'))
@@ -124,19 +125,17 @@ class CommentCreateView(generic.CreateView):
         product = get_object_or_404(Product, pk=int(self.kwargs['pk']))
         comment = form.save(commit=False)
         comment.product = product
-        user = self.request.user
-        if user.is_authenticated:
-            comment.user = user
-            comment.name = user.username
-            comment.email = user.email
+
+        if self.request.user.is_authenticated:
+            comment.user = self.request.user
+            comment.name = self.request.user.username
+            comment.email = self.request.user.email
+
         else:
             cleaned_data = form.cleaned_data
-            print(cleaned_data)
             comment.name = cleaned_data.get('name', )
             comment.email = cleaned_data.get('email', )
-            print(comment.name, comment.email)
         comment.save()
-        print('saved!')
 
         messages.success(self.request, _('Your comment added successfully'))
         return redirect(self.get_success_url())
